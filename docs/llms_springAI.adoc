@@ -1,0 +1,1794 @@
+= LLMs
+:toc: 
+:toc-title: Índice de contenidos
+:sectnums:
+:toclevels: 3
+:source-highlighter: coderay
+
+== Conceptos de IA
+
+=== Modelos
+
+Los modelos de IA son algoritmos diseñados para procesar y generar información, a menudo imitando funciones cognitivas humanas. Al aprender patrones y conocimientos de grandes conjuntos de datos, estos modelos pueden hacer predicciones, texto, imágenes u otros resultados, mejorando diversas aplicaciones en diferentes industrias.
+
+Hay diferentes tipos de modelos de IA, cada uno adaptado a un caso de uso específico. Mientras que ChatGPT y sus capacidades de IA generativa han cautivado a los usuarios a través de la entrada y salida de texto, muchos modelos y empresas ofrecen entradas y salidas diversas. Antes de ChatGPT, muchas personas estaban fascinadas por los modelos de generación de texto a imagen como Midjourney y Stable Diffusion.
+
+.La siguiente tabla muestra algunos ejemplos de modelos de IA y sus aplicaciones:
+
+|===
+| Modelo              | Aplicación
+
+| ChatGPT             | Conversaciones de texto a texto
+| SAM          | Segmentación de elementos en imágenes
+| Stable Diffusion    | Generación de texto a imagen
+| Llava               | Detección de objetos en imágenes
+|===
+
+=== Prompts
+
+Los prompts sirven como la base para las entradas basadas en lenguaje que guían a un modelo de IA para producir salidas específicas. Para aquellos familiarizados con ChatGPT, un prompt podría parecer simplemente el texto introducido en un cuadro de diálogo que se envía a la API. Sin embargo, abarca mucho más que eso. En muchos modelos de IA, el texto del prompt no es solo una cadena simple.
+
+La creación de prompts efectivos es tanto un arte como una ciencia. ChatGPT fue diseñado para conversaciones humanas. Esto es bastante diferente de usar algo como SQL para "hacer una pregunta". Uno debe comunicarse con el modelo de IA de manera similar a como se conversa con otra persona.
+
+Tal es la importancia de este estilo de interacción que ha surgido el término "Prompt engineering" como su propia disciplina. Existe una creciente colección de técnicas que mejoran la efectividad de los prompts. Invertir tiempo en la creación de un prompt puede mejorar drásticamente el resultado obtenido.
+
+=== Prompt Templates
+
+Los prompt templates son plantillas predefinidas que se utilizan para guiar la entrada de texto en un modelo de IA. Estas plantillas proporcionan una estructura y un formato específicos para la entrada de texto, lo que ayuda a los usuarios a crear prompts efectivos y obtener resultados precisos y relevantes.
+
+.Un ejemplo de prompt template:
+```
+Tell me a story about {character} who {action} in {setting}.
+```
+
+=== Embedings
+
+Los embeddings son representaciones numéricas de palabras, frases o documentos en un espacio vectorial. Estas representaciones se utilizan en modelos de IA para capturar el significado semántico y la relación entre las palabras, lo que permite a los modelos comprender y procesar el lenguaje natural de manera más efectiva.
+
+Los embeddings son especialmente relevantes en aplicaciones prácticas como el patrón de Generación con Recuperación Aumentada (RAG). Permiten la representación de datos como puntos en un espacio semántico, que es similar al espacio 2-D de la geometría euclidiana, pero en dimensiones superiores. Esto significa que al igual que los puntos en un plano en la geometría euclidiana pueden estar cerca o lejos según sus coordenadas, en un espacio semántico, la proximidad de los puntos refleja la similitud en el significado. Las oraciones sobre temas similares se posicionan más cerca en este espacio multidimensional, al igual que los puntos que se encuentran cerca entre sí en un gráfico. Esta proximidad ayuda en tareas como la clasificación de texto, la búsqueda semántica e incluso las recomendaciones de productos, ya que permite que la IA distinga y agrupe conceptos relacionados en función de su "ubicación" en este paisaje semántico expandido.
+
+=== Tokens
+
+Los tokens son unidades de texto que se utilizan como entradas para modelos de IA. Estas unidades pueden ser palabras, frases, oraciones o párrafos, dependiendo del contexto y la tarea específica que se esté realizando. Los tokens se utilizan para representar información de texto de manera estructurada y procesable por los modelos de IA.
+
+En el contexto de los modelos de IA, la facturación se determina por el número de tokens utilizados. Tanto la entrada como la salida contribuyen al recuento total de tokens.
+
+También, los modelos están sujetos a límites de tokens, que restringen la cantidad de texto procesado en una sola llamada a la API. Este umbral se conoce a menudo como la 'ventana de contexto'. El modelo no procesa ningún texto que exceda este límite.
+
+Por ejemplo, ChatGPT3 tiene un límite de 4K tokens, mientras que GPT4 ofrece opciones variables, como 8K, 16K y 32K. El modelo Claude AI de Anthropic tiene un límite de 100K tokens, y Meta ha obtenido un modelo con un límite de 1M tokens.
+
+=== Output parsing
+
+El output parsing es el proceso de analizar y procesar las salidas generadas por un modelo de IA para extraer información relevante y presentarla de manera clara y comprensible. Este proceso es fundamental para interpretar y utilizar eficazmente los resultados generados por los modelos de IA en diversas aplicaciones.
+
+Output parsing emplea prompts meticulosamente elaborados, a menudo requiriendo múltiples interacciones con el modelo para lograr el formato deseado.
+
+Este tipo de escenarios han llevado a OpenAI a introducir 'OpenAI Functions' como un medio para especificar el formato de salida deseado del modelo de manera precisa.
+
+=== Uso de datos propios en modelos de IA
+
+.Hay 3 manera de usar datos propios en modelos de IA:
+1. **Fine-tuning**: Ajustar un modelo pre-entrenado con datos propios para mejorar su rendimiento en tareas específicas.
+2. **Prompt stuffing**: Incorporar datos propios en los prompts para guiar la generación de texto de un modelo de IA.
+3. **Function calls**: Llamar a funciones personalizadas que procesen los datos propios y generen salidas específicas en un modelo de IA.
+
+=== Retrieval Augmented Generation (RAG)
+
+La generación con recuperación aumentada (RAG) es un enfoque híbrido que combina la generación de lenguaje natural con la recuperación de información para mejorar la calidad y relevancia de las respuestas generadas por los modelos de IA. En lugar de depender únicamente de la generación de texto, RAG utiliza un modelo de recuperación para buscar información relevante en una base de conocimientos y luego genera respuestas basadas en esa información recuperada.
+
+
+Como parte de la carga de los datos no estructurados en la base de datos vectorial, una de las transformaciones más importantes es dividir el documento original en piezas más pequeñas. 
+
+.El procedimiento de dividir el documento original en piezas más pequeñas tiene dos pasos importantes:
+
+* Separar el documento en partes mientras se preservan los límites semánticos del contenido. Por ejemplo, para un documento con párrafos y tablas, se debe evitar dividir el documento en medio de un párrafo o tabla. Para el código, evitar dividir el código en medio de la implementación de un método.
+
+* Separar las partes del documento en partes cuyo tamaño sea un pequeño porcentaje del límite de tokens del modelo de IA.
+
+La siguiente fase en RAG es procesar la entrada del usuario. Cuando una pregunta del usuario debe ser respondida por un modelo de IA, la pregunta y todas las piezas de documento "similares" se colocan en el prompt que se envía al modelo de IA. Esta es la razón para usar una base de datos vectorial. Es muy bueno para encontrar contenido similar.
+
+.Hay varios conceptos que se utilizan en la implementación de RAG. Los conceptos se asignan a clases en Spring AI:
+
+* **DocumentReader:** Un interfaz funcional de Java que se encarga de cargar una List<Document> desde una fuente de datos. Las fuentes de datos comunes son PDF, Markdown y JSON.
+* **Document:** Una representación basada en texto de su fuente de datos que también contiene metadatos para describir el contenido.
+* **DocumentTransformer:** Responsable de procesar los datos de diversas maneras (por ejemplo, dividir los documentos en piezas más pequeñas o agregar metadatos adicionales al Document).
+* **DocumentWriter:** permite persistir los Documentos en una base de datos (más comúnmente en la pila de IA, una base de datos vectorial).
+* **Embedding:** Una representación de sus datos como una List<Double> que es utilizada por la base de datos vectorial para calcular la "similitud" de la consulta de un usuario con documentos relevantes.
+
+=== Function calling
+
+Los LLMs son inmutables después del entrenamiento, lo que lleva a un conocimiento obsoleto y no pueden acceder o modificar datos externos.
+
+El mecanismo de llamada a funciones aborda estas deficiencias. Permite registrar funciones personalizadas que conectan los grandes modelos de lenguaje con las API de sistemas externos. Estos sistemas pueden proporcionar a los LLMs datos en tiempo real y realizar acciones de procesamiento de datos en su nombre.
+
+Spring AI simplifica en gran medida el código que necesita escribir para admitir la invocación de funciones. Actúa como intermediario en la conversación de invocación de funciones por usted. Puede proporcionar su función como un @Bean y luego proporcionar el nombre del bean de la función en las opciones de prompt para activar esa función. También puede definir y hacer referencia a múltiples funciones en un solo prompt.
+
+=== Evaluación de respuestas de LLMs
+
+solicitudes de los usuarios es muy importante para garantizar la precisión y utilidad de la aplicación final. Varias técnicas emergentes permiten el uso del modelo preentrenado en sí para este propósito.
+
+Esta evaluación implica analizar si la respuesta generada se alinea con la intención del usuario y el contexto de la consulta. Se utilizan métricas como relevancia, coherencia y corrección factual para medir la calidad de la respuesta generada por la IA.
+
+Una aproximación implica presentar tanto la solicitud del usuario como la respuesta del modelo de IA al modelo, consultando si la respuesta se alinea con los datos proporcionados.
+
+Además, aprovechar la información almacenada en la base de datos vectorial como datos complementarios puede mejorar el proceso de evaluación, ayudando a determinar la relevancia de la respuesta.
+
+El proyecto Spring AI actualmente proporciona algunos ejemplos muy básicos de cómo puede evaluar las respuestas en forma de prompts para incluir en una prueba JUnit.
+
+== Capacidades de los LLMs
+
+.Los LLMs se clasifican de acuerdo a estos criterios:
+* Generales
+** MMLU Representación de cuestiones de 57 materias (humanidades, ciencias sociales, ciencias naturales, matemáticas, tecnología, etc.)
+* Razonamiento
+** Un gran test de datos de tareas desafiantes que requieren razonamiento de múltiples pasos
+** DROP Compprensión de lectura (F1 Score)
+** HellaSwag razonamiento de sentido común para tareas cotidianas
+* Matemáticas
+** GSM8K Aritmética básica (incluye problemas de matemáticas de primaria)
+** MATH Challenging Retos matemáticos (incluye álgebra, geometría, pre-cálculo y otros)
+* Código
+** Generación de código HumanEval Python
+** Generación de código de Python de HumanEval. Nuevo conjunto de datos retenido similar a HumanEval, no filtrado en la web
+* Imágenes (multimodal)
+** MMMU razonamiento de problemas de nivel universitario de múltiples disciplinas
+** VQAv2 Comprensión de imágenes naturales
+** TextVQA OCR reconocimiento de objetos en imágenes naturales
+** DocVQA Comprensión de documentos
+** Infographic VQA comprensión de infografías
+** MathVista razonamiento matemático en contextos visuales
+** MathVQA2 razonamiento matemático en contextos visuales (incluye problemas de matemáticas de primaria)
+* Texto (imodal)
+** MMTU Comprensión de texto naturales
+** VQAText OCR reconocimiento de palabras en imágenes naturales
+** DocText Comprensión de documentos
+** Infographic TextVQA comprensión de infografías
+* Audio (multimodal)
+** MMAU Comprensión de audio naturales
+** VQAAudio OCR reconocimiento de palabras en imágenes naturales
+
+.Los LLMs se clasifican de acuerdo a estas capacidades:
+
+1. **Comprensión (Comprehension):**
+   - POS Tagging (Part-of-Speech): Evalúa la precisión al identificar las categorías gramaticales de cada palabra.
+   - Named Entity Recognition (NER): Mide la habilidad para reconocer y clasificar entidades nombradas dentro del texto.
+   - Question Answering: Comprueba la capacidad para responder preguntas con precisión, basándose en contextos proporcionados.
+   - Commonsense Reasoning: Evalúa la habilidad para resolver problemas y hacer inferencias razonables.
+
+2. **Generación de Texto (Text Generation):**
+   - Coherence and Cohesion: Mide la capacidad para generar texto coherente y cohesivo, con transiciones adecuadas entre oraciones.
+   - Grammar and Fluency: Evalúa la gramática y fluidez del texto generado.
+   - Creativity: Comprueba la habilidad para generar contenido creativo o variado.
+
+3. **Comunicación (Communication):**
+   - Dialogue Generation: Mides la capacidad para generar diálogos naturales y adecuados.
+   - Summarization: Evalúa la habilidad para resumir textos de manera precisa y relevante.
+
+4. **Conocimiento y Factualidad (Knowledge and Factuality):**
+   - Knowledge Base Question Answering: Comprueba si el modelo puede acceder a su base de conocimientos para responder preguntas correctamente.
+   - Fact Verification: Evalúa la capacidad del modelo para confirmar o refutar hechos y datos.
+
+5. **Traducción (Translation):**
+   - Multilingual Ability: Mides la habilidad para traducir entre diferentes idiomas con precisión y fidelidad al texto original.
+   - Zero-Shot Translation: Evalúa la capacidad del modelo para realizar traducciones sin entrenamiento previo en parejas de idiomas específicas.
+
+6. **Inferencia (Inference):**
+   - Entailment and Paradox Detection: Comprueba la habilidad para detectar lógica y resolver paradójos.
+   - Causal Reasoning: Evalúa la capacidad para entender causas y efectos en el texto.
+7. **Multimodality (Multimodality):**
+   - Image Captioning: Mide si el modelo puede describir imágenes de manera coherente y precisa.
+   - Grounded Language (Visual/Audio Commands, etc.): Evalúa la habilidad para interpretar y responder a comandos basados en imágenes o sonidos.
+
+8. **Generalization and Adaptation (Generalization and Adaptation):**
+   - Domain Adaptation: Comprueba cómo el modelo adapta su conocimiento a diferentes dominios de conocimiento.
+   - Out-of-Distribution Generalization: Evalúa la capacidad del modelo para generalizar a datos que no están en el conjunto de entrenamiento original.
+
+9. **Bias and Fairness (Bias and Fairness):**
+   - Bias Detection and Mitigation: Identifica y evalúa cómo se manejan los sesgos presentes en los datos de entrenamiento.
+
+10. **Robustness and Reliability (Robustness and Reliability):**
+    - Robustness to Adversarial Attacks: Evalúa la capacidad del modelo para resistir ataques adversarios diseñados para confundir o engañar al modelo.
+    - Model Interpretability: Comprueba si se pueden entender las respuestas y decisiones tomadas por el modelo.
+
+11. **Human Evaluation (Human Evaluation):**
+    - Human-in-the-Loop Evaluations: Utiliza a los usuarios humanos para evaluar la calidad de las respuestas generadas o comprender mejor cómo se perciben las interacciones con el modelo.
+
+
+== LLMs de propósito general
+
+Un LLM de propósito general es un modelo de lenguaje que puede ser utilizado para una amplia variedad de tareas de procesamiento de lenguaje natural. Estos modelos son entrenados en grandes cantidades de datos y son capaces de realizar tareas como generación de texto, traducción automática, resumen de texto, entre otras.
+
+.Aplicaciones de los LLMs de propósito general:
+* Chatbots.
+* Asistentes virtuales.
+* Traducción automática.
+* Autocompletado de texto.
+* RAG (Retrieve, Answer, Generate).
+
+.Podemos establecer dos categorías de LLMs de propósito general:
+* **LLMs privativos**: son aquellos que no están disponibles para el público en general.
+** GPT-3
+** BERT
+
+* **LLMs de código abierto**: son aquellos que están disponibles para el público en general.
+** Llama
+** Mistral
+
+.Una referencia para ver el rendimiento de los LLMs de propósito general:
+https://huggingface.co/spaces/andrewrreed/closed-vs-open-arena-elo
+
+== Chat GPT
+
+ChatGPT es una inteligencia artificial diseñada para mantener conversaciones con usuarios humanos. Utiliza el aprendizaje automático para comprender el lenguaje humano y generar respuestas coherentes y relevantes en función de las entradas de texto que recibe. En resumen, es como tener una charla con una máquina inteligente.
+
+ChatGPT se basa en la arquitectura GPT (Generative Pre-trained Transformer), desarrollada por OpenAI. Hasta mi última actualización en enero de 2022, existían varias versiones de ChatGPT que se basaban en diferentes versiones de la arquitectura GPT, incluyendo GPT-3.5, que es la versión en la que estoy basado.
+
+.Las prestaciones de ChatGPT incluyen:
+1. **Generación de texto coherente y relevante:** Puede comprender el contexto de una conversación y generar respuestas que se ajusten a ese contexto.
+
+2. **Flexibilidad en el lenguaje:** Puede manejar una amplia variedad de temas y estilos de conversación, desde preguntas técnicas hasta conversaciones informales.
+
+3. **Adaptabilidad:** A medida que se le proporciona más información y datos, ChatGPT puede mejorar su capacidad para responder de manera más precisa y relevante.
+
+4. **Aplicaciones en múltiples campos:** Se puede utilizar para una variedad de aplicaciones, como asistencia al cliente, generación de contenido, enseñanza y más.
+
+En general, las prestaciones de ChatGPT están orientadas a proporcionar una experiencia de conversación fluida y natural con los usuarios, ayudando a facilitar la comunicación entre humanos y máquinas.
+
+=== GPT
+
+.Aquí tienes un resumen de las principales versiones de modelos GPT que se han utilizado en ChatGPT, junto con sus fechas de publicación:
+
+[cols="1,1,3", options="header"]
+|=== 
+| Modelo              | Fecha de Publicación | Descripción
+
+| GPT-1               | 2018                 | La primera versión del modelo GPT, introducida por OpenAI.
+| GPT-2               | 2019                 | Una versión más grande y potente que GPT-1, con 1.5 mil millones de parámetros.
+| GPT-3               | 2020                 | Un salto significativo en tamaño y rendimiento, con 175 mil millones de parámetros y capacidades de generación avanzadas.
+| GPT-3.5             | 2021                 | Una mejora incremental de GPT-3 con correcciones de errores y ajustes de rendimiento.
+| GPT-4   | 2023         | Una versión más avanzada y potente que GPT-3, con mejoras en la generación de lenguaje natural y la capacidad de razonamiento.
+|===
+
+
+== Spring AI
+
+El proyecto Spring AI tiene como objetivo simplificar el desarrollo de aplicaciones que incorporan funcionalidades de inteligencia artificial sin complejidades innecesarias.
+
+El proyecto se inspira en proyectos de Python como LangChain y LlamaIndex, pero Spring AI no es un puerto directo de esos proyectos. El proyecto se fundó con la creencia de que la próxima ola de aplicaciones de IA generativa no será solo para desarrolladores de Python, sino que será ubicua en muchos lenguajes de programación.
+
+En su núcleo, Spring AI proporciona abstracciones que sirven como base para el desarrollo de aplicaciones de IA. Estas abstracciones tienen múltiples implementaciones, lo que permite cambiar fácilmente los componentes con cambios mínimos en el código.
+
+
+
+.Spring AI proporciona las siguientes características:
+
+* Soporte para todos los principales proveedores de modelos como OpenAI, Microsoft, Amazon, Google y Huggingface.
+* Los tipos de modelos soportados son Chat y Text to Image, con más en camino.
+* Un API portable entre proveedores de IA para Chat y para modelos de incrustación. Se admiten opciones de API síncronas y de transmisión. También se admite la posibilidad de acceder a características específicas del modelo.
+* Mapeo de la salida del modelo de IA a POJOs (Plain Old Java Objects) para facilitar el uso de los resultados en aplicaciones Java.
+* Soporte para todos los principales proveedores de bases de datos vectoriales como Azure Vector Search, Chroma, Milvus, Neo4j, PostgreSQL/PGVector, PineCone, Qdrant, Redis y Weaviate
+* API portable entre proveedores de almacenamiento de vectores, incluido un nuevo API de filtro de metadatos similar a SQL que también es portátil.
+* Llamadas a funciones de IA en tiempo real
+* Auto-configuración de Spring Boot y Starters para modelos de IA y vector stores
+* Framework ETL para Ingeniería de Datos
+
+=== Spring AI: instalación y uso
+
+Podemos usar el cliente de Spring Boot para instalar y usar Spring AI. 
+Está disponible en el repositorio del proyecto en GitHub: 
+https://github.com/spring-projects/spring-cli/releases
+
+Para instalar Spring AI, simplemente descarga el archivo ejecutable para tu sistema operativo y sigue las instrucciones de instalación. Una vez instalado, puedes usar el comando `spring` para gestionar aplicaciones de Spring y acceder a las funcionalidades de Spring AI.
+
+.Con este comando podemos crear un nuevo proyecto de Spring AI:
+```
+spring boot new --from ai --name myai
+```
+
+Es necesario definir un archivo de configuración `application.properties` para especificar las credenciales y configuraciones necesarias para acceder a los servicios de IA y bases de datos vectoriales. 
+
+.Aquí tienes un ejemplo de cómo podría ser un archivo de configuración `application.properties` para Spring AI:
+```
+spring.ai.openai.api-key = <API_KEY>
+spring.ai.openai.chat.options.model=gpt-3.5-turbo
+spring.ai.openai.chat.options.temperature=0.7
+```
+
+Este mismo proceso se puede hacer con la herramienta online spring initializer: https://start.spring.io/
+
+=== Modelos soportados por Spring AI
+
+* **Chat Completion API**
+    ** OpenAI Chat Completion 
+    ** Microsoft Azure Open AI Chat Completion 
+    ** Ollama Chat Completion
+    ** HuggingFace Chat Completion 
+    ** Google Vertex AI PaLM2 Chat Completion 
+    ** Google Vertex AI Gemini Chat Completion 
+    ** Amazon Bedrock
+        *** Cohere Chat Completion
+        *** Llama2 Chat Completion
+        *** Titan Chat Completion
+        *** Anthropic Chat Completion
+    ** MistralAI Chat Completion 
+
+* **Transcription API**
+    ** OpenAI Transcription (Whisper)
+
+* **Image Generation API**
+** OpenAI Image Generation
+** StabilityAI Image Generation
+
+* **Embeddings API**
+** Spring AI OpenAI Embeddings
+** Spring AI Azure OpenAI Embeddings
+** Spring AI Ollama Embeddings
+** Spring AI Transformers (ONNX) Embeddings
+** Spring AI PostgresML Embeddings
+** Spring AI Bedrock Cohere Embeddings
+** Spring AI Bedrock Titan Embeddings
+** Spring AI VertexAI Embeddings
+** Spring AI MistralAI Embeddings
+
+* **Vector Database API**
+** Azure Vector Search 
+** ChromaVectorStore 
+** MilvusVectorStore 
+** Neo4jVectorStore 
+** PgVectorStore 
+** PineconeVectorStore 
+** QdrantVectorStore 
+** RedisVectorStore 
+** WeaviateVectorStore 
+** SimpleVectorStore 
+
+=== Spring AI API
+
+El API de Spring AI cubre una amplia gama de funcionalidades. Cada característica principal se detalla en su propia sección dedicada. Para proporcionar una visión general.
+
+.Las siguientes funcionalidades clave están disponibles:
+
+* API reutilizable a través de proveedores de IA para Chat, Text to Image y modelos de Embedding. Se admiten opciones de API síncronas y de transmisión. También se admite la posibilidad de acceder a características específicas del modelo. Admitimos modelos de IA de OpenAI, Microsoft, Amazon, Google, Huggingface y más.
+
+* API portable entre proveedores de almacenamiento de vectores, incluido un nuevo API de filtro de metadatos similar a SQL que también es portátil. Se admiten 8 bases de datos vectoriales.
+
+* Llamadas a funciones de IA en tiempo real. Spring AI facilita que el modelo de IA invoque su objeto java.util.Function POJO.
+
+* Auto-configuración de Spring Boot y Starters para modelos de IA y vector stores.
+
+* Framework ETL para Ingeniería de Datos. Esto proporciona la base para cargar datos en una base de datos vectorial, ayudando a implementar el patrón de Generación con Recuperación Aumentada que le permite llevar sus datos al modelo de IA para incorporarlos en su respuesta.
+
+==== Chat Completion API
+
+El Chat Completion API de Spring AI proporciona una interfaz unificada para interactuar con varios proveedores de modelos de chat, como OpenAI, Microsoft, Amazon, Google, Huggingface y más. Con esta API, los desarrolladores pueden enviar solicitudes de texto a un modelo de chat alojado en la nube y recibir respuestas generadas por el modelo en tiempo real.
+
+El API funciona enviando un prompt o una conversación parcial al modelo de IA, que luego genera una completación o continuación de la conversación basada en sus datos de entrenamiento y su comprensión de los patrones del lenguaje natural. La respuesta completada se devuelve a la aplicación, que puede presentarla al usuario o utilizarla para un procesamiento adicional.
+
+Éste API es útil para una variedad de aplicaciones, como chatbots, asistentes virtuales, soporte al cliente automatizado, juegos de texto y más. Permite a los desarrolladores aprovechar la potencia de los modelos de lenguaje natural para mejorar la interacción humano-máquina en sus propios productos y servicios.
+
+.Los objetivos de la API de Chat Completion son:
+* ChatClient 
+* StreamingChatClient
+* Prompt
+* Message
+* ChatOptions
+* ChatResponse
+* Generation
+
+.La definición del interfaz de ChatClient es:
+```java
+public interface ChatClient extends ModelClient<Prompt, ChatResponse> {
+
+	default String call(String message) {// implementation omitted
+	}
+
+    @Override
+	ChatResponse call(Prompt prompt);
+}
+```
+
+Donde `Prompt` es la entrada al modelo de IA y `ChatResponse` es la salida generada por el modelo. La interfaz `ChatClient` define un método `call` que toma un `Prompt` y devuelve un `ChatResponse`. La implementación de este método varía según el proveedor de IA subyacente.
+
+.La definición de la interfaz `StreamingChatClient` es:
+```java
+public interface StreamingChatClient extends StreamingModelClient<Prompt, ChatResponse> {
+    @Override
+	Flux<ChatResponse> stream(Prompt prompt);
+}
+```
+
+Donde `Flux<ChatResponse>` es un flujo de respuestas generadas por el modelo de IA. La interfaz `StreamingChatClient` define un método `stream` que toma un `Prompt` y devuelve un `Flux<ChatResponse>`. Este método permite la generación de respuestas en tiempo real a medida que se reciben las entradas. No todos los servicios de IA admiten la transmisión de respuestas en tiempo real.
+
+.La definición de la clase `Prompt` es:
+```java
+public class Prompt implements ModelRequest<List<Message>> {
+
+    private final List<Message> messages;
+
+    private ChatOptions modelOptions;
+
+	@Override
+	public ChatOptions getOptions() {..}
+
+	@Override
+	public List<Message> getInstructions() {...}
+
+    // constructors and utility methods omitted
+}
+```
+
+Donde `Message` es un mensaje de texto en una conversación y `ChatOptions` son las opciones de configuración del modelo de IA. La clase `Prompt` implementa la interfaz `ModelRequest` y proporciona métodos para acceder a los mensajes y opciones de configuración.
+
+.La definición de la clase `Message` es:
+```java
+public interface Message {
+
+	String getContent();
+
+	List<Media> getMedia();
+
+	Map<String, Object> getProperties();
+
+	MessageType getMessageType();
+
+}
+```
+
+Donde `MessageType` es un enumerador que define el tipo de mensaje, como entrada del usuario, respuesta del modelo, etc. La interfaz `Message` define métodos para acceder al contenido del mensaje, las propiedades asociadas y el tipo de mensaje.
+
+.La definición del interfaz `ChatOptions` es:
+```java
+public interface ChatOptions extends ModelOptions {
+
+	Float getTemperature();
+	void setTemperature(Float temperature);
+	Float getTopP();
+	void setTopP(Float topP);
+	Integer getTopK();
+	void setTopK(Integer topK);
+}
+```
+
+Donde `ModelOptions` es una interfaz que define las opciones de configuración del modelo de IA. La interfaz `ChatOptions` extiende `ModelOptions` y proporciona métodos para acceder y configurar parámetros específicos del modelo de chat, como la temperatura, `topP` y `topK`.
+
+.La definición de la clase `ChatResponse` es:
+```java
+
+public class ChatResponse implements ModelResponse<Generation> {
+
+    private final ChatResponseMetadata chatResponseMetadata;
+	private final List<Generation> generations;
+
+	@Override
+	public ChatResponseMetadata getMetadata() {...}
+
+    @Override
+	public List<Generation> getResults() {...}
+
+    // other methods omitted
+}
+```
+
+Donde `ChatResponseMetadata` es un objeto que contiene metadatos sobre la respuesta generada por el modelo de IA y `Generation` es una generación de texto en la conversación. La clase `ChatResponse` implementa la interfaz `ModelResponse` y proporciona métodos para acceder a los metadatos y generaciones de la respuesta.
+
+.La definición de la clase `Generation` es:
+```java
+public class Generation implements ModelResult<AssistantMessage> {
+
+	private AssistantMessage assistantMessage;
+	private ChatGenerationMetadata chatGenerationMetadata;
+
+	@Override
+	public AssistantMessage getOutput() {...}
+
+	@Override
+	public ChatGenerationMetadata getMetadata() {...}
+
+    // other methods omitted
+}
+```
+Donde `AssistantMessage` es un mensaje generado por el modelo de IA y `ChatGenerationMetadata` son metadatos asociados con la generación de texto. La clase `Generation` implementa la interfaz `ModelResult` y proporciona métodos para acceder al mensaje y metadatos generados.
+
+
+Inicialmente, los prompts eran cadenas simples, solo líneas de texto. Con el tiempo, esto evolucionó para incluir marcadores de posición específicos dentro de estas cadenas, como "USUARIO:", que el modelo de IA podía reconocer y responder en consecuencia. Este fue un paso hacia prompts más estructurados.
+
+Los roles categorizan los mensajes, aclarando el contexto y el propósito de cada segmento del prompt para el modelo de IA. Este enfoque estructurado mejora el matiz y la eficacia de la comunicación con la IA, ya que cada parte del prompt desempeña un papel distinto y definido en la interacción.
+
+.Los roles comunes en los prompts estructurados son:
+* **System Role:** Guía el comportamiento del AI y el estilo de respuesta, estableciendo parámetros o reglas para cómo el AI interpreta y responde a la entrada. Es similar a proporcionar instrucciones al AI antes de iniciar una conversación.
+* **User Role:** Representa la entrada del usuario (sus preguntas, comandos o declaraciones a la IA). Este rol es fundamental ya que forma la base de la respuesta del AI.
+* **Assistant Role:** La respuesta del AI a la entrada del usuario. Más que una respuesta o reacción, es crucial para mantener el flujo de la conversación. Al rastrear las respuestas anteriores del AI (sus mensajes de 'Assistant Role'), el sistema garantiza interacciones coherentes y contextualmente relevantes.
+* **Function Role:** Este rol se ocupa de tareas u operaciones específicas durante la conversación. Mientras que el Rol del Sistema establece el comportamiento general del AI, el Rol de la Función se centra en llevar a cabo ciertas acciones o comandos que el usuario solicita. Es como una característica especial en el AI, utilizada cuando sea necesario para realizar funciones específicas como cálculos, obtención de datos u otras tareas más allá de simplemente hablar. Este rol permite al AI ofrecer ayuda práctica además de respuestas conversacionales.
+
+.Los roles se representan en Spring AI como un enmu:
+```java
+public enum MessageType {
+
+	USER("user"),
+
+	ASSISTANT("assistant"),
+
+	SYSTEM("system"),
+
+	FUNCTION("function");
+
+	private final String value;
+
+	MessageType(String value) {
+		this.value = value;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public static MessageType fromValue(String value) {
+		for (MessageType messageType : MessageType.values()) {
+			if (messageType.getValue().equals(value)) {
+				return messageType;
+			}
+		}
+		throw new IllegalArgumentException("Invalid MessageType value: " + value);
+	}
+
+}
+```
+
+.La clase PromptTemplate está diseñada para facilitar la creación de prompts estructurados que luego se envían al modelo de IA para su procesamiento.
+```java
+public class PromptTemplate implements PromptTemplateActions, PromptTemplateMessageActions {
+
+   String render(); //PromptTemplateStringActions
+
+	String render(Map<String, Object> model); //PromptTemplateStringActions
+
+   Message createMessage(); //PromptTemplateMessageActions
+
+	Message createMessage(Map<String, Object> model); //PromptTemplateMessageActions
+
+   Prompt create(); //PromptTemplateActions
+
+	Prompt create(Map<String, Object> model); //PromptTemplateActions
+}
+```
+
+.Ejemplo de uso de PromptTemplate:
+```java
+PromptTemplate promptTemplate = new PromptTemplate("Tell me a {adjective} joke about {topic}");
+
+Prompt prompt = promptTemplate.create(Map.of("adjective", adjective, "topic", topic));
+
+return chatClient.call(prompt).getResult();
+```
+
+En este ejemplo, se crea un `PromptTemplate` con una plantilla de prompt que incluye marcadores de posición para un adjetivo y un tema. Luego, se crea un `Prompt` a partir de la plantilla con valores específicos para el adjetivo y el tema. Finalmente, se envía el `Prompt` al modelo de IA para obtener una respuesta.
+
+.Otro ejemplo de uso de PromptTemplate:
+```java
+String userText = """
+    Tell me about three famous pirates from the Golden Age of Piracy and why they did.
+    Write at least a sentence for each pirate.
+    """;
+
+Message userMessage = new UserMessage(userText);
+
+String systemText = """
+  You are a helpful AI assistant that helps people find information.
+  Your name is {name}
+  You should reply to the user's request with your name and also in the style of a {voice}.
+  """;
+
+SystemPromptTemplate systemPromptTemplate = new SystemPromptTemplate(systemText);
+Message systemMessage = systemPromptTemplate.createMessage(Map.of("name", name, "voice", voice));
+
+Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
+
+List<Generation> response = chatClient.call(prompt).getResults();
+```
+
+En este ejemplo, se crea un mensaje de usuario con una solicitud de información sobre piratas. Luego, se crea un mensaje del sistema con una plantilla que incluye marcadores de posición para el nombre y la voz del asistente de IA. Se crea un `Prompt` con los mensajes de usuario y sistema, y se envía al modelo de IA para obtener una respuesta.
+
+El interfaz OutputParser permite obtener una salida estructurada, por ejemplo, mapeando la salida a una clase Java o a un array de valores a partir de la salida basada en cadenas de los modelos de IA.
+
+.EL interfaz OutputParser es:
+```java
+public interface OutputParser<T> extends Parser<T>, FormatProvider {
+   T parse(String text);
+	String getFormat();
+}
+```
+.El interfaz OutputParser tiene las siguientes implementaciones disponibles:
+* **BeanOutputParser:** Especifica el esquema JSON para la clase Java y utiliza DRAFT_2020_12 de la especificación del esquema JSON, ya que OpenAI ha indicado que esto daría los mejores resultados. La salida JSON del modelo de IA se deserializa a un objeto Java, también conocido como JavaBean.
+* **MapOutputParser:** Similar a BeanOutputParser, pero la carga útil JSON se deserializa en una instancia de java.util.Map<String, Object>.
+* **ListOutputParser:** Especifica que la salida sea una lista delimitada por comas.
+
+.Ejemplo de uso de OutputParser:
+```java
+class ActorsFilms {
+
+	public String actor;
+
+	public List<String> movies;
+
+    // getters and toString omitted
+}
+
+@GetMapping("/ai/output")
+    public ActorsFilms generate(@RequestParam(value = "actor", defaultValue = "Jeff Bridges") String actor) {
+        var outputParser = new BeanOutputParser<>(ActorsFilms.class);
+
+        String userMessage =
+                """
+                Generate the filmography for the actor {actor}.
+                {format}
+                """;
+
+        PromptTemplate promptTemplate = new PromptTemplate(userMessage, Map.of("actor", actor, "format", outputParser.getFormat() ));
+        Prompt prompt = promptTemplate.create();
+        Generation generation = chatClient.call(prompt).getResult();
+
+        ActorsFilms actorsFilms = outputParser.parse(generation.getOutput().getContent());
+        return actorsFilms;
+    }
+```
+
+
+
+===== OpenAI Chat Completion
+
+El OpenAI Chat Completion es un servicio de inteligencia artificial que permite a los desarrolladores integrar capacidades de chat en sus aplicaciones y sistemas. Utiliza el modelo de lenguaje GPT-3 de OpenAI para generar respuestas coherentes y relevantes en función de las entradas de texto proporcionadas.
+
+.Instalación con Maven:
+[code, xml]
+----
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+</dependency>
+----
+
+.Instalación con Gradle:
+[code, groovy]
+----
+dependencies {
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+}
+----
+
+
+.En OpenAI Chat Completion, las propiedades de chat se dividen en:
+* **retry properties**: Propiedades de reintentos
+* **connection properties**: Propiedades de conexión
+* **configuration properties**: Propiedades de configuración
+
+.Las propiedades de reintentos son:
+[cols="1,3,1", options="header"]
+|===
+| Propiedad | Descripción | Predeterminado
+
+| spring.ai.retry.max-attempts
+| Número máximo de intentos de reintento.
+| 10
+
+| spring.ai.retry.backoff.initial-interval
+| Duración inicial de espera para la política de retroceso exponencial.
+| 2 seg.
+
+| spring.ai.retry.backoff.multiplier
+| Multiplicador del intervalo de retroceso.
+| 5
+
+| spring.ai.retry.backoff.max-interval
+| Duración máxima de retroceso.
+| 3 min.
+
+| spring.ai.retry.on-client-errors
+| Si es falso, lanza una NonTransientAiException y no intente reintentar para los códigos de error 4xx del cliente.
+| false
+
+| spring.ai.retry.exclude-on-http-codes
+| Lista de códigos de estado HTTP que no deben desencadenar un reintento (por ejemplo, para lanzar NonTransientAiException).
+| vacío
+|===
+
+.Las propiedades de conexión son:
+[cols="1,3,1", options="header"]
+|===
+| Propiedad | Descripción | Predeterminado
+
+| spring.ai.openai.base-url
+| La URL para conectarse.
+| api.openai.com
+
+| spring.ai.openai.api-key
+| La clave API.
+| -
+|===
+
+.Las propiedades de configuración son:
+[cols="1,3,1", options="header"]
+|===
+| Propiedad | Descripción | Predeterminado
+
+| spring.ai.openai.chat.enabled
+| Habilitar el cliente de chat de OpenAI.
+| true
+
+| spring.ai.openai.chat.base-url
+| Opcional, sobrescribe la spring.ai.openai.base-url para proporcionar una URL específica para el chat.
+| -
+
+| spring.ai.openai.chat.api-key
+| Opcional, sobrescribe la spring.ai.openai.api-key para proporcionar una clave API específica para el chat.
+| -
+
+| spring.ai.openai.chat.options.model
+| Este es el modelo de chat de OpenAI a utilizar.
+| gpt-3.5-turbo (los gpt-3.5-turbo, gpt-4 y gpt-4-32k apuntan a las versiones más recientes del modelo)
+
+| spring.ai.openai.chat.options.temperature
+| La temperatura de muestreo a utilizar que controla la creatividad aparente de las respuestas generadas. Valores más altos harán que la salida sea más aleatoria mientras que valores más bajos harán que los resultados sean más enfocados y deterministas. No se recomienda modificar temperature y top_p para la misma solicitud de completación, ya que la interacción de estos dos ajustes es difícil de predecir.
+| 0.8
+
+| spring.ai.openai.chat.options.frequencyPenalty
+| Número entre -2.0 y 2.0. Valores positivos penalizan nuevos tokens basados en su frecuencia existente en el texto hasta ahora, disminuyendo la probabilidad de que el modelo repita la misma línea textualmente.
+| 0.0f
+
+| spring.ai.openai.chat.options.logitBias
+| Modifica la probabilidad de que aparezcan tokens específicos en la completación.
+| -
+
+| spring.ai.openai.chat.options.maxTokens
+| El número máximo de tokens a generar en la completación del chat. La longitud total de los tokens de entrada y los tokens generados está limitada por la longitud del contexto del modelo.
+| -
+
+| spring.ai.openai.chat.options.n
+| Cuántas opciones de completación de chat generar para cada mensaje de entrada. Tenga en cuenta que se le cobrará según el número de tokens generados en todas las opciones. Mantenga n en 1 para minimizar costos.
+| 1
+
+| spring.ai.openai.chat.options.presencePenalty
+| Número entre -2.0 y 2.0. Valores positivos penalizan nuevos tokens basados en si aparecen en el texto hasta ahora, aumentando la probabilidad de que el modelo hable sobre nuevos temas.
+| -
+
+| spring.ai.openai.chat.options.responseFormat
+| Un objeto que especifica el formato que el modelo debe generar. Establecer en { "type": "json_object" } habilita el modo JSON, que garantiza que el mensaje que genera el modelo sea JSON válido.
+| -
+
+| spring.ai.openai.chat.options.seed
+| Esta función está en Beta. Si se especifica, nuestro sistema hará el mejor esfuerzo para muestrear de manera determinista, de modo que las solicitudes repetidas con la misma semilla y parámetros deberían devolver el mismo resultado.
+| -
+
+| spring.ai.openai.chat.options.stop
+| Hasta 4 secuencias donde la API dejará de generar más tokens.
+| -
+
+| spring.ai.openai.chat.options.topP
+| Una alternativa al muestreo con temperatura, llamada muestreo de núcleo, donde el modelo considera los resultados de los tokens con masa de probabilidad top_p. Así, 0.1 significa que solo se consideran los tokens que comprenden el 10% superior de la masa de probabilidad. Generalmente recomendamos alterar esto o la temperatura, pero no ambos.
+| -
+
+| spring.ai.openai.chat.options.tools
+| Una lista de herramientas que el modelo puede llamar. Actualmente, solo se admiten funciones como herramientas. Utilice esto para proporcionar una lista de funciones para las cuales el modelo puede generar entradas JSON.
+| -
+
+| spring.ai.openai.chat.options.toolChoice
+| Controla cuál (si hay alguna) función es llamada por el modelo. none significa que el modelo no llamará a ninguna función y en su lugar generará un mensaje. auto significa que el modelo puede elegir entre generar un mensaje o llamar a una función. Especificar una función particular mediante {"type: "function", "function": {"name": "my_function"}} obliga al modelo a llamar a esa función. none es el valor predeterminado cuando no hay funciones presentes. auto es el valor predeterminado si hay funciones presentes.
+| -
+
+| spring.ai.openai.chat.options.user
+| Un identificador único que representa a su usuario final, lo que puede ayudar a OpenAI a monitorear y detectar abusos.
+| -
+
+| spring.ai.openai.chat.options.functions
+| Lista de funciones, identificadas por sus nombres, para habilitar la llamada de funciones en una sola solicitud de prompt. Las funciones con esos nombres deben existir en el registro functionCallbacks.
+| -
+|===
+
+====== Ejemplos de uso de OpenAI Chat Completion
+
+Para usar el servicio de Chat Completion de OpenAI en Spring AI, primero necesitas configurar las propiedades de conexión y configuración en tu archivo `application.properties`. 
+
+.A continuución, se muestra un ejemplo de cómo podría quedar application.properties:
+```
+spring.ai.openai.api-key=YOUR_API_KEY
+spring.ai.openai.chat.options.model=gpt-3.5-turbo
+spring.ai.openai.chat.options.temperature=0.7
+```
+
+.El controlador de Spring Boot para el servicio de Chat Completion de OpenAI podría ser así:
+```java
+@RestController
+public class ChatController {
+
+    private final OpenAiChatClient chatClient;
+
+    @Autowired
+    public ChatController(OpenAiChatClient chatClient) {
+        this.chatClient = chatClient;
+    }
+
+    @GetMapping("/ai/generate")
+    public Map generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        return Map.of("generation", chatClient.call(message));
+    }
+
+    @GetMapping("/ai/generateStream")
+	public Flux<ChatResponse> generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        Prompt prompt = new Prompt(new UserMessage(message));
+        return chatClient.stream(prompt);
+    }
+}
+```
+
+En este controlador, se inyecta un `OpenAiChatClient` y se define un método `generate` que toma un mensaje de texto y llama al cliente de chat para generar una respuesta. También se define un método `generateStream` que toma un mensaje de texto y llama al cliente de chat para generar una respuesta en tiempo real utilizando un `Flux`.
+
+.Podemos añadir la dependencia de OpenAI al proyecto de Spring AI con Maven:
+```
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-openai</artifactId>
+</dependency>
+```
+
+.O con Gradle:
+[code, groovy]
+----
+dependencies {
+    implementation 'org.springframework.ai:spring-ai-openai'
+}
+----
+
+.A partir de aquí, podemos configurar el uso del modelo de OpenAI en nuestro proyecto de Spring AI.
+```java
+openAiApi = new OpenAiApi(System.getenv("OPENAI_API_KEY"));
+
+chatClient = new OpenAiChatClient(openAiApi)
+    .withDefaultOptions(OpenAiChatOptions.builder()
+            .withModel("gpt-35-turbo")
+            .withTemperature(0.4)
+            .withMaxTokens(200)
+        .build());
+
+ChatResponse response = chatClient.call(
+    new Prompt("Generate the names of 5 famous pirates."));
+
+// Or with streaming responses
+Flux<ChatResponse> response = chatClient.stream(
+    new Prompt("Generate the names of 5 famous pirates."));
+```
+
+====== Llamadas a funciones con OpenAIChatClient
+
+Se puede registrar funciones Java personalizadas con el OpenAiChatClient y hacer que el modelo de OpenAI elija inteligentemente generar un objeto JSON que contenga argumentos para llamar a una o muchas de las funciones registradas. Esto te permite conectar las capacidades de LLM con herramientas y APIs externas. Los modelos de OpenAI están entrenados para detectar cuándo se debe llamar a una función y responder con JSON que se ajusta a la firma de la función.
+
+Spring AI proporciona mecanismos flexibles y fáciles de usar para registrar y llamar a funciones personalizadas. En general, las funciones personalizadas deben proporcionar un nombre de función, una descripción y la firma de la llamada a la función (como esquema JSON) para que el modelo sepa qué argumentos espera la función. La descripción ayuda al modelo a entender cuándo llamar a la función.
+
+.Partimos de una clase que define un objeto de información meteorológica:
+```java
+public class MockWeatherService implements Function<Request, Response> {
+
+	public enum Unit { C, F }
+	public record Request(String location, Unit unit) {}
+	public record Response(double temp, Unit unit) {}
+
+	public Response apply(Request request) {
+		return new Response(30.0, Unit.C);
+	}
+}
+```
+.Hay dos formas de registrar funciones con el OpenAiChatClient como Beans de Spring:
+1. **Funciones Java planas**
+2. ** Wrapper de FunctionCallback**
+
+Internamente, Spring AI ChatClient creará una instancia wrapper FunctionCallbackWrapper que añade la lógica para que sea invocado a través del modelo de IA. El nombre del @Bean se pasa como ChatOption.
+
+.Un ejemplo de cómo registrar una función Java plana:
+```java
+@Configuration
+static class Config {
+
+	@Bean
+	@Description("Get the weather in location") // function description
+	public Function<MockWeatherService.Request, MockWeatherService.Response> weatherFunction1() {
+		return new MockWeatherService();
+	}
+	...
+}
+```
+La anotación @Description es opcional y proporciona una descripción de la función que ayuda al modelo a entender cuándo llamar a la función. Es una propiedad importante para establecer para ayudar al modelo de IA a determinar qué función del lado del cliente invocar.
+
+.Un ejemplo de cómo registrar una función con un wrapper de FunctionCallback:
+```java
+@Configuration
+static class Config {
+
+	@Bean
+	public FunctionCallback weatherFunctionInfo() {
+
+		return new FunctionCallbackWrapper<>("CurrentWeather", // (1) function name
+				"Get the weather in location", // (2) function description
+				(response) -> "" + response.temp() + response.unit(), // (3) Response Converter
+				new MockWeatherService()); // function code
+	}
+	...
+}
+```
+
+Esto encapsula la función de terceros, MockWeatherService, y la registra como una función CurrentWeather con el OpenAiChatClient. También proporciona una descripción (2) y un convertidor de respuesta opcional (3) para convertir la respuesta en un texto como se espera por el modelo.
+
+Por defecto, el convertidor de respuesta hace una serialización JSON del objeto de respuesta.
+
+.Especificación de esta función en el objeto ChatOptions:
+```java
+OpenAiChatClient chatClient = ...
+
+UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");
+
+ChatResponse response = chatClient.call(new Prompt(List.of(userMessage),
+		OpenAiChatOptions.builder().withFunction("CurrentWeather").build())); 
+
+logger.info("Response: {}", response);
+```
+
+En este ejemplo, se envía un mensaje de usuario que contiene una pregunta sobre el clima en varias ubicaciones. Se habilita la función CurrentWeather en las opciones de chat (1), lo que indica al modelo de IA que llame a la función registrada para obtener la información meteorológica.
+
+.La respuesta final tendrá el siguiente formato:
+```
+Here is the current weather for the requested cities:
+- San Francisco, CA: 30.0°C
+- Tokyo, Japan: 10.0°C
+- Paris, France: 15.0°C
+```
+
+.Además de la autoconfiguración, puedes registrar funciones de devolución de llamada, dinámicamente, con tus solicitudes de Prompt:
+```java
+OpenAiChatClient chatClient = ...
+
+UserMessage userMessage = new UserMessage("What's the weather like in San Francisco, Tokyo, and Paris?");
+
+var promptOptions = OpenAiChatOptions.builder()
+	.withFunctionCallbacks(List.of(new FunctionCallbackWrapper<>(
+		"CurrentWeather", // name
+		"Get the weather in location", // function description
+		new MockWeatherService()))) // function code
+	.build();
+
+ChatResponse response = chatClient.call(new Prompt(List.of(userMessage), promptOptions));
+```
+
+==== Embedings API
+
+El interfaz EmbeddingClient está diseñado para una integración sencilla con modelos de embeddings en IA y aprendizaje automático. **Su función principal es convertir texto en vectores numéricos**, comúnmente conocidos como embeddings. Estos embeddings son cruciales para diversas tareas como análisis semántico y clasificación de texto.
+
+
+.Conceptos Clave de los Embeddings
+
+1. **Vectorización de Datos:**
+   - Los embeddings convierten datos textuales en vectores numéricos. Por ejemplo, una palabra puede ser representada como un vector de números en un espacio de alta dimensionalidad.
+
+2. **Captura de Semántica:**
+   - Los embeddings están diseñados para capturar el significado y la relación semántica entre las palabras. Por ejemplo, en un buen espacio de embeddings, las palabras "rey" y "reina" estarán cerca una de otra y también mostrarán relaciones como "hombre" a "mujer".
+
+3. **Contexto:**
+   - Los embeddings contextuales, como los generados por modelos como BERT y GPT, tienen en cuenta el contexto en el que una palabra aparece, lo que permite desambiguar palabras con múltiples significados según el contexto.
+
+.Tipos de Embeddings
+1. **Word Embeddings:**
+   - Representan palabras individuales como vectores en un espacio vectorial. Ejemplos populares incluyen Word2Vec, GloVe y FastText.
+2. **Contextual Embeddings:**
+   - Generados por modelos que tienen en cuenta el contexto en el que una palabra aparece. Modelos como BERT, GPT y ELMo producen embeddings diferentes para una misma palabra según su contexto en la oración.
+
+.Ejemplos de Uso de Embeddings
+1. **Clasificación de Texto:**
+   - Los embeddings pueden ser utilizados como características de entrada para modelos de clasificación de texto, ayudando a agrupar y categorizar documentos basados en su contenido.
+2. **Búsqueda y Recuperación de Información:**
+   - Al convertir consultas y documentos en embeddings, se puede medir la similitud entre ellos y recuperar los documentos más relevantes para una consulta.
+3. **Análisis de Sentimientos:**
+   - Los embeddings permiten capturar las sutilezas de los sentimientos expresados en el texto, mejorando la precisión de los modelos de análisis de sentimientos.
+4. **Traducción Automática:**
+   - En los sistemas de traducción, los embeddings ayudan a mapear palabras y frases entre diferentes idiomas, facilitando una traducción más precisa y natural.
+
+
+Los embeddings son representaciones vectoriales densas que capturan la semántica de los datos textuales. Para determinar similitudes de conceptos utilizando embeddings, se pueden realizar varias operaciones matemáticas y estadísticas. A continuación se describen algunas de las más comunes:
+
+.Operaciones Comunes con Embeddings
+
+1. **Producto vectorial (Dot Product):**
+   - El producto vectorial entre dos vectores embeddings puede ser utilizado para medir la similitud. Un valor mayor indica una mayor similitud.
+   [source,python]
+   ----
+   similitud = np.dot(embedding1, embedding2)
+   ----
+
+2. **Distancia Euclidiana (Euclidean Distance):**
+   - La distancia euclidiana mide la distancia "recta" entre dos puntos en el espacio de embeddings. Valores más pequeños indican mayor similitud.
+   [source,python]
+   ----
+   distancia = np.linalg.norm(embedding1 - embedding2)
+   ----
+
+3. **Similitud del Coseno (Cosine Similarity):**
+   - La similitud del coseno mide el coseno del ángulo entre dos vectores. Es un valor entre -1 y 1, donde 1 indica vectores idénticos en dirección.
+   [source,python]
+   ----
+   from sklearn.metrics.pairwise import cosine_similarity
+   similitud = cosine_similarity([embedding1], [embedding2])
+   ----
+
+.Operaciones Avanzadas con Embeddings
+
+1. **Distancia de Manhattan (Manhattan Distance):**
+   - También conocida como distancia L1, es la suma de las diferencias absolutas de sus componentes. Es útil en ciertos contextos donde las diferencias lineales son más importantes.
+   [source,python]
+   ----
+   distancia = np.sum(np.abs(embedding1 - embedding2))
+   ----
+
+2. **Distancia de Chebyshev (Chebyshev Distance):**
+   - Esta medida de distancia toma el valor máximo de las diferencias absolutas de sus componentes. Es útil en aplicaciones donde se debe considerar la máxima diferencia en cualquier dimensión.
+   [source,python]
+   ----
+   distancia = np.max(np.abs(embedding1 - embedding2))
+   ----
+
+3. **Similitud de Jaccard (Jaccard Similarity):**
+   - Aunque más comúnmente utilizada para conjuntos, la similitud de Jaccard puede ser adaptada para vectores esparcidos o binarios.
+   [source,python]
+   ----
+   interseccion = np.minimum(embedding1, embedding2).sum()
+   union = np.maximum(embedding1, embedding2).sum()
+   similitud = interseccion / union
+   ----
+
+.Aplicaciones de Similitud de Embeddings
+
+1. **Agrupación de Documentos (Document Clustering):**
+   - Utilizando medidas de similitud para agrupar documentos similares en grupos (clusters).
+
+2. **Recuperación de Información (Information Retrieval):**
+   - Comparar consultas con documentos para encontrar los más relevantes basados en la similitud de sus embeddings.
+
+3. **Detección de Duplicados (Duplicate Detection):**
+   - Identificar documentos o registros duplicados mediante la comparación de sus embeddings.
+
+4. **Análisis de Sentimientos (Sentiment Analysis):**
+   - Evaluar la similitud entre frases para determinar sentimientos similares o diferentes.
+
+En resumen, los embeddings permiten realizar una variedad de operaciones matemáticas para determinar la similitud entre conceptos, facilitando tareas como la agrupación, la recuperación de información y la detección de duplicados.
+
+
+.Consideremos un modelo simple de Word2Vec. Aquí, palabras como "rey" y "reina" pueden tener embeddings que capturan la relación entre géneros. Si `v(rey)` representa el embedding de "rey" y `v(hombre)` representa el embedding de "hombre", entonces la relación `v(rey) - v(hombre) + v(mujer)` debería resultar en un vector cercano a `v(reina)`.
+
+[source,python]
+----
+# Ejemplo ilustrativo de cómo podría verse en un espacio de embeddings
+v_rey = model['rey']
+v_reina = model['reina']
+v_hombre = model['hombre']
+v_mujer = model['mujer']
+
+resultado = v_rey - v_hombre + v_mujer
+
+# Verificamos la similitud
+similitud = cosine_similarity(resultado, v_reina)
+----
+
+En resumen, los embeddings son una herramienta fundamental en los modelos de lenguaje, ya que permiten transformar datos textuales en una forma que los modelos pueden procesar y entender, capturando las relaciones semánticas y contextuales de manera efectiva.
+
+
+.El diseño de la interfaz EmbeddingClient en Spring AI se centra en dos objetivos principales:
+
+* **Portabilidad:** Esta interfaz garantiza una fácil adaptabilidad entre varios modelos de embeddings. Permite a los desarrolladores cambiar entre diferentes técnicas o modelos de embeddings con cambios mínimos en el código. 
+
+* **Simplicidad:** EmbeddingClient simplifica el proceso de convertir texto en embeddings. Al proporcionar métodos directos como embed(String text) y embed(Document document), elimina la complejidad de tratar con datos de texto en bruto y algoritmos de embedding. Esta elección de diseño facilita a los desarrolladores, especialmente a los nuevos en IA, utilizar embeddings en sus aplicaciones sin profundizar en la mecánica subyacente.
+
+
+
+.Los elementos principales del API de embeddings son:
+* **EmbeddingClient** 
+* **EmbeddingRequest** 
+* **EmbeddingResponse**
+* **Embedding**
+
+.La definición de la interfaz `EmbeddingClient` es:
+```java
+public interface EmbeddingClient extends ModelClient<EmbeddingRequest, EmbeddingResponse> {
+
+	@Override
+	EmbeddingResponse call(EmbeddingRequest request);
+
+
+	/**
+	 * Embeds the given document's content into a vector.
+	 * @param document the document to embed.
+	 * @return the embedded vector.
+	 */
+	List<Double> embed(Document document);
+
+	/**
+	 * Embeds the given text into a vector.
+	 * @param text the text to embed.
+	 * @return the embedded vector.
+	 */
+	default List<Double> embed(String text) {
+		Assert.notNull(text, "Text must not be null");
+		return this.embed(List.of(text)).iterator().next();
+	}
+
+	/**
+	 * Embeds a batch of texts into vectors.
+	 * @param texts list of texts to embed.
+	 * @return list of list of embedded vectors.
+	 */
+	default List<List<Double>> embed(List<String> texts) {
+		Assert.notNull(texts, "Texts must not be null");
+		return this.call(new EmbeddingRequest(texts, EmbeddingOptions.EMPTY))
+			.getResults()
+			.stream()
+			.map(Embedding::getOutput)
+			.toList();
+	}
+
+	/**
+	 * Embeds a batch of texts into vectors and returns the {@link EmbeddingResponse}.
+	 * @param texts list of texts to embed.
+	 * @return the embedding response.
+	 */
+	default EmbeddingResponse embedForResponse(List<String> texts) {
+		Assert.notNull(texts, "Texts must not be null");
+		return this.call(new EmbeddingRequest(texts, EmbeddingOptions.EMPTY));
+	}
+
+	/**
+	 * @return the number of dimensions of the embedded vectors. It is generative
+	 * specific.
+	 */
+	default int dimensions() {
+		return embed("Test String").size();
+	}
+
+}
+```
+
+Donde `EmbeddingRequest` es la entrada al modelo de embeddings y `EmbeddingResponse` es la salida generada por el modelo. La interfaz `EmbeddingClient` define métodos para incrustar documentos y textos en vectores, así como para obtener la dimensión de los vectores incrustados.
+
+.La definición de la clase `EmbeddingRequest` es:
+```java
+public class EmbeddingRequest implements ModelRequest<List<String>> {
+	private final List<String> inputs;
+	private final EmbeddingOptions options;
+	// other methods omitted
+}
+```
+
+Donde `EmbeddingOptions` son las opciones de configuración del modelo de embeddings. La clase `EmbeddingRequest` implementa la interfaz `ModelRequest` y proporciona métodos para acceder a los textos de entrada y opciones de configuración.
+
+.La definición de la clase `EmbeddingResponse` es:
+```java
+public class EmbeddingResponse implements ModelResponse<Embedding> {
+
+	private List<Embedding> embeddings;
+	private EmbeddingResponseMetadata metadata = new EmbeddingResponseMetadata();
+	// other methods omitted
+}
+```
+
+Donde `Embedding` es un vector generado por el modelo de embeddings y `EmbeddingResponseMetadata` son metadatos asociados con la respuesta de embeddings. La clase `EmbeddingResponse` implementa la interfaz `ModelResponse` y proporciona métodos para acceder a los embeddings y metadatos generados.
+
+.La definición de la clase `Embedding` es:
+```java
+public class Embedding implements ModelResult<List<Double>> {
+	private List<Double> embedding;
+	private Integer index;
+	private EmbeddingResultMetadata metadata;
+	// other methods omitted
+}
+```
+
+===== Embedings API en OpenAI
+
+.Reintentos de OpenAI Embeddings
+[cols="2,3,2"]
+|===
+|Propiedad                         |Descripción                                                                                |Predeterminado
+
+|spring.ai.retry.max-attempts
+|Número máximo de intentos de reintento.
+|10
+
+|spring.ai.retry.backoff.initial-interval
+|Duración inicial de la pausa para la política de retroceso exponencial.
+|2 seg.
+
+|spring.ai.retry.backoff.multiplier
+|Multiplicador del intervalo de retroceso.
+|5
+
+|spring.ai.retry.backoff.max-interval
+|Duración máxima del retroceso.
+|3 min.
+
+|spring.ai.retry.on-client-errors
+|Si es false, lanza una NonTransientAiException y no intenta reintentos para los códigos de error 4xx del cliente.
+|false
+
+|spring.ai.retry.exclude-on-http-codes
+|Lista de códigos de estado HTTP que no deben activar un reintento (por ejemplo, para lanzar NonTransientAiException).
+|vacío
+|===
+
+.Propiedades de conexión de OpenAI Embeddings
+[cols="2,3,2"]
+|===
+|Propiedad                       |Descripción                         |Predeterminado
+
+|spring.ai.openai.base-url
+|La URL para conectarsespring.ai.openai.api-key=YOUR_API_KEY
+spring.ai.openai.embedding.options.model=text-embedding-ada-002
+|api.openai.com
+
+|spring.ai.openai.api-key
+|La clave API
+|-
+|===
+
+.Propiedades de configuración de OpenAI Embeddings
+[cols="2,3,2"]
+|===
+|Propiedad                                    |Descripción                                                                                                          |Predeterminado
+
+|spring.ai.openai.embedding.enabled
+|Habilitar el cliente de embeddings de OpenAI.
+|true
+
+|spring.ai.openai.embedding.base-url
+|Opcional: anula la propiedad spring.ai.openai.base-url para proporcionar una URL específica para incrustaciones.
+|-
+
+|spring.ai.openai.embedding.api-key
+|Opcional: anula la propiedad spring.ai.openai.api-key para proporcionar una clave API específica para incrustaciones.
+|-
+
+|spring.ai.openai.embedding.metadata-mode
+|Modo de extracción de contenido del documento.
+|EMBED
+
+|spring.ai.openai.embedding.options.model
+|El modelo a utilizar.
+|text-embedding-ada-002 (otras opciones: text-embedding-3-large, text-embedding-3-small)
+
+|spring.ai.openai.embedding.options.encodingFormat
+|El formato para devolver las incrustaciones. Puede ser float o base64.
+|-
+
+|spring.ai.openai.embedding.options.user
+|Un identificador único que representa a tu usuario final, lo que puede ayudar a OpenAI a monitorear y detectar abusos.
+|-
+|===
+
+.Para usar los embeddings, es necesario configurar las propiedades de conexión y configuración en el archivo `application.properties`:
+```
+spring.ai.openai.api-key=YOUR_API_KEY
+spring.ai.openai.embedding.options.model=text-embedding-ada-002
+```
+
+.Un ejemplo de controlador de Spring Boot para el servicio de embeddings de OpenAI podría ser así:
+```java
+@RestController
+public class EmbeddingController {
+
+    private final EmbeddingClient embeddingClient;
+
+    @Autowired
+    public EmbeddingController(EmbeddingClient embeddingClient) {
+        this.embeddingClient = embeddingClient;
+    }
+
+    @GetMapping("/ai/embedding")
+    public Map embed(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        EmbeddingResponse embeddingResponse = this.embeddingClient.embedForResponse(List.of(message));
+        return Map.of("embedding", embeddingResponse);
+    }
+}
+```
+
+==== Transcription API
+
+El interfaz TranscriptionClient está diseñado para una integración sencilla con servicios de transcripción de voz a texto. Su función principal es convertir archivos de audio en texto, lo que permite a los desarrolladores integrar capacidades de transcripción en sus aplicaciones y sistemas.
+
+.El pom.xml para la dependencia de Transcription API de Spring AI sería:
+[code, xml]
+----
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+</dependency>
+----
+
+.El build.gradle para la dependencia de Transcription API de Spring AI sería:
+[code, groovy]
+----
+dependencies {
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+}
+----
+
+.Las propiedades de transcripción son:
+[cols="2,4,1"]
+|===
+|Propiedad                                                       |Descripción                                                                                                                                                                                                                                      |Predeterminado
+
+|spring.ai.openai.audio.transcription.options.model
+|ID del modelo a utilizar. Actualmente, solo está disponible whisper-1 (que está basado en nuestro modelo de código abierto Whisper V2).
+|whisper-1
+
+|spring.ai.openai.audio.transcription.options.response-format
+|El formato de salida de la transcripción, en una de estas opciones: json, text, srt, verbose_json, o vtt.
+|json
+
+|spring.ai.openai.audio.transcription.options.prompt
+|Un texto opcional para guiar el estilo del modelo o continuar un segmento de audio anterior. El prompt debe coincidir con el idioma del audio.
+|-
+
+|spring.ai.openai.audio.transcription.options.language
+|El idioma del audio de entrada. Proporcionar el idioma de entrada en formato ISO-639-1 mejorará la precisión y la latencia.
+|-
+
+|spring.ai.openai.audio.transcription.options.temperature
+|La temperatura de muestreo, entre 0 y 1. Valores más altos como 0.8 harán que la salida sea más aleatoria, mientras que valores más bajos como 0.2 harán que sea más enfocada y determinista. Si se establece en 0, el modelo usará la probabilidad logarítmica para aumentar automáticamente la temperatura hasta que se alcancen ciertos umbrales.
+|0
+
+|spring.ai.openai.audio.transcription.options.timestamp_granularities
+|Las granularidades de las marcas de tiempo a poblar para esta transcripción. response_format debe estar configurado en verbose_json para usar granularidades de marcas de tiempo. Se admiten una o ambas de estas opciones: word o segment. Nota: No hay latencia adicional para marcas de tiempo de segmentos, pero generar marcas de tiempo de palabras genera latencia adicional.
+|segment
+|===
+
+.Un ejemplo de código que usa el servicio de transcripción de OpenAI podría ser así:
+```java
+@RestController
+public class TranscriptionController {
+
+    private final OpenAiAudioApi openAiAudioApi;
+
+    public TranscriptionController(OpenAiAudioApi openAiAudioApi) {
+        this.openAiAudioApi = openAiAudioApi;
+    }
+
+    @GetMapping("/ai/transcription")
+    public Map<String, String> transcription() {
+
+
+        var openAiAudioTranscriptionClient = new OpenAiAudioTranscriptionClient(openAiAudioApi);
+
+        var transcriptionOptions = OpenAiAudioTranscriptionOptions.builder()
+            .withResponseFormat(TranscriptResponseFormat.TEXT)
+            .withTemperature(0f)
+            .build();
+
+        var audioFile = new FileSystemResource("/path/to/your/resource/speech/jfk.flac");
+
+        AudioTranscriptionPrompt transcriptionRequest = new AudioTranscriptionPrompt(audioFile, transcriptionOptions);
+        AudioTranscriptionResponse response = openAiAudioTranscriptionClient.call(transcriptionRequest);
+        return Map.of( "transcription", response.getResult().getOutput());
+    }
+    
+}
+```
+
+==== Ollama Chat completions API
+
+El interfaz OllamaChatClient está diseñado para una integración sencilla con el servicio de Chat Completions de Ollama. Su función principal es generar respuestas coherentes y relevantes en función de las entradas de texto proporcionadas.
+
+.Las propiedades de chat son:
+[cols="1,2,1", options="header"]
+|===
+| Propiedad                     | Descripción                                      | Valor por defecto
+| spring.ai.ollama.base-url     | URL base donde se está ejecutando el servidor API de Ollama. | localhost:11434
+|===
+
+.Las opciones de configuración son:
+[cols="1,2,1", options="header"]
+|===
+| Propiedad  ```llama.chat.options.numa             | Si se debe usar NUMA.                                                                                                                         | false
+| spring.ai.ollama.chat.options.num-ctx          | Establece el tamaño de la ventana de contexto utilizada para generar el siguiente token.                                                      | 2048
+| spring.ai.ollama.chat.options.num-batch        | ???                                                                                                                                           | 512
+| spring.ai.ollama.chat.options.num-gqa          | El número de grupos GQA en la capa del transformador. Necesario para algunos modelos, por ejemplo, es 8 para llama2:70b.                      | 1
+| spring.ai.ollama.chat.options.num-gpu          | El número de capas a enviar a la(s) GPU(s). En macOS por defecto es 1 para habilitar el soporte de metal, 0 para deshabilitar. 1 aquí indica que NumGPU debe establecerse dinámicamente | -1
+| spring.ai.ollama.chat.options.main-gpu         | define la GPU que se usa                                                                                                                                           | -
+| spring.ai.ollama.chat.options.low-vram         | modo de funcionamiento en GPU con bajo uso de RAM                                                                                                                                           | false
+| spring.ai.ollama.chat.options.f16-kv           | usar la representación de datos de coma flotante simplificada                                                                                                                                           | true
+| spring.ai.ollama.chat.options.logits-all       | ???                                                                                                                                           | -
+| spring.ai.ollama.chat.options.vocab-only       | ???                                                                                                                                           | -
+| spring.ai.ollama.chat.options.use-mmap         | ???                                                                                                                                           | true
+| spring.ai.ollama.chat.options.use-mlock        | ???                                                                                                                                           | false
+| spring.ai.ollama.chat.options.embedding-only   | usar sólo representación de embeddings                                                                                                                                           | false
+| spring.ai.ollama.chat.options.rope-frequency-base | ???                                                                                                                                           | 10000.0
+| spring.ai.ollama.chat.options.rope-frequency-scale | ???                                                                                                                                           | 1.0
+| spring.ai.ollama.chat.options.num-thread       | Establece el número de hilos a utilizar durante la computación. Por defecto, Ollama detectará esto para un rendimiento óptimo. Se recomienda establecer este valor al número de núcleos físicos de la CPU de tu sistema (en lugar del número lógico de núcleos). 0 = dejar que el runtime decida | 0
+| spring.ai.ollama.chat.options.num-keep         | ???                                                                                                                                           | 0
+| spring.ai.ollama.chat.options.seed             | Establece la semilla de números aleatorios a usar para la generación. Establecer esto a un número específico hará que el modelo genere el mismo texto para el mismo mensaje. | -1
+| spring.ai.ollama.chat.options.num-predict      | Número máximo de tokens a predecir al generar texto. (-1 = generación infinita, -2 = llenar contexto)                                          | -1
+| spring.ai.ollama.chat.options.top-k            | Reduce la probabilidad de generar tonterías. Un valor más alto (por ejemplo, 100) dará respuestas más diversas, mientras que un valor más bajo (por ejemplo, 10) será más conservador. | 40
+| spring.ai.ollama.chat.options.top-p            | Trabaja junto con top-k. Un valor más alto (por ejemplo, 0.95) llevará a texto más diverso, mientras que un valor más bajo (por ejemplo, 0.5) generará texto más enfocado y conservador. | 0.9
+| spring.ai.ollama.chat.options.tfs-z            | El muestreo sin cola se usa para reducir el impacto de los tokens menos probables en la salida. Un valor más alto (por ejemplo, 2.0) reducirá más el impacto, mientras que un valor de 1.0 desactiva esta configuración. | 1.0
+| spring.ai.ollama.chat.options.typical-p        | ???                                                                                                                                           | 1.0
+| spring.ai.ollama.chat.options.repeat-last-n    | Establece cuán atrás debe mirar el modelo para evitar repeticiones. (Por defecto: 64, 0 = deshabilitado, -1 = num_ctx)                         | 64
+| spring.ai.ollama.chat.options.temperature      | La temperatura del modelo. Aumentar la temperatura hará que el modelo responda de manera más creativa.                                         | 0.8
+| spring.ai.ollama.chat.options.repeat-penalty   | Establece cuán fuertemente penalizar las repeticiones. Un valor más alto (por ejemplo, 1.5) penalizará más fuertemente las repeticiones, mientras que un valor más bajo (por ejemplo, 0.9) será más indulgente. | 1.1
+| spring.ai.ollama.chat.options.presence-penalty | ???                                                                                                                                           | 0.0
+| spring.ai.ollama.chat.options.frequency-penalty | ???                                                                                                                                           | 0.0
+| spring.ai.ollama.chat.options.mirostat         | Habilita el muestreo Mirostat para controlar la perplejidad. (por defecto: 0, 0 = deshabilitado, 1 = Mirostat, 2 = Mirostat 2.0)               | 0
+| spring.ai.ollama.chat.options.mirostat-tau     | Influye en la rapidez con la que el algoritmo responde a los comentarios del texto generado. Una tasa de aprendizaje más baja resultará en ajustes más lentos, mientras que una tasa de aprendizaje más alta hará que el algoritmo sea más receptivo. | 5.0
+| spring.ai.ollama.chat.options.mirostat-eta     | Controla el equilibrio entre la coherencia y la diversidad de la salida. Un valor más bajo resultará en texto más enfocado y coherente.         | 0.1
+| spring.ai.ollama.chat.options.penalize-newline | ???                                                                                                                                           | true
+| spring.ai.ollama.chat.options.stop             | Establece las secuencias de parada a utilizar. Cuando se encuentre este patrón, el LLM dejará de generar texto y devolverá. Se pueden establecer múltiples patrones de parada especificando múltiples parámetros de parada separados en un archivo de modelo. | -
+|===
+
+Estas opciones de configuración permiten ajustar el comportamiento del modelo de Ollama Chat Completions para adaptarse a las necesidades específicas de la aplicación. Se suelen especificar en el archivo `application.properties` de Spring Boot.
+
+.Es posible variar esta configuración en tiempo de ejecución, indicando las opciones en el objeto ChatOptions de la solicitud de Prompt:
+```java
+ChatResponse response = chatClient.call(
+    new Prompt(
+        "Generate the names of 5 famous pirates.",
+        OllamaOptions.create()
+            .withModel("llama2")
+            .withTemperature(0.4)
+    ));
+```
+
+Para poder usar el servicio de Chat Completions de Ollama, es necesario importar la dependencia de Ollama Chat Completions en el proyecto de Spring AI:
+
+.Maven:
+```xml
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-ollama</artifactId>
+</dependency>
+```
+
+.Gradle:
+```groovy
+dependencies {
+    implementation 'org.springframework.ai:spring-ai-ollama'
+}
+```
+
+
+
+En el ejemplo anterior, se solicita al modelo de Ollama que genere los nombres de 5 piratas famosos con un modelo llama2 y una temperatura de 0.4. Estas opciones se pueden ajustar según las necesidades de la aplicación y el contexto de la conversación.
+
+.Un ejemplo de application.properties para configurar el servicio de Chat Completions de Ollama podría ser así:
+```
+spring.ai.ollama.base-url=http://localhost:11434
+spring.ai.ollama.chat.options.model=ollama3
+spring.ai.ollama.chat.options.temperature=0.7
+```
+
+.Un ejemplo de controlador de Spring Boot para el servicio de Chat Completions de Ollama podría ser así:
+```java
+@RestController
+public class ChatController {
+
+    private final OllamaChatClient chatClient;
+
+    @Autowired
+    public ChatController(OllamaChatClient chatClient) {
+        this.chatClient = chatClient;
+    }
+
+    @GetMapping("/ai/generate")
+    public Map generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        return Map.of("generation", chatClient.call(message));
+    }
+
+    @GetMapping("/ai/generateStream")
+	public Flux<ChatResponse> generateStream(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        Prompt prompt = new Prompt(new UserMessage(message));
+        return chatClient.stream(prompt);
+    }
+
+}
+```
+
+==== Ollama Embeddings API
+
+Ollama embeddings proporciona la representaciones vectoriales que capturan la semántica y el contexto del texto, lo que permite a los desarrolladores realizar tareas como análisis de sentimientos, clasificación de texto y búsqueda semántica.
+
+.Las propiedades de Ollama Embeddings son:
+[cols="1,2,1", options="header"]
+|===
+| Propiedad                                     | Descripción                                                                                                                                  | Valor por defecto
+| spring.ai.ollama.base-url                     | URL base donde se está ejecutando el servidor API de Ollama.                                                                                  | localhost:11434
+
+El prefijo `spring.ai.ollama.embedding.options` es el prefijo de propiedad que configura la implementación de EmbeddingClient para Ollama.
+
+| Propiedad                                     | Descripción                                                                                                                                  | Valor por defecto
+| spring.ai.ollama.embedding.enabled            | Habilita el cliente de embedding de Ollama.                                                                                                   | true
+| spring.ai.ollama.embedding.model (DEPRECATED) | El nombre del modelo a usar. Obsoleto, use `spring.ai.ollama.embedding.options.model` en su lugar.                                            | mistral
+| spring.ai.ollama.embedding.options.model      | El nombre de los modelos compatibles a usar.                                                                                                  | mistral
+| spring.ai.ollama.embedding.options.numa       | Si se debe usar NUMA.                                                                                                                         | false
+| spring.ai.ollama.embedding.options.num-ctx    | Establece el tamaño de la ventana de contexto utilizada para generar el siguiente token.                                                      | 2048
+| spring.ai.ollama.embedding.options.num-batch  | Establece el número de lotes (batches) a procesar simultáneamente.                                                                             | -
+| spring.ai.ollama.embedding.options.num-gqa    | El número de grupos GQA en la capa del transformador. Necesario para algunos modelos, por ejemplo, es 8 para llama2:70b.                      | -
+| spring.ai.ollama.embedding.options.num-gpu    | El número de capas a enviar a la(s) GPU(s). En macOS por defecto es 1 para habilitar el soporte de metal, 0 para deshabilitar.                | -
+| spring.ai.ollama.embedding.options.main-gpu   | El índice de la GPU principal a usar.                                                                                                         | -
+| spring.ai.ollama.embedding.options.low-vram   | Si se debe usar un modo de baja VRAM para ahorrar memoria.                                                                                    | -
+| spring.ai.ollama.embedding.options.f16-kv     | Si se debe utilizar una representación de 16 bits (half precision) para las claves y valores (key-value).                                     | -
+| spring.ai.ollama.embedding.options.logits-all | Si se deben devolver todos los logits en lugar de solo el más alto.                                                                           | -
+| spring.ai.ollama.embedding.options.vocab-only | Si se debe cargar solo el vocabulario, sin los pesos del modelo.                                                                              | -
+| spring.ai.ollama.embedding.options.use-mmap   | Si se debe utilizar mmap para asignar archivos en memoria, mejorando la gestión de memoria.                                                   | -
+| spring.ai.ollama.embedding.options.use-mlock  | Si se debe usar mlock para bloquear las páginas de memoria en RAM, evitando que se intercambien.                                              | -
+| spring.ai.ollama.embedding.options.embedding-only | Si se debe ejecutar en modo solo de embedding, sin generación de texto.                                                                      | -
+| spring.ai.ollama.embedding.options.rope-frequency-base | La base de frecuencia para la codificación posicional ROPE (Rotary Position Embedding).                                                        | -
+| spring.ai.ollama.embedding.options.rope-frequency-scale | La escala de frecuencia para la codificación posicional ROPE.                                                                                  | -
+| spring.ai.ollama.embedding.options.num-thread | Establece el número de hilos a utilizar durante la computación. Por defecto, Ollama detectará esto para un rendimiento óptimo. Se recomienda establecer este valor al número de núcleos físicos de la CPU de tu sistema (en lugar del número lógico de núcleos). | -
+| spring.ai.ollama.embedding.options.num-keep   | El número de tokens a mantener en la memoria al hacer recortes de contexto.                                                                   | -
+| spring.ai.ollama.embedding.options.seed       | Establece la semilla de números aleatorios a usar para la generación. Establecer esto a un número específico hará que el modelo genere el mismo texto para el mismo mensaje. | 0
+| spring.ai.ollama.embedding.options.num-predict | Número máximo de tokens a predecir al generar texto. (Por defecto: 128, -1 = generación infinita, -2 = llenar contexto)                       | 128
+| spring.ai.ollama.embedding.options.top-k      | Reduce la probabilidad de generar tonterías. Un valor más alto (por ejemplo, 100) dará respuestas más diversas, mientras que un valor más bajo (por ejemplo, 10) será más conservador. | 40
+| spring.ai.ollama.embedding.options.top-p      | Trabaja junto con top-k. Un valor más alto (por ejemplo, 0.95) llevará a texto más diverso, mientras que un valor más bajo (por ejemplo, 0.5) generará texto más enfocado y conservador. | 0.9
+| spring.ai.ollama.embedding.options.tfs-z      | El muestreo sin cola se usa para reducir el impacto de los tokens menos probables en la salida. Un valor más alto (por ejemplo, 2.0) reducirá más el impacto, mientras que un valor de 1.0 desactiva esta configuración. | 1
+| spring.ai.ollama.embedding.options.typical-p  | Utiliza la probabilidad típica para ajustar la generación de texto, manteniendo la generación dentro de límites razonables.                    | -
+| spring.ai.ollama.embedding.options.repeat-last-n | Establece cuán atrás debe mirar el modelo para evitar repeticiones. (Por defecto: 64, 0 = deshabilitado, -1 = num_ctx)                         | 64
+| spring.ai.ollama.embedding.options.temperature | La temperatura del modelo. Aumentar la temperatura hará que el modelo responda de manera más creativa.                                         | 0.8
+| spring.ai.ollama.embedding.options.repeat-penalty | Establece cuán fuertemente penalizar las repeticiones. Un valor más alto (por ejemplo, 1.5) penalizará más fuertemente las repeticiones, mientras que un valor más bajo (por ejemplo, 0.9) será más indulgente. | 1.1
+| spring.ai.ollama.embedding.options.presence-penalty | Penaliza la aparición de nuevas palabras que no se han visto antes en el contexto.                                                             | -
+| spring.ai.ollama.embedding.options.frequency-penalty | Penaliza la repetición de palabras basándose en su frecuencia.                                                                                 | -
+| spring.ai.ollama.embedding.options.mirostat   | Habilita el muestreo Mirostat para controlar la perplejidad. (por defecto: 0, 0 = deshabilitado, 1 = Mirostat, 2 = Mirostat 2.0)               | 0
+| spring.ai.ollama.embedding.options.mirostat-tau | Influye en la rapidez con la que el algoritmo responde a los comentarios del texto generado. Una tasa de aprendizaje más baja resultará en ajustes más lentos, mientras que una tasa de aprendizaje más alta hará que el algoritmo sea más receptivo. | 5.0
+| spring.ai.ollama.embedding.options.mirostat-eta | Controla el equilibrio entre la coherencia y la diversidad de la salida. Un valor más bajo resultará en texto más enfocado y coherente.         | 0.1
+| spring.ai.ollama.embedding.options.penalize-newline | Penaliza la generación de nuevas líneas en el texto generado.                                                                                  | -
+| spring.ai.ollama.embedding.options.stop       | Establece las secuencias de parada a utilizar. Cuando se encuentre este patrón, el LLM dejará de generar texto y devolverá. Se pueden establecer múltiples patrones de parada especificando múltiples parámetros de parada separados en un archivo de modelo. | -
+|===
+
+
+.Un ejemplo de aplicación.properties para configurar el servicio de Embeddings de Ollama podría ser así:
+```
+spring.ai.ollama.base-url=http://localhost:11434
+spring.ai.ollama.embedding.options.model=llama3
+```
+
+.Un ejemplo de controlador de Spring Boot para el servicio de Embeddings de Ollama podría ser así:
+```java
+@RestController
+public class EmbeddingController {
+
+    private final EmbeddingClient embeddingClient;
+
+    @Autowired
+    public EmbeddingController(EmbeddingClient embeddingClient) {
+        this.embeddingClient = embeddingClient;
+    }
+
+    @GetMapping("/ai/embedding")
+    public Map embed(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+        EmbeddingResponse embeddingResponse = this.embeddingClient.embedForResponse(List.of(message));
+        return Map.of("embedding", embeddingResponse);
+    }
+}
+```
+
+==== Bases de datos vectoriales en Spring AI
+
+Las bases de datos vectoriales son una forma eficiente de almacenar y recuperar vectores multi dimensionales, como los embeddings generados por modelos de lenguaje. Estas bases de datos permiten realizar consultas de similitud y búsqueda de vecinos cercanos en un espacio de vectores, lo que resulta útil en aplicaciones como la recuperación de información, la agrupación y la detección de duplicados.
+
+El primer paso en su uso es cargar los datos en una base de datos vectorial. Luego, cuando se envía una consulta de usuario al modelo de IA, primero se recuperan un conjunto de documentos similares. Estos documentos luego sirven como contexto para la pregunta del usuario y se envían al modelo de IA, junto con la consulta del usuario. Esta técnica se conoce como Generación Aumentada por Recuperación (RAG).
+
+.La definición de la interfaz `VectorStore` es:
+```java
+public interface VectorStore {
+
+    void add(List<Document> documents);
+
+    Optional<Boolean> delete(List<String> idList);
+
+    List<Document> similaritySearch(String query);
+
+    List<Document> similaritySearch(SearchRequest request);
+}
+```
+
+.La definición de la clase `SearchRequest` es:
+```java
+public class SearchRequest {
+
+	public final String query;
+	private int topK = 4;
+	private double similarityThreshold = SIMILARITY_THRESHOLD_ALL;
+	private Filter.Expression filterExpression;
+
+	public static SearchRequest query(String query) { return new SearchRequest(query); }
+
+	private SearchRequest(String query) { this.query = query; }
+
+	public SearchRequest withTopK(int topK) {...}
+	public SearchRequest withSimilarityThreshold(double threshold) {...}
+	public SearchRequest withSimilarityThresholdAll() {...}
+	public SearchRequest withFilterExpression(Filter.Expression expression) {...}
+	public SearchRequest withFilterExpression(String textExpression) {...}
+
+	public String getQuery() {...}
+	public int getTopK() {...}
+	public double getSimilarityThreshold() {...}
+	public Filter.Expression getFilterExpression() {...}
+}
+```
+Para insertar datos en la base de datos vectorial, se encapsulan en un objeto Document. La clase Document aglutina el contenido de una fuente de datos, como un documento PDF o de Word, e incluye texto representado como una cadena. También contiene metadatos en forma de pares clave-valor, incluyendo detalles como el nombre del archivo.
+
+El rol de las bases de datos vectoriales es almacenar y facilitar búsquedas de similitud para estos embeddings. No genera los embeddings en sí. Para crear embeddings vectoriales, se debe utilizar el EmbeddingClient.
+
+Los métodos similaritySearch en la interfaz permiten recuperar documentos similares a una cadena de consulta dada. Estos métodos se pueden ajustar utilizando los siguientes parámetros:
+
+* **k:** Un número entero que especifica el número máximo de documentos similares a devolver. A menudo se denomina búsqueda 'top K' o 'K vecinos más cercanos' (KNN).
+* **threshold:** Un valor decimal (doble) que varía de 0 a 1, donde los valores más cercanos a 1 indican una mayor similitud. De forma predeterminada, si estableces un umbral de 0.75, por ejemplo, solo se devuelven los documentos con una similitud superior a este valor.
+* **Filter.Expression:** Una clase utilizada para pasar una expresión DSL (Domain-Specific Language) fluida que funciona de manera similar a una cláusula 'where' en SQL, pero se aplica exclusivamente a los pares clave-valor de metadatos de un Documento.
+* **filterExpression:** Un DSL externo basado en ANTLR4 que acepta expresiones de filtro como cadenas. Por ejemplo, con claves de metadatos como país, año y isActive, podrías usar una expresión como: país == 'UK' && año >= 2020 && isActive == true.
+
+El uso general de la carga de datos en un almacén de vectores es algo que harías en un trabajo tipo lote, primero cargando datos en la clase Document de Spring AI y luego llamando al método save.
+
+Si tienes un archivo JSON con datos que deseas cargar en la base de datos vectorial, puedes usar la clase JsonReader de Spring AI para cargar campos específicos en el JSON, dividirlos en piezas pequeñas y luego pasar esas piezas pequeñas a la implementación de VectorStore. 
+
+.La implementación de VectorStore calcula los embeddings y almacena el JSON y el embedding en la base de datos vectorial:
+```java
+@Autowired
+VectorStore vectorStore;
+
+// Load data into the vector store
+void load(String sourceFile) {
+        JsonReader jsonReader = new JsonReader(new FileSystemResource(sourceFile),
+                "price", "name", "shortDescription", "description", "tags");
+        List<Document> documents = jsonReader.get();
+        this.vectorStore.add(documents);
+}
+
+// Query the vector store
+String query(String query) {
+        List<Document> documents = this.vectorStore.similaritySearch(query);
+        return documents.get(0).getContent();
+}
+
+// remove data from the vector store
+void remove(List<String> idList) {
+        this.vectorStore.delete(idList);
+}
+```
+
+.Los mmétodos para trabajar con la base de datos vectorial son:
+* **add:** Agrega una lista de documentos a la base de datos vectorial.
+* **delete:** Elimina una lista de documentos de la base de datos vectorial.
+* **similaritySearch:** Realiza una búsqueda de similitud en la base de datos vectorial y devuelve una lista de documentos similares. Usa una cadena de consulta.
+* **similaritySearch:** Realiza una búsqueda de similitud en la base de datos vectorial y devuelve una lista de documentos similares, utilizando un objeto **SearchRequest**.
+
+Es posible crear una instancia de Filter.Expression con un FilterExpressionBuilder. 
+
+.Un ejemplo simple es el siguiente:
+```java
+Filter.Expression filterExpression = FilterExpressionBuilder.create()
+    .withKey("country").isEqualTo("UK")
+    .and()
+    .withKey("year").isGreaterThanOrEqualTo(2020)
+    .and()
+    .withKey("isActive").isEqualTo(true)
+    .build();
+```
+
+.Los operadores disponibles en Filter.Expression son:
+* **isEqualTo:** Igual a
+* **isNotEqualTo:** No igual a
+* **isGreaterThan:** Mayor que
+* **isGreaterThanOrEqualTo:** Mayor o igual que
+* **isLessThan:** Menor que
+* **isLessThanOrEqualTo:** Menor o igual que
+* **contains:** Contiene
+* **startsWith:** Comienza con
+* **endsWith:** Termina con
+* **matches:** Coincide con una expresión regular
+* **isIn:** Está en una lista de valores
+* **isNotIn:** No está en una lista de valores
+* **and:** Operador lógico AND
+* **or:** Operador lógico OR
+
+Un enlace interesante para comprender mejor los vectores y las bases de datos vectoriales es el siguiente: https://docs.spring.io/spring-ai/reference/api/vectordbs/understand-vectordbs.html
+
+===== Qdrant en Spring AI
+
+Qdrant es una base de datos vectorial de código abierto que permite almacenar y recuperar vectores multi dimensionales, como los embeddings generados por modelos de lenguaje. Qdrant es una base de datos de búsqueda de vecinos más cercanos (KNN) que facilita la búsqueda de documentos similares en un espacio de vectores.
+
+.La forma más rápida de crear una instancia de Qdrant es con Docker:
+```bash
+docker run -d --name qdrant -p 6334:6334 -p 6333:6333 -v /path/to/data:/data qdrant/qdrant
+```
+
+.Para usar Qdrant en Spring AI, primero debes agregar la dependencia de Qdrant en tu proyecto:
+```xml
+<dependency>
+	<groupId>org.springframework.ai</groupId>
+	<artifactId>spring-ai-qdrant-store-spring-boot-starter</artifactId>
+</dependency>
+```
+
+.En Gradle, la dependencia de Qdrant se vería así:
+```groovy
+dependencies {
+    implementation 'org.springframework.ai:spring-ai-qdrant-store-spring-boot-starter'
+}
+```
+
+.En el archivo `application.properties`, debes configurar las propiedades de conexión a Qdrant:
+```properties
+spring.ai.vectorstore.qdrant.host=<la dirección IP de tu instancia de Qdrant>
+spring.ai.vectorstore.qdrant.port=<el puerto de gRPC de tu instancia de Qdrant (default: 6334)>
+spring.ai.vectorstore.qdrant.api-key=<la clave API de tu instancia de Qdrant>
+spring.ai.vectorstore.qdrant.collection-name=<el nombre de la colección de vectores en Qdrant>
+spring.ai.vectorstore.qdrant.use-tls=<true o false>
+
+# API key if needed, e.g. OpenAI
+spring.ai.openai.api.key=<api-key>
+```
+
+.Un ejemplo de controlador de Spring Boot para el servicio de Qdrant podría ser así:
+```java
+@RestController
+public class QdrantController {
+
+    private final VectorStore vectorStore;
+
+    @Autowired
+    public QdrantController(VectorStore vectorStore) {
+        this.vectorStore = vectorStore;
+    }
+
+    @GetMapping("/ai/qdrant/load")
+    public void load(@RequestParam(value = "sourceFile", defaultValue = "data.json") String sourceFile) {
+        JsonReader jsonReader = new JsonReader(new FileSystemResource(sourceFile),
+                "price", "name", "shortDescription", "description", "tags");
+        List<Document> documents = jsonReader.get();
+        this.vectorStore.add(documents);
+    }
+
+    @GetMapping("/ai/qdrant/query")
+    public String query(@RequestParam(value = "query", defaultValue = "Tell me a joke") String query) {
+        vectorStore.similaritySearch(SearchRequest.defaults()
+        .withQuery("The World")
+        .withTopK(TOP_K)
+        .withSimilarityThreshold(SIMILARITY_THRESHOLD)
+        .withFilterExpression("author in ['john', 'jill'] && article_type == 'blog'"));
+    }
+
+    @GetMapping("/ai/qdrant/remove")
+    public void remove(@RequestParam(value = "idList") List<String> idList) {
+        this.vectorStore.delete(idList);
+    }
+}
+```
+
+.Para hacer peticiones a una base de datos vectorial Qdrant, hay 2 métodos:
+* El lenjuage de expresión de texto: "author in ['john', 'jill'] && article_type == 'blog'"
+* El DSL Filter.Expression: de una forma más programática
+
+.Ejemplo de Lenjuage de expresión de texto:
+```java
+vectorStore.similaritySearch(SearchRequest.defaults()
+        .withQuery("The World")
+        .withTopK(TOP_K)
+        .withSimilarityThreshold(SIMILARITY_THRESHOLD)
+        .withFilterExpression("author in ['john', 'jill'] && article_type == 'blog'"));
+```
+
+.Ejemplo de DSL Filter.Expression:
+```java
+FilterExpressionBuilder b = new FilterExpressionBuilder();
+
+vectorStore.similaritySearch(SearchRequest.defaults()
+    .withQuery("The World")
+    .withTopK(TOP_K)
+    .withSimilarityThreshold(SIMILARITY_THRESHOLD)
+    .withFilterExpression(b.and(
+        b.in("john", "jill"),
+        b.eq("article_type", "blog")).build()));
+```
+
+.Ejemplo para borrar datos de la base de datos vectorial:
+```java
+vectorStore.delete(idList);
+```

@@ -1,0 +1,678 @@
+= Curso de Pandas: Análisis de Datos con Python
+:toc: 
+:toc-title: Índice de contenidos
+:sectnums:
+:toclevels: 3
+:source-highlighter: coderay
+
+== Módulo 1: Introducción a Pandas
+
+=== ¿Qué es Pandas?
+Pandas es una librería de Python especializada en el análisis y manipulación de datos. Facilita el trabajo con datos estructurados (tabulares) mediante estructuras llamadas *DataFrames* y *Series*. Es ampliamente utilizada en la ciencia de datos y el análisis financiero, entre otros campos.
+
+=== Instalación de Pandas
+Para instalar Pandas, utilizamos el gestor de paquetes `pip`:
+
+[source,bash]
+----
+# Instalación
+pip install pandas
+----
+
+Una vez instalada, se puede importar la librería en cualquier script o entorno de Python:
+
+[source,python]
+----
+# Importación de la librería
+import pandas as pd
+----
+
+=== Lectura de Datos de un Archivo CSV con Pandas
+
+La librería **Pandas** proporciona una forma sencilla y eficiente de leer y manipular datos en formato CSV. A continuación, se describen los pasos para realizar la lectura de datos desde un archivo CSV y algunas operaciones básicas que puedes llevar a cabo con el DataFrame resultante.
+
+==== Leer un Archivo CSV
+
+Puedes leer un archivo CSV utilizando la función `pd.read_csv()`. A continuación se muestra un ejemplo básico.
+
+[source,python]
+----
+# Leer un archivo CSV
+df = pd.read_csv('ruta/al/archivo.csv')
+
+# Mostrar las primeras 5 filas del DataFrame
+print(df.head())
+----
+
+==== Parámetros Comunes de `read_csv()`
+
+La función `read_csv()` tiene varios parámetros útiles que puedes ajustar según tus necesidades:
+
+- **sep**: Especifica el delimitador. Por defecto es `,`, pero puede cambiarse a `;`, `\t`, etc.
+- **header**: Indica si la primera fila debe ser utilizada como cabecera. Puedes establecerlo en `None` si no tienes cabecera.
+- **index_col**: Define qué columna se usará como índice del DataFrame.
+- **usecols**: Permite especificar qué columnas leer.
+- **dtype**: Especifica el tipo de datos a usar para las columnas.
+
+Ejemplo con parámetros:
+
+[source,python]
+----
+# Leer un archivo CSV con delimitador punto y coma y establecer la primera columna como índice
+df = pd.read_csv('ruta/al/archivo.csv', sep=';', index_col=0)
+
+# Mostrar las primeras 5 filas del DataFrame
+print(df.head())
+----
+
+==== Manejo de Errores Comunes
+
+Al leer un archivo CSV, es posible que te enfrentes a ciertos errores comunes, como archivos faltantes, datos mal formateados, o problemas de codificación. Asegúrate de manejar estas situaciones de manera adecuada:
+
+- **FileNotFoundError**: Asegúrate de que la ruta del archivo es correcta.
+- **UnicodeDecodeError**: Prueba diferentes codificaciones, como `encoding='utf-8'` o `encoding='latin1'`.
+
+Ejemplo de manejo de errores:
+
+[source,python]
+----
+try:
+    df = pd.read_csv('ruta/al/archivo.csv')
+except FileNotFoundError:
+    print("El archivo no fue encontrado.")
+except UnicodeDecodeError:
+    print("Error en la codificación del archivo.")
+----
+
+==== Inspección de Datos
+
+Una vez que hayas leído los datos en un DataFrame, puedes utilizar varias funciones de Pandas para inspeccionar y manipular los datos:
+
+- `df.info()`: Muestra información resumida sobre el DataFrame.
+- `df.describe()`: Genera estadísticas descriptivas de las columnas numéricas.
+- `df.columns`: Devuelve el nombre de las columnas del DataFrame.
+
+Ejemplo de inspección:
+
+[source,python]
+----
+# Inspeccionar el DataFrame
+print(df.info())
+print(df.describe())
+print(df.columns)
+----
+
+==== Escritura de Datos en un Archivo CSV
+
+Además de leer archivos CSV, **Pandas** también permite escribir DataFrames en archivos CSV utilizando la función `df.to_csv()`. Puedes especificar la ruta y algunos parámetros opcionales.
+
+Ejemplo de escritura:
+
+[source,python]
+----
+# Escribir el DataFrame en un archivo CSV
+df.to_csv('ruta/al/nuevo_archivo.csv', index=False)
+
+# Opciones adicionales
+# df.to_csv('ruta/al/nuevo_archivo.csv', sep=';', encoding='utf-8', columns=['columna1', 'columna2'])
+----
+
+
+
+
+=== Creación de DataFrames y Series
+Los *DataFrames* y *Series* son las estructuras fundamentales en Pandas. 
+
+* Una *Serie* es una estructura unidimensional similar a un array o lista.
+* Un *DataFrame* es una estructura bidimensional que se asemeja a una tabla, con etiquetas para las filas y columnas.
+
+==== Creación de una Serie
+
+[source,python]
+----
+import pandas as pd
+
+# Crear una Serie desde una lista
+serie = pd.Series([10, 20, 30, 40])
+print(serie)
+----
+
+==== Creación de un DataFrame
+
+[source,python]
+----
+# Crear un DataFrame desde un diccionario
+datos = {'Nombre': ['Ana', 'Luis', 'María'], 'Edad': [23, 25, 22]}
+df = pd.DataFrame(datos)
+print(df)
+----
+
+
+== Módulo 2: Operaciones básicas con DataFrames
+
+=== Indexación y selección de datos
+Pandas ofrece varias formas de acceder y seleccionar datos dentro de un *DataFrame*. Las más comunes son:
+
+* Acceso a columnas: Puedes seleccionar columnas utilizando su nombre.
+* `.loc[]`: Permite seleccionar filas y columnas por etiquetas.
+* `.iloc[]`: Permite seleccionar filas y columnas por índices.
+
+[source,python]
+----
+import pandas as pd
+
+# Crear un DataFrame
+df = pd.DataFrame({'Nombre': ['Ana', 'Luis', 'María'], 'Edad': [23, 25, 22]})
+
+# Seleccionar una columna
+print(df['Nombre'])
+
+# Seleccionar filas con loc
+print(df.loc[0])  # Selecciona la primera fila
+
+# Seleccionar por índice con iloc
+print(df.iloc[1])  # Selecciona la segunda fila
+----
+
+=== Filtrado de datos
+El filtrado de datos consiste en aplicar condiciones para obtener subconjuntos específicos de un *DataFrame*. Las condiciones se expresan como comparaciones que resultan en valores booleanos.
+
+[source,python]
+----
+# Filtrar filas donde la edad es mayor que 23
+df_filtrado = df[df['Edad'] > 23]
+print(df_filtrado)
+----
+
+También es posible combinar múltiples condiciones con operadores lógicos como `&` (AND) y `|` (OR).
+
+[source,python]
+----
+# Filtrar filas donde la edad es mayor que 23 y el nombre es 'Luis'
+df_filtrado = df[(df['Edad'] > 23) & (df['Nombre'] == 'Luis')]
+print(df_filtrado)
+----
+
+=== Modificación de datos
+Modificar datos en un *DataFrame* incluye agregar, modificar o eliminar columnas y filas. 
+
+==== Agregar columnas
+
+[source,python]
+----
+# Agregar una nueva columna al DataFrame
+df['Ciudad'] = ['Madrid', 'Barcelona', 'Sevilla']
+print(df)
+----
+
+==== Modificar valores de una columna
+
+[source,python]
+----
+# Modificar los valores de una columna específica
+df['Edad'] = df['Edad'] + 1  # Aumentar la edad en 1
+print(df)
+----
+
+==== Eliminar columnas y filas
+
+[source,python]
+----
+# Eliminar una columna
+df = df.drop('Ciudad', axis=1)
+
+# Eliminar una fila por índice
+df = df.drop(1)  # Eliminar la fila con índice 1
+print(df)
+----
+
+
+== Módulo 3: Limpieza de datos
+
+=== Manejo de valores faltantes (NaN)
+En los conjuntos de datos reales, es común encontrar valores faltantes representados como `NaN` (Not a Number). Pandas ofrece varias funciones para identificar, eliminar o reemplazar estos valores.
+
+==== Identificación de valores faltantes
+
+[source,python]
+----
+import pandas as pd
+
+# Crear un DataFrame con valores faltantes
+df = pd.DataFrame({'Nombre': ['Ana', 'Luis', 'María'], 'Edad': [23, None, 22], 'Ciudad': [None, 'Barcelona', 'Sevilla']})
+
+# Detectar valores faltantes
+print(df.isna())
+----
+
+==== Eliminar valores faltantes
+Puedes eliminar las filas o columnas que contengan valores faltantes utilizando `dropna()`.
+
+[source,python]
+----
+# Eliminar filas con valores faltantes
+df_sin_nan = df.dropna()
+print(df_sin_nan)
+
+# Eliminar columnas con valores faltantes
+df_sin_nan_col = df.dropna(axis=1)
+print(df_sin_nan_col)
+----
+
+==== Rellenar valores faltantes
+Otra opción es reemplazar los valores `NaN` con valores específicos usando `fillna()`.
+
+[source,python]
+----
+# Rellenar los valores faltantes con un valor específico
+df_filled = df.fillna({'Edad': 0, 'Ciudad': 'Desconocido'})
+print(df_filled)
+----
+
+=== Eliminación de duplicados
+Los datos duplicados pueden afectar los análisis y los resultados. Pandas permite identificar y eliminar estas duplicaciones con `drop_duplicates()`.
+
+[source,python]
+----
+# Crear un DataFrame con duplicados
+df_dup = pd.DataFrame({'Nombre': ['Ana', 'Luis', 'Ana'], 'Edad': [23, 25, 23]})
+
+# Eliminar filas duplicadas
+df_sin_duplicados = df_dup.drop_duplicates()
+print(df_sin_duplicados)
+----
+
+=== Conversión de tipos de datos
+A veces es necesario convertir el tipo de datos de una columna, especialmente cuando se trabajan con fechas o valores numéricos que se han importado como cadenas de texto.
+
+==== Convertir tipos de datos
+Usa `astype()` para cambiar el tipo de datos de una columna.
+
+[source,python]
+----
+# Crear un DataFrame con tipos incorrectos
+df_tipos = pd.DataFrame({'Nombre': ['Ana', 'Luis'], 'Edad': ['23', '25']})
+
+# Convertir la columna 'Edad' a tipo entero
+df_tipos['Edad'] = df_tipos['Edad'].astype(int)
+print(df_tipos.dtypes)
+----
+
+==== Manejo de fechas
+Para trabajar con fechas, Pandas proporciona la función `to_datetime()` que convierte cadenas de texto a objetos de fecha.
+
+[source,python]
+----
+# Convertir una columna de texto a fecha
+df_fechas = pd.DataFrame({'Fecha': ['2023-01-01', '2023-01-02']})
+df_fechas['Fecha'] = pd.to_datetime(df_fechas['Fecha'])
+print(df_fechas.dtypes)
+----
+
+
+== Módulo 4: Operaciones avanzadas
+
+=== Agrupación de datos con `groupby()`
+La función `groupby()` en Pandas permite agrupar datos en función de los valores de una o más columnas y luego aplicar funciones agregadas como `sum()`, `mean()`, `count()`, entre otras.
+
+[source,python]
+----
+import pandas as pd
+
+# Crear un DataFrame de ejemplo
+data = {'Nombre': ['Ana', 'Luis', 'María', 'Ana', 'Luis'], 'Edad': [23, 25, 22, 23, 30], 'Ciudad': ['Madrid', 'Barcelona', 'Sevilla', 'Madrid', 'Barcelona']}
+
+df = pd.DataFrame(data)
+
+# Agrupar por la columna 'Nombre' y calcular la edad media
+grupo = df.groupby('Nombre')['Edad'].mean()
+print(grupo)
+----
+
+También es posible agrupar por varias columnas y aplicar varias funciones agregadas.
+
+[source,python]
+----
+# Agrupar por 'Ciudad' y 'Nombre', y calcular la suma y la cuenta de las edades
+grupo = df.groupby(['Ciudad', 'Nombre']).agg({'Edad': ['sum', 'count']})
+print(grupo)
+----
+
+=== Ordenación de datos
+Pandas permite ordenar los datos en un DataFrame utilizando el método `sort_values()`. Puedes ordenar por una o más columnas, y definir si quieres que el orden sea ascendente o descendente.
+
+[source,python]
+----
+# Ordenar por la columna 'Edad' en orden ascendente
+df_ordenado = df.sort_values('Edad')
+print(df_ordenado)
+
+# Ordenar por la columna 'Edad' en orden descendente
+df_ordenado_desc = df.sort_values('Edad', ascending=False)
+print(df_ordenado_desc)
+----
+
+También es posible ordenar por múltiples columnas.
+
+[source,python]
+----
+# Ordenar primero por 'Ciudad' y luego por 'Edad' en cada ciudad
+df_multi_orden = df.sort_values(['Ciudad', 'Edad'])
+print(df_multi_orden)
+----
+
+=== Fusión y combinación de DataFrames
+Pandas ofrece varias maneras de combinar DataFrames, incluyendo las funciones `merge()`, `concat()`, y `join()`. Estas se utilizan para unir diferentes conjuntos de datos en función de una clave común.
+
+==== Fusión de DataFrames con `merge()`
+La función `merge()` se utiliza para realizar uniones tipo SQL, uniendo DataFrames en función de una columna común.
+
+[source,python]
+----
+# Crear dos DataFrames
+df1 = pd.DataFrame({'ID': [1, 2, 3], 'Nombre': ['Ana', 'Luis', 'María']})
+df2 = pd.DataFrame({'ID': [1, 2, 4], 'Ciudad': ['Madrid', 'Barcelona', 'Valencia']})
+
+# Realizar una unión por la columna 'ID'
+df_merged = pd.merge(df1, df2, on='ID', how='inner')
+print(df_merged)
+----
+
+Los tipos de uniones disponibles son:
+
+* `inner`: Devuelve las filas que tienen coincidencia en ambas tablas.
+* `left`: Devuelve todas las filas de la tabla izquierda, y las coincidencias de la derecha (rellena con NaN si no hay coincidencia).
+* `right`: Devuelve todas las filas de la tabla derecha y las coincidencias de la izquierda.
+* `outer`: Devuelve todas las filas de ambas tablas, con NaN donde no haya coincidencias.
+
+==== Concatenación de DataFrames con `concat()`
+La función `concat()` se utiliza para concatenar DataFrames a lo largo de un eje (filas o columnas).
+
+[source,python]
+----
+# Concatenar DataFrames por filas (uno debajo del otro)
+df_concat = pd.concat([df1, df2], axis=0, ignore_index=True)
+print(df_concat)
+
+# Concatenar DataFrames por columnas (lado a lado)
+df_concat_cols = pd.concat([df1, df2], axis=1)
+print(df_concat_cols)
+----
+
+==== Unión de DataFrames con `join()`
+El método `join()` se utiliza para unir DataFrames utilizando los índices.
+
+[source,python]
+----
+# Crear dos DataFrames con índices
+df1 = pd.DataFrame({'Nombre': ['Ana', 'Luis', 'María']}, index=[1, 2, 3])
+df2 = pd.DataFrame({'Ciudad': ['Madrid', 'Barcelona', 'Sevilla']}, index=[1, 2, 3])
+
+# Unir los DataFrames usando el índice
+df_join = df1.join(df2)
+print(df_join)
+----
+
+
+== Módulo 5: Visualización de datos
+
+=== Integración de Pandas con Matplotlib
+Pandas se integra fácilmente con Matplotlib, una de las bibliotecas más populares para la visualización de datos en Python. Puedes crear gráficos directamente desde un *DataFrame* o una *Serie*.
+
+==== Gráficos básicos con Pandas
+Pandas permite crear gráficos sencillos con un solo comando. Aquí hay algunos ejemplos de diferentes tipos de gráficos.
+
+[source,python]
+----
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Crear un DataFrame de ejemplo
+df = pd.DataFrame({'Nombre': ['Ana', 'Luis', 'María'], 'Edad': [23, 25, 22]})
+
+# Gráfico de barras
+df.plot(kind='bar', x='Nombre', y='Edad')
+plt.title('Edad por Nombre')
+plt.ylabel('Edad')
+plt.show()
+----
+
+==== Gráficos de líneas
+Puedes crear gráficos de líneas para mostrar tendencias a lo largo del tiempo.
+
+[source,python]
+----
+# Crear un DataFrame de ejemplo
+df_lineas = pd.DataFrame({'Mes': ['Enero', 'Febrero', 'Marzo'], 'Ventas': [200, 300, 250]})
+
+# Gráfico de líneas
+df_lineas.plot(kind='line', x='Mes', y='Ventas')
+plt.title('Ventas por Mes')
+plt.ylabel('Ventas')
+plt.show()
+----
+
+=== Generación de gráficos con Seaborn
+Seaborn es una biblioteca de visualización de datos basada en Matplotlib que proporciona una interfaz más sencilla y atractiva para crear gráficos estadísticos.
+
+==== Gráficos de dispersión
+Los gráficos de dispersión son útiles para visualizar la relación entre dos variables.
+
+[source,python]
+----
+import seaborn as sns
+
+# Crear un DataFrame de ejemplo
+df_seaborn = pd.DataFrame({'Edad': [23, 25, 22, 30, 29], 'Salario': [40000, 50000, 45000, 60000, 55000]})
+
+# Gráfico de dispersión
+sns.scatterplot(data=df_seaborn, x='Edad', y='Salario')
+plt.title('Salario según Edad')
+plt.show()
+----
+
+==== Gráficos de cajas (Boxplots)
+Los boxplots son útiles para mostrar la distribución de los datos y detectar outliers.
+
+[source,python]
+----
+# Gráfico de cajas
+sns.boxplot(data=df_seaborn, x='Edad', y='Salario')
+plt.title('Distribución de Salarios según Edad')
+plt.show()
+----
+
+==== Gráficos de barras
+Puedes crear gráficos de barras para comparar categorías.
+
+[source,python]
+----
+# Gráfico de barras
+sns.barplot(data=df_seaborn, x='Edad', y='Salario')
+plt.title('Salario promedio por Edad')
+plt.show()
+----
+
+=== Personalización de gráficos
+Tanto Matplotlib como Seaborn permiten personalizar los gráficos con títulos, etiquetas, colores y estilos para mejorar la presentación visual.
+
+[source,python]
+----
+# Personalización de un gráfico
+plt.figure(figsize=(10, 5))
+sns.barplot(data=df_seaborn, x='Edad', y='Salario', palette='viridis')
+plt.title('Salario Promedio por Edad')
+plt.xlabel('Edad')
+plt.ylabel('Salario')
+plt.show()
+----
+
+
+== Módulo 6: Importación y exportación de datos
+
+=== Lectura de archivos CSV
+Pandas facilita la lectura de archivos CSV utilizando la función `read_csv()`. Esta función permite cargar datos en un *DataFrame* de manera rápida y sencilla.
+
+==== Lectura de un archivo CSV
+Para leer un archivo CSV, simplemente especifica la ruta del archivo. Aquí hay un ejemplo:
+
+[source,python]
+----
+import pandas as pd
+
+# Leer un archivo CSV
+df_csv = pd.read_csv('ruta/al/archivo.csv')
+print(df_csv.head())  # Muestra las primeras filas del DataFrame
+----
+
+==== Opciones de lectura
+Puedes personalizar la lectura de archivos CSV con varios parámetros, como `sep`, `header`, `index_col`, entre otros.
+
+[source,python]
+----
+# Leer un archivo CSV con un separador diferente y sin encabezado
+df_csv_custom = pd.read_csv('ruta/al/archivo.csv', sep=';', header=None)
+print(df_csv_custom.head())
+----
+
+=== Lectura de archivos Excel
+Pandas también permite la lectura de archivos Excel mediante la función `read_excel()`. Necesitarás tener instalado `openpyxl` o `xlrd` para manejar archivos Excel.
+
+==== Lectura de un archivo Excel
+Para leer un archivo Excel, especifica la ruta del archivo y la hoja que deseas cargar.
+
+[source,python]
+----
+# Leer un archivo Excel
+df_excel = pd.read_excel('ruta/al/archivo.xlsx', sheet_name='Hoja1')
+print(df_excel.head())
+----
+
+==== Opciones de lectura
+Puedes personalizar la lectura de archivos Excel con parámetros como `header`, `index_col`, `usecols`, etc.
+
+[source,python]
+----
+# Leer un archivo Excel especificando columnas
+df_excel_custom = pd.read_excel('ruta/al/archivo.xlsx', usecols=['A', 'B'])
+print(df_excel_custom.head())
+----
+
+=== Exportación de datos a CSV y Excel
+Pandas permite exportar *DataFrames* a archivos CSV y Excel usando las funciones `to_csv()` y `to_excel()`.
+
+==== Exportación a un archivo CSV
+Para exportar un *DataFrame* a CSV, utiliza `to_csv()`. Puedes personalizar el formato de salida con varios parámetros.
+
+[source,python]
+----
+# Exportar un DataFrame a CSV
+df_csv_export = df_csv.to_csv('ruta/al/nuevo_archivo.csv', index=False)
+print("Datos exportados a CSV.")
+----
+
+==== Exportación a un archivo Excel
+Para exportar un *DataFrame* a Excel, utiliza `to_excel()`. Especifica el nombre del archivo y la hoja.
+
+[source,python]
+----
+# Exportar un DataFrame a Excel
+df_excel_export = df_excel.to_excel('ruta/al/nuevo_archivo.xlsx', sheet_name='Hoja1', index=False)
+print("Datos exportados a Excel.")
+----
+
+
+== Módulo 7: Trabajo con series temporales
+
+=== Fechas en Pandas
+Pandas proporciona potentes herramientas para trabajar con fechas y horas. Las fechas se pueden manejar usando el tipo de datos `datetime`, que permite realizar operaciones y análisis temporales.
+
+==== Creación de objetos de fecha
+Puedes crear objetos de fecha directamente desde cadenas de texto o utilizando la función `pd.to_datetime()`.
+
+[source,python]
+----
+import pandas as pd
+
+# Crear un DataFrame con fechas
+fechas = pd.date_range(start='2023-01-01', periods=5, freq='D')
+df_fechas = pd.DataFrame({'Fecha': fechas, 'Valores': [10, 20, 15, 30, 25]})
+print(df_fechas)
+----
+
+==== Indexación por fechas
+Pandas permite indexar y seleccionar datos utilizando fechas. Esto es especialmente útil en análisis de series temporales.
+
+[source,python]
+----
+# Establecer la columna 'Fecha' como índice
+df_fechas.set_index('Fecha', inplace=True)
+
+# Seleccionar datos por fecha
+print(df_fechas.loc['2023-01-03'])
+----
+
+=== Resampleo de datos
+El resampleo es una técnica que permite reorganizar y resumir datos temporales a diferentes frecuencias. Esto es útil para obtener promedios, sumas, conteos, etc., en diferentes intervalos de tiempo.
+
+==== Resampleo de datos
+La función `resample()` permite especificar la frecuencia deseada y aplicar funciones de agregación.
+
+[source,python]
+----
+# Crear un DataFrame con datos aleatorios y fechas
+data = {'Fecha': pd.date_range(start='2023-01-01', periods=10, freq='D'), 'Valores': [10, 20, 15, 30, 25, 10, 5, 20, 15, 10]}
+df_resample = pd.DataFrame(data).set_index('Fecha')
+
+# Resamplear datos a frecuencia semanal y calcular la suma
+resample_semanal = df_resample.resample('W').sum()
+print(resample_semanal)
+----
+
+==== Otras funciones de resampleo
+Además de `sum()`, se pueden aplicar otras funciones como `mean()`, `max()`, `min()`, entre otras.
+
+[source,python]
+----
+# Resamplear y calcular la media semanal
+resample_media_semanal = df_resample.resample('W').mean()
+print(resample_media_semanal)
+----
+
+==== Ejemplo de resampleo con agregación múltiple
+Se pueden aplicar múltiples funciones de agregación al mismo tiempo utilizando `agg()`.
+
+[source,python]
+----
+# Resamplear y aplicar múltiples funciones de agregación
+resample_multifunciones = df_resample.resample('W').agg({'Valores': ['sum', 'mean', 'max']})
+print(resample_multifunciones)
+----
+
+
+== Módulo 8: Ejericios y proyectos
+
+.Lista de 20 problemas prácticos utilizando la librería Pandas:
+
+1. Crea un DataFrame a partir de un diccionario que contenga información sobre estudiantes (nombre, edad, y nota).
+2. Carga un archivo CSV en un DataFrame y muestra las primeras 5 filas del conjunto de datos.
+3. Filtra un DataFrame para mostrar solo las filas donde la columna "edad" sea mayor a 18.
+4. Agrupa un DataFrame por una columna categórica y calcula la media de otra columna numérica.
+5. Crea una nueva columna en un DataFrame que contenga el resultado de aplicar una función a otra columna existente.
+6. Lee un archivo Excel en un DataFrame y exporta el DataFrame resultante a un nuevo archivo CSV.
+7. Combina dos DataFrames utilizando la función `merge`, basándote en una columna clave común.
+8. Reemplaza valores en un DataFrame utilizando un diccionario para mapear valores antiguos a nuevos.
+9. Encuentra y elimina las filas con valores nulos en un DataFrame.
+10. Ordena un DataFrame por múltiples columnas y muestra el resultado.
+11. Convierte una columna de texto en tipo fecha y extrae el año, mes y día en columnas separadas.
+12. Crea un DataFrame con datos de ventas y calcula el total de ventas por producto utilizando `groupby`.
+13. Filtra un DataFrame para mostrar solo las filas donde los valores de dos columnas cumplan con una condición específica.
+14. Crea un gráfico de barras que muestre la distribución de una columna categórica en un DataFrame.
+15. Utiliza la función `pivot_table` para reorganizar los datos en un DataFrame, calculando la suma de una columna para cada combinación de valores en dos columnas categóricas.
+16. Cambia el índice de un DataFrame a una columna existente y restablece el índice.
+17. Aplica una función personalizada a cada elemento de una columna en un DataFrame utilizando `apply`.
+18. Utiliza la función `value_counts` para contar la frecuencia de valores únicos en una columna.
+19. Crea un DataFrame de múltiples índices (multi-index) y muestra cómo acceder a datos específicos en él.
+20. Realiza una operación de concatenación de DataFrames en el eje de las filas y muestra el DataFrame resultante.
+
+

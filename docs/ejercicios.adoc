@@ -1,0 +1,26 @@
+= Ejercicios LLMs
+:toc: 
+:toc-title: Índice de contenidos
+:sectnums:
+:toclevels: 3
+:source-highlighter: coderay
+
+1. Realiza una pregunta simple a un modelo de lenguaje en Python y muestra la respuesta por consola. Por ejemplo: pregunta "¿Cuál es la capital de España?" y muestra la respuesta.
+
+2. Escribe un script que reciba un texto por teclado, lo envíe a un modelo de lenguaje y muestre el resumen generado.
+
+3. Crea un programa que lea un archivo de texto, lo divida en párrafos y genere un resumen para cada uno usando un modelo de lenguaje. Imprime los resúmenes en pantalla o guárdalos en un nuevo archivo.
+
+4. Implementa una función que reciba una lista de preguntas y obtenga las respuestas de un modelo de lenguaje, mostrando cada pregunta junto a su respuesta.
+
+5. Configura el parámetro de temperatura en la generación de texto para comparar cómo cambia la creatividad de las respuestas. Realiza la misma consulta con diferentes valores de temperatura y analiza las diferencias.
+
+6. Desarrolla un chatbot sencillo que mantenga una conversación con el usuario utilizando un historial de mensajes para gestionar el contexto del chat.
+
+7. Utiliza un modelo de lenguaje para corregir o mejorar un fragmento de código fuente en Python, enviando el código como prompt y mostrando la corrección sugerida por el modelo.
+
+8. Crea un programa que reciba varios documentos (pueden ser archivos de texto) y, usando una plantilla de prompt, genere respuestas concisas a preguntas sobre el contenido de esos documentos.
+
+9. Implementa una función que permita cambiar dinámicamente el modelo de lenguaje (por ejemplo, alternar entre dos modelos distintos) y observe cómo varían las respuestas a la misma consulta. Compara los resultados.
+
+10. Desarrolla una API REST sencilla en Python que reciba texto mediante una petición POST, lo procese con un modelo de lenguaje y devuelva la respuesta generada.

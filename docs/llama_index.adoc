@@ -1,0 +1,1987 @@
+= LlamaIndex
+:toc: 
+:toc-title: Índice de contenidos
+:sectnums:
+:toclevels: 3
+:source-highlighter: coderay
+
+== 1. Introducción a LlamaIndex
+
+=== ¿Qué es LlamaIndex y para qué sirve?
+
+LlamaIndex es un framework flexible y robusto diseñado para facilitar la construcción de aplicaciones basadas en modelos de lenguaje grande (LLMs) conectados a tus propios datos empresariales o privados. Su objetivo principal es servir de puente entre los LLMs y la información relevante, permitiendo que los modelos accedan, comprendan y utilicen datos que no estaban presentes en su entrenamiento original. 
+
+.LlamaIndex proporciona:
+* Conectores para ingestar datos desde múltiples fuentes (APIs, PDFs, SQL, documentos, etc.)
+* Herramientas para indexar y estructurar datos de forma eficiente, facilitando búsquedas contextuales y semánticas
+* Interfaces para construir asistentes de conocimiento, chatbots, agentes autónomos y sistemas de análisis de documentos
+* Capacidades para parsear documentos complejos (tablas, imágenes, estructuras jerárquicas) y convertirlos en formatos comprensibles para los LLMs
+
+.Ejemplo de flujo básico en Python:
+[source,python]
+----
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
+
+# Configurar modelos locales de Ollama
+Settings.llm = Ollama(
+    model="llama3.2",  # Modelo de lenguaje
+    base_url="http://localhost:11434",
+    temperature=0.1  # Más determinista para búsquedas
+)
+
+Settings.embed_model = OllamaEmbedding(
+    model_name="nomic-embed-text",  # Modelo de embeddings
+    base_url="http://localhost:11434"
+)
+
+# Cargar documentos desde directorio
+documents = SimpleDirectoryReader("docs/").load_data()
+
+# Crear índice con embeddings locales
+index = VectorStoreIndex.from_documents(
+    documents,
+    embed_model=Settings.embed_model  # Usar embeddings de Ollama
+)
+
+# Configurar motor de consultas con modelo local
+query_engine = index.as_query_engine(
+    llm=Settings.llm,
+    similarity_top_k=3  # Número de resultados a considerar
+)
+
+# Realizar consulta usando el modelo local
+respuesta = query_engine.query("¿qué es AlphaStar?")
+print("Respuesta basada en documentos:\n", respuesta.response)
+----
+
+=== Papel de LlamaIndex en el ecosistema de los LLM (Large Language Models)
+
+.LlamaIndex actúa como la capa de orquestación y acceso a datos en el ecosistema de aplicaciones con LLMs. Permite:
+* Integrar cualquier LLM (OpenAI, Hugging Face, LangChain, etc.) a través de una interfaz unificada
+* Utilizar los LLMs tanto para generación de texto como para chat, completado de texto, agentes autónomos y más
+* Gestionar la ingesta, el almacenamiento y la recuperación de datos, así como la interacción con los modelos de lenguaje
+* Implementar flujos de trabajo avanzados como Retrieval-Augmented Generation (RAG), donde el LLM responde usando información recuperada y contextualizada desde los índices creados por LlamaIndex
+* Facilitar la experimentación, evaluación y monitorización de aplicaciones mediante módulos de observabilidad y workflows personalizables
+
+=== Casos de uso: chatbots, agentes, asistentes de conocimiento, análisis de datos
+
+.LlamaIndex es utilizado en una amplia variedad de sectores y escenarios, incluyendo:
+
+* **Chatbots empresariales**: Sistemas de atención al cliente y soporte técnico que responden preguntas usando documentación interna o bases de conocimiento de la empresa
+* **Agentes autónomos**: Bots que pueden realizar investigaciones, extraer datos estructurados de documentos complejos o automatizar tareas a partir de información no estructurada
+* **Asistentes de conocimiento**: Herramientas internas para empleados que permiten consultas en lenguaje natural sobre manuales, reportes, políticas, etc.
+* **Análisis de datos y extracción de información**: Procesamiento de grandes volúmenes de documentos (PDFs, informes, emails) para extraer insights, estructurar información o alimentar sistemas de BI
+* **Aplicaciones multimodales**: Combinación de texto, imágenes y otros formatos para enriquecer la interacción y el análisis de datos
+
+.Ejemplo de chatbot con LlamaIndex:
+[source,python]
+----
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core import VectorStoreIndex, Document, Settings
+
+# Configurar modelos locales de Ollama
+Settings.llm = Ollama(
+    model="llama3.2",  # Modelo de lenguaje local
+    base_url="http://localhost:11434",
+    temperature=0.3
+)
+
+Settings.embed_model = OllamaEmbedding(
+    model_name="nomic-embed-text",  # Modelo para embeddings
+    base_url="http://localhost:11434"
+)
+
+# Documentos de ejemplo sobre errores 404
+documents = [
+    Document(
+        text="Un error 404 significa que la página que buscas no existe en el servidor. "
+             "Esto puede deberse a que la URL está mal escrita o la página fue eliminada. "
+             "Para solucionarlo, revisa la dirección web o vuelve a la página principal.",
+        metadata={"tipo_error": "404"}
+    ),
+    Document(
+        text="Si recibes un error 404, intenta actualizar la página, limpiar la caché del navegador "
+             "o buscar la página desde el menú principal del sitio web.",
+        metadata={"tipo_error": "404"}
+    ),
+    Document(
+        text="Los errores 404 son comunes cuando se cambia la estructura de un sitio web. "
+             "Si eres el administrador, revisa los enlaces rotos y redirige correctamente.",
+        metadata={"tipo_error": "404"}
+    )
+]
+
+# Crear índice con configuración local
+index = VectorStoreIndex.from_documents(
+    documents,
+    embed_model=Settings.embed_model
+)
+
+# Configurar motor de chat con el modelo local
+chat_engine = index.as_chat_engine(
+    llm=Settings.llm,
+    verbose=True  # Opcional: ver el proceso de razonamiento
+)
+
+# Consulta usando el modelo local
+respuesta = chat_engine.chat("¿Qué debo hacer si recibo un error 404?")
+print("Respuesta del asistente:\n", respuesta)
+----
+
+LlamaIndex ha sido adoptado por empresas de sectores como finanzas, manufactura, tecnología y consultoría para acelerar la creación de asistentes de conocimiento, automatizar la extracción de datos y potenciar la adopción de IA generativa de forma segura y escalable.
+
+== 2. Instalación y Configuración
+
+=== Requisitos previos (Python, APIs, conocimientos básicos de IA)
+
+.Para comenzar a trabajar con LlamaIndex, asegúrate de cumplir con los siguientes requisitos previos:
+* Python 3.8 o superior instalado en tu sistema.
+* pip actualizado para instalar paquetes de Python.
+* Conocimientos básicos de programación en Python y conceptos generales de IA.
+* Tener instalado y funcionando Ollama en tu máquina local (Ollama sirve modelos LLM en `localhost:11434`).
+* Suficiente memoria RAM para el modelo que vayas a usar (por ejemplo, Llama 3 8B requiere al menos ~32GB de RAM).
+* Acceso a los datos que quieras indexar (archivos, directorios, bases de datos, etc.).
+
+=== Instalación de LlamaIndex y dependencias
+
+.Instala los paquetes necesarios para trabajar con Ollama y LlamaIndex:
+[source,bash]
+----
+pip install llama-index-llms-ollama llama-index-embeddings-ollama
+----
+
+.Descarga el modelo Llama 3 para Ollama (ejemplo con Llama 3.2):
+[source,bash]
+----
+ollama pull llama3.2
+ollama pull nomic-embed-text
+----
+
+.Opcional: instala otros conectores de LlamaIndex según tus fuentes de datos:
+[source,bash]
+----
+pip install llama-index-readers-file llama-index-readers-pdf llama-index-readers-web
+----
+
+=== Configuración del entorno de desarrollo
+
+.Configura LlamaIndex para usar Ollama como LLM y HuggingFace como modelo de embeddings:
+[source,python]
+----
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.core import Settings, VectorStoreIndex, SimpleDirectoryReader
+
+# Configuración completa con modelos locales
+Settings.embed_model = OllamaEmbedding(
+    model_name="nomic-embed-text",  # Modelo de embeddings alternativo
+    base_url="http://localhost:11434",
+    request_timeout=120.0
+)
+
+Settings.llm = Ollama(
+    model="llama3.2",              # Nombre exacto del modelo en Ollama
+    base_url="http://localhost:11434",
+    request_timeout=300.0,         # Tiempo ampliado para modelos grandes
+    context_window=8192,           # Ventana de contexto aumentada
+    temperature=0.3                # Control de creatividad
+)
+
+# Carga de documentos y creación del índice
+documents = SimpleDirectoryReader("docs/").load_data()
+index = VectorStoreIndex.from_documents(
+    documents,
+    embed_model=Settings.embed_model  # Usar embeddings locales
+)
+
+# Configuración del motor de consultas
+query_engine = index.as_query_engine(
+    llm=Settings.llm,
+    similarity_top_k=3,            # Considerar 3 fragmentos relevantes
+    verbose=True                    # Opcional: ver proceso de razonamiento
+)
+
+# Ejecución de la consulta
+respuesta = query_engine.query("¿Qué temas trata el manual de usuario?")
+print(respuesta.response)
+----
+
+
+== 3. Fundamentos de Indexación de Datos
+
+=== Conceptos básicos de indexación y recuperación  
+.La indexación en LlamaIndex transforma datos brutos en **representaciones matemáticas optimizadas** mediante estos procesos claved:  
+
+* **Vectorización**: Conversión de texto a vectores numéricos usando modelos como `BAAI/bge-small-es-v1.5` para búsquedas semánticasd  
+* **Organización jerárquica**: Estructuración de datos en árboles binarios o grafos para navegación eficiente  
+* **Metadatos contextuales**: Asociación de información adicional (fuente, fecha) para filtrado avanzado  
+
+.La recuperación combina:  
+- Algoritmos **k-NN** para similitud vectorial  
+- Filtros basados en metadatos  
+- **Recuperación recursiva** para búsquedas en múltiples niveles de contexto
+
+.Ejemplo de pipeline de indexación:
+[source,python]
+----
+from llama_index.core import Document
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core.extractors import TitleExtractor
+from llama_index.core.ingestion import IngestionPipeline
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.ollama import OllamaEmbedding
+
+# Configura el modelo Ollama para LLM y embeddings
+ollama_llm = Ollama(
+    model="llama3.2",  # Cambia por el modelo que tengas en Ollama
+    base_url="http://localhost:11434",
+    temperature=0.3
+)
+embed_model = OllamaEmbedding(
+    model_name="nomic-embed-text",
+    base_url="http://localhost:11434"
+)
+
+# Prepara tus documentos (puedes cargar desde archivos, aquí un ejemplo simple)
+documents = [
+    Document(text="Este es el manual de usuario. Explica las políticas de devolución y garantías."),
+    Document(text="Para devolver un producto, contacte con soporte y siga las instrucciones del sitio web.")
+]
+
+# Crea el extractor de títulos usando Ollama como LLM
+title_extractor = TitleExtractor(llm=ollama_llm)
+
+# Define la pipeline de ingesta
+pipeline = IngestionPipeline(
+    transformations=[
+        SentenceSplitter(chunk_size=64, chunk_overlap=0),
+        title_extractor,
+        embed_model
+    ]
+)
+
+# Ejecuta la pipeline sobre los documentos
+nodes = pipeline.run(documents=documents)
+
+# Visualiza los nodos resultantes
+for node in nodes:
+    print("--- Nodo ---")
+    print("Texto:", node.text)
+    print("Título:", node.metadata.get("document_title"))
+    print("Embeddings (primeros valores):", node.embedding[:5], "...")
+----
+
+=== Tipos de datos soportados  
+LlamaIndex procesa 160+ formatos mediante:  
+
+[cols="1,2,2,2", options="header"]
+|===
+| Tipo | Ejemplos | Cargador | Caso de uso  
+| **Estructurados**  
+| SQL, CSV, Excel  
+| `SQLAlchemyReader`, `PandasReader`  
+| Análisis tabular  
+
+| **Semiestructurados**  
+| JSON, XML, emails  
+| `JSONReader`, `BeautifulSoupWebReader`  
+| Integración APIs  
+
+| **No estructurados**  
+| PDF, imágenes, audio  
+| `LlamaParse`, `SimpleDirectoryReader`  
+| Documentos complejos  
+|===
+
+.Ejemplo con PDF usando Ollama:
+[source,python]
+----
+from llama_index.readers.file import PDFReader
+from llama_index.llms.ollama import Ollama
+
+# 1. Cargar el documento PDF
+pdf_path = "docs/sample.pdf"
+reader = PDFReader()
+documents = reader.load_data(file=pdf_path)
+
+# 2. Configurar el modelo Ollama para resumen
+llm = Ollama(
+    model="llama3.2",  # Cambia por el modelo que tengas descargado en Ollama
+    base_url="http://localhost:11434",
+    temperature=0.2,
+    request_timeout=120.0
+)
+
+# 3. Crear el prompt de resumen
+texto = documents[0].text[:6000]  # Limita el texto si el PDF es muy largo
+prompt = (
+    "Resume el siguiente texto en español, resaltando los puntos más importantes:\n\n"
+    f"{texto}\n\nResumen:"
+)
+
+# 4. Generar el resumen
+resumen = llm.complete(prompt)
+print("Resumen del PDF:\n")
+print(resumen)
+
+----
+
+=== Uso de cargadores y conectores de datos (LlamaHub)  
+LlamaHub ofrece 160+ conectores para:  
+
+**Flujo de trabajo típico:**  
+1. Instalar conector específico  
+2. Configurar parámetros de conexión  
+3. Cargar datos como documentos  
+
+.Los principales conectores incluyen:
+[cols="2,6",options="header"]
+|===
+| Reader
+| Descripción
+
+| PDFReader
+| Lee y extrae texto de archivos PDF.
+
+| DocxReader
+| Lee archivos de Microsoft Word (.docx).
+
+| EpubReader
+| Lee archivos EPUB.
+
+| MarkdownReader
+| Lee archivos Markdown (.md).
+
+| HTMLTagReader
+| Extrae texto de archivos HTML locales.
+
+| ImageReader / ImageCaptionReader
+| Procesa imágenes y extrae texto o descripciones.
+
+| CSVReader / PagedCSVReader / PandasCSVReader
+| Lee archivos CSV.
+
+| RTFReader
+| Lee archivos RTF.
+
+| MboxReader
+| Lee archivos de correo electrónico MBOX.
+
+| PptxReader
+| Lee presentaciones de PowerPoint.
+
+| IPYNBReader
+| Lee notebooks de Jupyter.
+
+| FlatReader
+| Lee archivos de texto plano.
+
+| UnstructuredReader
+| Procesa documentos no estructurados.
+
+| PyMuPDFReader
+| Alternativa para leer PDFs usando PyMuPDF.
+
+| XMLReader
+| Lee y procesa archivos XML.
+
+| SitemapReader
+| Extrae y procesa páginas web a partir de un sitemap XML.
+
+| WebPageReader
+| Extrae contenido directamente de URLs individuales.
+
+| NotionPageReader
+| Extrae contenido de páginas de Notion.
+
+| ObsidianReader
+| Lee y procesa notas de Obsidian.
+
+| GoogleDriveReader
+| Carga archivos y carpetas desde Google Drive.
+
+| GoogleDocsReader
+| Lee documentos de Google Docs.
+
+| GoogleSheetsReader
+| Lee hojas de cálculo de Google Sheets.
+
+| GoogleMapsTextSearchReader
+| Busca y carga resultados de Google Maps.
+
+| GoogleChatReader
+| Extrae mensajes de Google Chat.
+
+| DatabaseReader
+| Permite ejecutar queries SQL y extraer datos de bases de datos compatibles con SQLAlchemy.
+
+| StringIterableReader
+| Convierte listas de strings directamente en documentos LlamaIndex.
+
+| VideoAudioReader
+| Extrae texto de archivos de vídeo y audio.
+
+| ImageVisionLLMReader
+| Procesa imágenes usando modelos de visión.
+|===
+
+.Ejemplo 1: Carga desde sitemap web
+[source,python]
+----
+from llama_index.readers.web import SimpleWebPageReader
+
+# URL del sitemap.xml del sitio que quieres leer
+sitemap_url = "https://gpt-index.readthedocs.io/sitemap.xml"
+
+# Instancia el lector de sitemaps
+# reader = SitemapReader(sitemap_url, html_to_text=True, limit=5)  # limit opcional para limitar páginas
+
+# Carga los documentos del sitemap
+documents = SimpleWebPageReader(html_to_text=True).load_data(
+    ["http://paulgraham.com/worked.html"]
+)
+
+
+# Muestra un resumen de los documentos obtenidos
+for i, doc in enumerate(documents):
+    print(f"--- Documento {i+1} ---")
+    print("URL:", doc.metadata.get("url"))
+    print("Contenido (primeros 3000 caracteres):")
+    print(doc.text[:3000])
+    print()
+
+----
+
+.Ejemplo 2: Integración con Notion
+[source,python]
+----
+from llama_index.readers.notion import NotionPageReader
+
+pages = NotionPageReader(
+    integration_token="secret_..."
+).load_data(page_ids=["12345"])  # 
+----
+
+.Ejemplo 3: Carga masiva local
+[source,python]
+----
+from llama_index.core import SimpleDirectoryReader
+
+documents = SimpleDirectoryReader(
+    input_dir="datos/",
+    required_exts=[".pdf", ".docx"],
+    recursive=True
+).load_data()  # 
+----
+
+**Caso avanzado - PostgreSQL con Ollama:**
+[source,python]
+----
+from llama_index.readers.postgres import PostgresReader
+
+reader = PostgresReader(
+    host="localhost",
+    user="usuario",
+    password="contraseña",
+    dbname="ventas"
+)
+query = """
+    SELECT cliente, ventas 
+    FROM transacciones 
+    WHERE fecha > '2024-01-01'
+"""
+documents = reader.load_data(query=query)  # 
+----
+
+== 4. Fases Principales del Flujo de Trabajo
+
+=== Fase de ingesta y carga de datos  
+Proceso inicial para integrar datos desde múltiples fuentes usando **160+ conectores** de LlamaHub:  
+
+.Carga desde directorio local (no estructurados):
+[source,python]
+----
+from llama_index.core import SimpleDirectoryReader
+
+# Verificar que el directorio 'docs/' exista y contenga archivos
+try:
+    documents = SimpleDirectoryReader(
+        input_dir="docs/",  # Asegúrate que esta carpeta existe
+        required_exts=[".pdf", ".md"],
+        recursive=True
+    ).load_data()
+    
+    print(f"✅ Documentos cargados: {len(documents)}")
+    for doc in documents:
+        print(f" - {doc.metadata.get('file_name')}")
+
+except Exception as e:
+    print(f"❌ Error: {str(e)}")
+    documents = []  # Definir variable como lista vacía para evitar errores
+
+# Verificar si hay documentos cargados
+if not documents:
+    print("\n⚠️  No se encontraron documentos. Verifica:")
+    print("1. Que el directorio 'docs/' existe")
+    print("2. Que contiene archivos PDF o Markdown (.md)")
+    print("3. Que tienes instaladas las dependencias: pip install pymupdf python-docx")
+else:
+    # Aquí puedes continuar con tu procesamiento
+    print("\n¡Documentos listos para usar!")
+----
+
+.Carga desde API web (semiestructurados):
+[source,python]
+----
+# Instala las dependencias si es necesario:
+# pip install llama-index-readers-web llama-index-llms-ollama
+
+from llama_index.readers.web import BeautifulSoupWebReader
+from llama_index.llms.ollama import Ollama
+
+# 1. Define la(s) URL(s) que quieres leer
+urls = ["https://es.wikipedia.org/wiki/Abraham_Lincoln"]
+
+# 2. Instancia el reader y carga los documentos desde la web
+reader = BeautifulSoupWebReader()
+documents = reader.load_data(urls=urls)
+
+# 3. Configura el modelo Ollama como LLM local
+llm = Ollama(
+    model="llama3.2",  # Cambia por el modelo que tengas descargado en Ollama
+    base_url="http://localhost:11434",
+    temperature=0.2,
+    request_timeout=120.0
+)
+
+# 4. Resume el contenido extraído de cada página
+for i, doc in enumerate(documents):
+    prompt = (
+        "Resume en español el siguiente texto web, resaltando los puntos más importantes:\n\n"
+        f"{doc.text[:6000]}\n\nResumen:"
+    )
+    resumen = llm.complete(prompt).text
+    print(f"\n--- Resumen de la página {i+1} ({doc.metadata.get('url', '')}) ---\n")
+    print(resumen)
+
+----
+
+.Carga desde PostgreSQL (estructurados):
+[source,python]
+----
+# Instalar dependencias necesarias
+# pip install llama-index-readers-postgres llama-index-llms-ollama psycopg2-binary
+
+from llama_index_cloud_sql_pg import PostgresEngine, PostgresReader
+from llama_index.llms.ollama import Ollama
+from llama_index.core import Settings
+
+# 1. Configurar conexión a PostgreSQL
+async def setup_postgres():
+    engine = await PostgresEngine.afrom_instance(
+        project_id="tu-proyecto-gcp",  # Solo para Cloud SQL
+        region="us-central1",
+        instance="tu-instancia",
+        database="tu-db",
+        user="postgres",
+        password="tu-password"
+    )
+    return engine
+
+# 2. Configurar Ollama como LLM local
+Settings.llm = Ollama(
+    model="llama3.2",
+    base_url="http://localhost:11434",
+    temperature=0.3
+)
+
+# 3. Cargar documentos desde PostgreSQL
+async def load_and_process_data():
+    engine = await setup_postgres()
+    
+    # Opción 1: Cargar desde tabla completa
+    reader = await PostgresReader.create(
+        engine=engine,
+        table_name="documentos",
+        content_columns=["contenido"],
+        metadata_columns=["autor", "fecha"]
+    )
+    
+    # Opción 2: Cargar con query personalizada
+    # reader = await PostgresReader.create(
+    #     engine=engine,
+    #     query="SELECT * FROM documentos WHERE categoria = 'tecnologia'",
+    #     content_columns=["titulo", "contenido"],
+    #     metadata_columns=["id"]
+    # )
+    
+    documents = await reader.aload_data()
+    
+    # 4. Procesar documentos con Ollama
+    for doc in documents:
+        prompt = f"Resume este documento técnico: {doc.text[:2000]}"
+        resumen = Settings.llm.complete(prompt)
+        doc.metadata["resumen"] = resumen.text
+        print(f"Documento {doc.metadata.get('id')} resumido")
+
+# Ejecutar el flujo
+import asyncio
+asyncio.run(load_and_process_data())
+----
+
+=== Fase de indexación: creación de índices vectoriales y otras estructuras
+
+La fase de indexación en LlamaIndex transforma los datos brutos en estructuras consultables, optimizando la recuperación de información en aplicaciones RAG. A continuación se describen los principales tipos de índices y su proceso de creación.
+
+.Tabla comparativa de índices
+
+[options="header"]
+|===
+| Escenario | Índice Recomendado | Ventaja
+| Búsqueda semántica | VectorStoreIndex | Contextualización precisa
+| Síntesis documental | SummaryIndex | Visión panorámica
+| Filtrado por metadatos | KeywordTableIndex | Precisión en términos específicos
+| Jerarquías complejas | TreeIndex | Razonamiento multinivel
+|===
+
+
+==== Índices vectoriales
+
+.Proceso básico:
+* División de documentos en nodos (fragmentos de 2048 tokens por defecto) para gestionar contextos extensos.
+* Generación de embeddings: cada nodo se convierte en un vector numérico usando modelos como OpenAI o Sentence Transformers.
+* Almacenamiento estructurado:
+
+.Un índice vectorial almacena nodos y sus embeddings, permitiendo búsquedas semánticas eficientes.
+[source,python]
+----
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.llms.ollama import Ollama
+
+# 1. Configurar modelos
+embed_model = OllamaEmbedding(
+    model_name="llama3.2",  # Modelo de embeddings
+    base_url="http://localhost:11434"
+)
+
+llm = Ollama(
+    model="llama3.2",  # Modelo para generación
+    request_timeout=300.0
+)
+
+# 2. Cargar documentos
+documents = SimpleDirectoryReader("./docs").load_data()
+
+# 3. Crear índice vectorial
+index = VectorStoreIndex.from_documents(
+    documents,
+    embed_model=embed_model,
+)
+
+# 4. Crear motor de consulta
+query_engine = index.as_query_engine(llm=llm)
+
+# 5. Ejecutar consulta
+response = query_engine.query("¿Cuál es el tema principal de los documentos?")
+print(response)
+
+----
+Personalización:
+
+    Ajuste del tamaño de fragmentos mediante ServiceContext.from_defaults(chunk_size=512).
+
+    Inclusión de metadatos (etiquetas, fechas, categorías) para filtrado híbrido.
+
+===== Índice de resumen (SummaryIndex)
+
+Organiza los nodos en secuencia lineal para síntesis global.
+[source,python]
+----
+from llama_index.core import SimpleDirectoryReader, SummaryIndex
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.llms.ollama import Ollama
+from llama_index.core import Settings
+
+# 1. Configurar modelos
+llm = Ollama(model="llama3.2", base_url="http://localhost:11434")
+Settings.llm = llm
+
+# 2. Cargar y dividir documentos
+documents = SimpleDirectoryReader("./docs").load_data()
+splitter = SentenceSplitter(chunk_size=512)
+nodes = splitter(documents)
+
+# 3. Crear índice de resúmenes
+index = SummaryIndex(nodes)
+
+# 4. Configurar motor de consulta con síntesis jerárquica
+query_engine = index.as_query_engine(
+    response_mode="tree_summarize",
+    use_async=True
+)
+
+# 5. Generar resumen
+response = query_engine.query("Resume los temas principales del documento")
+print(response)
+
+----
+Ideal para generar resúmenes ejecutivos o respuestas panorámicas.
+
+===== Índice de palabras clave (KeywordTableIndex)
+KeywordTableIndex es un mecanismo de Indexación por Palabras Clave que permite búsquedas rápidas y precisas basadas en términos clave. Utiliza una tabla hash para almacenar pares de palabras clave y nodos documentales, facilitando la recuperación de información relevante.
+
+.Características clave:
+* **Tabla Hash Conceptual**: Almacena pares `(keyword, lista_de_nodos)`
+* **Nodos Documentales**: Fragmentos de texto procesados (oraciones/párrafos)
+* **Metadatos Asociados**: Información contextual de cada nodo
+
+.Proceso de Indexación:
+* *Segmentación*: Divide documentos en nodos usando `NodeParser`
+* *Extracción Keywords*: Usa modelos LLM para identificar términos relevantes
+* *Mapeo Inverso*: Crea relación keywords → nodos
+
+.Consulta:
+* Análisis léxico de la pregunta
+* Búsqueda en tabla de keywords
+* Recuperación de nodos relevantes
+* Síntesis de respuesta
+
+*Parámetros principales:*
+- `max_keywords_per_chunk`: Controla densidad terminológica
+- `keyword_extract_template`: Define estrategia de extracción
+- `retriever_mode`: Tipo de búsqueda (`simple`/`rake`/`default`)
+
+.Ventajas Comparativas
+|===
+| Característica | KeywordTableIndex | VectorIndex
+| Velocidad consultas | Alto | Medio 
+| Requisitos recursos | Bajos | Altos 
+| Precisión léxica | Excelente | Regular 
+| Manejo sinónimos | Limitado | Bueno
+|===
+
+*Casos ideales de uso:*
+- Búsqueda exacta de términos técnicos
+Optimiza consultas que requieren razonamiento multinivel.
+- Documentación con vocabulario controlado
+- Entornos con limitaciones hardware
+
+.Permite búsquedas rápidas y precisas basadas en términos clave, ideal para documentos con metadatos ricos o etiquetas.
+[source,python]
+----
+from llama_index.core import SimpleDirectoryReader, KeywordTableIndex
+from llama_index.core.node_parser import SimpleNodeParser
+from llama_index.llms.ollama import Ollama
+from llama_index.core import Settings
+
+# 1. Configurar modelo de Ollama
+Settings.llm = Ollama(model="llama3.2", base_url="http://localhost:11434")
+
+# 2. Cargar y dividir documentos
+documents = SimpleDirectoryReader("./docs").load_data()
+parser = SimpleNodeParser.from_defaults(chunk_size=512)
+nodes = parser.get_nodes_from_documents(documents)
+
+# 3. Crear índice de tabla de palabras clave
+index = KeywordTableIndex(nodes)
+
+# 4. Configurar motor de consulta
+query_engine = index.as_query_engine(
+    retriever_mode="simple", 
+    max_keywords_per_query=5
+)
+
+# 5. Ejecutar consulta basada en keywords
+response = query_engine.query("Explica el concepto de aprendizaje automático")
+print(response)
+
+----
+Permite búsquedas exactas por etiquetas o metadatos.
+
+===== Índice de árbol (TreeIndex)
+
+El `TreeIndex` es una estructura de índice jerárquica en la que cada nodo representa un resumen de sus nodos hijos. Se construye siguiendo un enfoque de abajo hacia arriba: los fragmentos de texto (nodos hoja) se agrupan y se sintetizan resúmenes en niveles superiores, formando así un árbol de resúmenes hasta llegar a uno o varios nodos raíz.
+
+.Estructura y Funcionamiento
+
+* Cada nodo hoja contiene un fragmento de texto original.
+* Los nodos internos contienen resúmenes generados automáticamente de sus hijos.
+* El parámetro `num_children` controla cuántos hijos puede tener cada nodo padre (por defecto, 10).
+* La construcción del árbol puede mostrar progreso y ser asíncrona (`use_async`).
+
+.Proceso de Indexación
+
+1. *División*: Los documentos se dividen en fragmentos (nodos hoja).
+2. *Agrupación*: Los nodos hoja se agrupan en nodos padres, resumiendo el contenido de los hijos.
+3. *Iteración*: El proceso se repite hasta formar el/los nodo(s) raíz.
+
+.Consulta
+
+Durante la consulta, existen dos modos principales:
+* *Recorrido descendente*: Se parte del nodo raíz y se baja por el árbol seleccionando los nodos más relevantes en cada nivel.
+* *Síntesis directa*: Se genera una respuesta directamente a partir de los nodos raíz.
+
+.Tabla de Parámetros Clave
+|===
+| Nombre            | Tipo      | Descripción                                    | Valor por defecto |
+| summary_template  | Template  | Prompt para resumir nodos hijos                | None              |
+| insert_prompt     | Template  | Prompt para inserción de nodos                 | None              |
+| num_children      | int       | Hijos por nodo padre                           | 10                |
+| build_tree        | bool      | Construir árbol al crear el índice             | True              |
+| show_progress     | bool      | Mostrar barra de progreso                      | False             |
+|===
+.Ventajas y Usos
+
+* Ideal para documentos largos o jerárquicos.
+* Permite síntesis progresiva y respuestas más estructuradas.
+* Escalable y eficiente para consultas que requieren visión global o resúmenes de alto nivel.
+
+.Ejemplo de creación y consulta de un índice de árbol:
+[source,python]
+----
+from llama_index.core import SimpleDirectoryReader, TreeIndex
+from llama_index.llms.ollama import Ollama
+from llama_index.core import Settings
+
+# 1. Configurar modelo de Ollama
+Settings.llm = Ollama(model="llama3.2", base_url="http://localhost:11434")
+
+# 2. Cargar documentos
+documents = SimpleDirectoryReader("./docs").load_data()
+
+# 3. Crear índice jerárquico con parámetros personalizados
+index = TreeIndex.from_documents(
+    documents,
+    num_children=5,  # 5 nodos hijos por nivel
+    build_tree=True,  # Construir estructura durante indexación
+    show_progress=True  # Mostrar barra de progreso
+)
+
+# 4. Configurar motor de consulta con traversing
+query_engine = index.as_query_engine(
+    child_branch_factor=2,  # Explorar 2 ramas por nivel
+    response_mode="tree_summarize"  # Síntesis jerárquica
+)
+
+# 5. Ejecutar consulta compleja
+response = query_engine.query("Analiza comparativamente los temas principales del documento")
+print(response)
+
+----
+
+
+==== IndexNode
+
+Un `IndexNode` en LlamaIndex es una estructura que representa un fragmento ("chunk") de un documento fuente, típicamente texto, aunque puede ser también una imagen u otro tipo de dato. Es una especialización de `TextNode`, por lo que hereda sus propiedades y funcionalidades, y está diseñado para ser utilizado dentro de los distintos índices de LlamaIndex, como VectorStoreIndex, TreeIndex, SummaryIndex, entre otros.
+
+.Propiedades principales
+
+- Contiene el contenido textual o multimodal del fragmento.
+- Almacena metadatos relevantes (por ejemplo, fuente, posición, etiquetas).
+- Gestiona relaciones con otros nodos mediante el atributo `relationships`, permitiendo definir conexiones como siguiente, anterior, padre, etc.
+- Cada nodo tiene un identificador único (`node_id`), que puede asignarse manualmente o generarse automáticamente.
+
+.Creación y uso
+
+Puedes crear nodos de manera manual o automática. Lo más común es usar un parser (por ejemplo, `SentenceSplitter`) para dividir documentos en nodos:
+
+.Ejemplo de creación automática de nodos:
+[source,python]
+----
+from llama_index.core.schema import TextNode, NodeRelationship, RelatedNodeInfo
+from llama_index.core import VectorStoreIndex, Settings
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.llms.ollama import Ollama
+
+# 1. Configura Ollama como modelo de embeddings y LLM global
+Settings.embed_model = OllamaEmbedding(
+    model_name="llama3.2",  # O el modelo de embeddings que hayas descargado en Ollama
+    base_url="http://localhost:11434"
+)
+Settings.llm = Ollama(
+    model="llama3.2",  # O el modelo LLM que prefieras
+    base_url="http://localhost:11434",
+    request_timeout=60.0
+)
+
+# 2. Crea dos nodos de texto manualmente
+node1 = TextNode(text="La inteligencia artificial permite a las máquinas aprender de los datos.", id_="nodo_1")
+node2 = TextNode(text="El aprendizaje automático es una rama de la inteligencia artificial.", id_="nodo_2")
+
+# 3. Define relaciones entre los nodos (opcional)
+node1.relationships[NodeRelationship.NEXT] = RelatedNodeInfo(node_id=node2.node_id)
+node2.relationships[NodeRelationship.PREVIOUS] = RelatedNodeInfo(node_id=node1.node_id)
+
+# 4. Construye el índice vectorial usando Ollama para los embeddings
+index = VectorStoreIndex(nodes=[node1, node2])
+
+# 5. Consulta el índice usando Ollama como modelo LLM
+query_engine = index.as_query_engine()
+response = query_engine.query("¿Qué es el aprendizaje automático?")
+print(response)
+----
+
+
+.Los `IndexNode` son la unidad básica sobre la que operan los índices de LlamaIndex. Por ejemplo:
+- En un VectorStoreIndex, cada nodo se representa como un vector y se almacena para búsquedas semánticas.
+- En un TreeIndex, los nodos hoja son los fragmentos originales y los nodos internos son resúmenes de estos.
+- En un KeywordTableIndex, los nodos se indexan por las palabras clave que contienen.
+
+.Ejemplo de flujo de trabajo
+1. Cargar documentos y dividirlos en nodos.
+2. Crear relaciones entre nodos si es necesario.
+3. Construir el índice deseado (vectorial, jerárquico, etc.) usando la lista de nodos.
+4. Realizar consultas, que internamente recuperan y procesan los nodos relevantes.
+
+==== Almacenamiento y reutilización: StorageContext y persistencia
+
+
+
+.El `StorageContext` es un contenedor utilitario que centraliza el almacenamiento de:
+* **Nodos**: Fragmentos de documentos procesados (`TextNode`, `IndexNode`)
+* **Índices**: Metadatos de estructuras de índices (vectoriales, árboles, etc.)
+* **Vectores**: Representaciones de embeddings generadas
+* **Grafos**: Relaciones entre nodos (opcional)
+
+.Componentes Principales
+|===
+| Componente | Descripción | Implementación por defecto
+| `docstore` | Almacena nodos/documentos | `SimpleDocumentStore` (memoria)
+| `index_store` | Guarda metadatos de índices | `SimpleIndexStore` (memoria)
+| `vector_store` | Contiene vectores de embeddings | `SimpleVectorStore` (memoria)
+| `graph_store` | Maneja relaciones complejas | `SimpleGraphStore` (opcional)
+|===
+
+.Funcionalidades Clave
+* **Persistencia**: Guarda/recupera todo el estado en disco
+* **Personalización**: Permite usar diferentes backends (Chroma, Qdrant, Redis, etc.)
+* **Multi-almacén**: Soporta múltiples `vector_stores` simultáneos
+
+.Creación y uso básico:
+[source,python]
+----
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext, load_index_from_storage
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.llms.ollama import Ollama
+from llama_index.core import Settings
+
+# 1. Configurar modelos de Ollama
+Settings.embed_model = OllamaEmbedding(
+    model_name="llama3.2",  # Modelo de embeddings
+    base_url="http://localhost:11434"
+)
+Settings.llm = Ollama(
+    model="llama3.2",  # Modelo para generación
+    base_url="http://localhost:11434",
+    request_timeout=300.0
+)
+
+# 2. Cargar documentos
+documents = SimpleDirectoryReader("./docs").load_data()
+
+# 3. Crear StorageContext y vector store
+storage_context = StorageContext.from_defaults()
+
+# 4. Construir índice vectorial con Ollama
+index = VectorStoreIndex.from_documents(
+    documents,
+    storage_context=storage_context,
+    embed_model=Settings.embed_model
+)
+
+# 5. Persistir el índice
+storage_context.persist(persist_dir="./mi_almacenamiento")
+
+# 6. Cargar desde almacenamiento
+nuevo_storage_context = StorageContext.from_defaults(
+    persist_dir="./mi_almacenamiento"
+)
+index_cargado = load_index_from_storage(nuevo_storage_context)
+
+# 7. Consultar el índice
+query_engine = index_cargado.as_query_engine(llm=Settings.llm)
+respuesta = query_engine.query("¿Cuál es el tema principal?")
+print(respuesta)
+----
+
+.Consideraciones Importantes
+* **Compatibilidad**: Verificar que los backends usados sean compatibles con LlamaIndex
+* **Persistencia completa**: Al usar `persist()`, asegurarse que todos los componentes estén configurados para persistir
+* **Rendimiento**: Almacenes en memoria son más rápidos pero volátiles, discos/remotos ofrecen persistencia
+
+=== Fase de consulta: recuperación y generación aumentada por recuperación (RAG)  
+
+
+La fase de consulta en LlamaIndex combina la recuperación semántica de fragmentos relevantes y la generación aumentada por recuperación (RAG) para ofrecer respuestas precisas y contextualizadas. 
+
+.El proceso consta de tres etapas principales:
+* Recuperación de Información
+* Posprocesamiento de nodos recuperados
+* Síntesis de Respuesta (RAG)
+
+==== Recuperación de Información
+
+*Objetivo:* Identificar los fragmentos más relevantes del índice.
+
+*Mecanismos:*
+- Búsqueda vectorial (similitud de embeddings)
+- Filtrado por metadatos (autor, fecha, fuente)
+- Recuperación híbrida (combinación de keywords y semántica)
+
+.El `Retriever` es el componente encargado de esta tarea, configurado con parámetros como:
+[source,python]
+----
+# Configurar el retriever con parámetros personalizados
+retriever = index.as_retriever(
+    similarity_top_k=5,  # Recuperar 5 nodos más similares
+    vector_store_query_mode="hybrid"  # Búsqueda semántica + keywords
+)
+nodes = retriever.retrieve("¿Qué modelos de Ollama soportan embeddings?")
+----
+
+==== Posprocesamiento
+
+*Técnicas aplicadas a los nodos recuperados:*
+- **Re-ranking:** Reordenar resultados con modelos como `bge-reranker`
+- **Filtrado:** Eliminar nodos de baja relevancia (`similarity_cutoff=0.7`)
+- **Fusión:** Combinar fragmentos relacionados contextualmente
+
+.El posprocesamiento mejora la precisión y relevancia de los nodos antes de la síntesis final. Por ejemplo, se puede usar un modelo de re-ranking para ajustar el orden de los nodos recuperados según su relevancia para la consulta.
+[source,python]
+----
+from llama_index.core.postprocessor import SentenceTransformerRerank
+
+reranker = SentenceTransformerRerank(model="cross-encoder/ms-marco-MiniLM-L-6-v2")
+nodes_reranked = reranker.postprocess_nodes(nodes, query_str=query)
+----
+
+==== Síntesis de Respuesta (RAG)
+
+*Proceso:*
+1. Los nodos relevantes se inyectan como contexto en el prompt.
+2. El LLM genera una respuesta natural basada en el contexto y la pregunta.
+
+.El `QueryEngine` es el componente que integra todo el proceso, permitiendo consultas sobre el índice y generando respuestas contextuales.
+[source,python]
+----
+from llama_index.llms.ollama import Ollama
+
+# Configurar modelo generativo
+llm = Ollama(model="llama3:8b", temperature=0.3)
+query_engine = index.as_query_engine(llm=llm, response_mode="compact")
+
+# Generar respuesta
+response = query_engine.query("Explica el mecanismo de atención en transformers")
+print(response)
+----
+
+*Ejemplo de salida:*
+"El mecanismo de atención permite a los modelos procesar relaciones contextuales entre palabras, asignando pesos diferenciales a cada token..."
+
+==== Ejemplo de consulta RAG
+
+.Un ejemplo completo de consulta RAG con LlamaIndex:
+[source,python]
+----
+# 1. Instalación de dependencias (requiere Ollama corriendo localmente)
+# pip install llama-index-core llama-index-llms-ollama llama-index-embeddings-ollama
+
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, StorageContext
+from llama_index.embeddings.ollama import OllamaEmbedding
+from llama_index.llms.ollama import Ollama
+from llama_index.core.postprocessor import SentenceTransformerRerank
+from llama_index.core import Settings
+
+# 2. Configuración de modelos Ollama
+Settings.embed_model = OllamaEmbedding(
+    model_name="llama3.2",  # Modelo de embeddings
+    base_url="http://localhost:11434"
+)
+Settings.llm = Ollama(
+    model="llama3.2",  # Modelo generativo
+    base_url="http://localhost:11434",
+    temperature=0.3
+)
+
+# 3. Carga y procesamiento de documentos
+documents = SimpleDirectoryReader("./docs").load_data()
+
+# 4. Creación de índice vectorial con persistencia
+storage_context = StorageContext.from_defaults()
+index = VectorStoreIndex.from_documents(
+    documents,
+    storage_context=storage_context
+)
+storage_context.persist(persist_dir="./mi_almacenamiento")
+
+# ----------------------------
+# Etapa 1: Recuperación de Información
+# ----------------------------
+retriever = index.as_retriever(similarity_top_k=5)
+nodes = retriever.retrieve("¿Qué es el aprendizaje automático?")
+print("Nodos recuperados crudos:", [node.text[:50] + "..." for node in nodes])
+
+# ----------------------------
+# Etapa 2: Posprocesamiento
+# ----------------------------
+reranker = SentenceTransformerRerank(
+    model="cross-encoder/ms-marco-MiniLM-L-6-v2", 
+    top_n=3
+)
+nodes_reranked = reranker.postprocess_nodes(nodes, query_str="¿Qué es el aprendizaje automático?")
+print("Nodos después de reranking:", [node.text[:50] + "..." for node in nodes_reranked])
+
+# ----------------------------
+# Etapa 3: Síntesis de Respuesta (RAG)
+# ----------------------------
+query_engine = index.as_query_engine(
+    node_postprocessors=[reranker],
+    response_mode="compact"
+)
+response = query_engine.query("¿Qué es el aprendizaje automático?")
+print("\nRespuesta generada:", response)
+----
+
+== 5. Componentes Clave de LlamaIndex
+
+=== Componentes: prompts, modelos, bases de datos, motores de consulta (QueryEngine)  
+LlamaIndex se estructura alrededor de cuatro pilares fundamentales:
+
+[cols="1,3", options="header"]
+|===
+| Componente | Función y Ejemplo
+| **Prompts** | Plantillas para guiar al LLM. Ejemplo con Ollama:
+[source,python]
+----
+from llama_index.core import PromptTemplate
+
+template = """
+Contexto:
+{context_str}
+
+Responde en español usando markdown:
+{query_str}
+"""
+prompt = PromptTemplate(template)
+----
+
+
+| **Modelos** | Configuración de LLMs locales:
+[source,python]
+----
+from llama_index.llms.ollama import Ollama
+
+llm = Ollama(model="llama3.1", temperature=0.3)
+----
+
+
+| **Bases de datos** | Almacenes vectoriales locales:
+[source,python]
+----
+from llama_index.vector_stores.lancedb import LanceDBVectorStore
+
+vector_store = LanceDBVectorStore(uri="./data.lancedb")
+----
+
+
+| **QueryEngine** | Motor de consultas RAG personalizado:
+[source,python]
+----
+query_engine = index.as_query_engine(
+    similarity_top_k=3,
+    llm=llm,
+    response_mode="compact"
+)
+----
+
+|===
+
+=== Herramientas y agentes: definición, usos y ejemplos  
+Principales tipos de herramientas y su implementación:
+
+**1. FunctionTool (Herramientas básicas):**
+[source,python]
+----
+from llama_index.core.tools import FunctionTool
+
+def calcular_iva(monto: float) -> float:
+    """Calcula el IVA del 21% para un monto dado"""
+    return monto * 0.21
+
+tool = FunctionTool.from_defaults(
+    calcular_iva,
+    name="calculadora_iva",
+    description="Calcula impuestos IVA para facturas"
+)
+----
+
+
+**2. QueryEngineTool (Integración RAG):**
+[source,python]
+----
+from llama_index.core.tools import QueryEngineTool
+
+rag_tool = QueryEngineTool(
+    query_engine=query_engine,
+    metadata=ToolMetadata(
+        name="manual_tecnico",
+        description="Contiene documentación de sistemas internos"
+    )
+)
+----
+
+
+**3. AgentWorkflow (Sistemas multiagente):**
+[source,python]
+----
+from llama_index.core.agent.workflow import AgentWorkflow, ReActAgent
+
+agente_finanzas = ReActAgent(
+    tools=[tool, rag_tool],
+    llm=Ollama(model="llama3.1"),
+    system_prompt="Eres un asistente financiero especializado"
+)
+
+workflow = AgentWorkflow(
+    agents=[agente_finanzas],
+    root_agent="agente_finanzas"
+)
+----
+
+
+=== Flujos de trabajo y pipelines con agentes 
+Implementación de pipelines complejos con gestión de estado:
+
+**Pipeline de procesamiento documental:**
+[source,python]
+----
+from llama_index.core.workflow import Workflow, step
+
+class ProcesadorDocs(Workflow):
+    @step
+    async def carga(self, ev: StartEvent) -> ProcessingEvent:
+        docs = SimpleDirectoryReader("docs").load_data()
+        return ProcessingEvent(docs=docs)
+    
+    @step
+    async def analisis(self, ev: ProcessingEvent) -> StopEvent:
+        resultados = await self.llm.complete(
+            f"Analiza: {ev.docs[0].text[:1000]}"
+        )
+        return StopEvent(result=resultados)
+
+# Ejecución
+pipeline = ProcesadorDocs(llm=Ollama(model="llama3.1"))
+resultado = await pipeline.run()
+----
+
+
+**Flujo multiagente con toma de decisiones:**
+[cols="1,2", options="header"]
+|===
+| Etapa | Componentes
+| 1. Clasificación | RouterQueryEngine
+| 2. Recuperación | VectorIndexRetriever
+| 3. Síntesis | TreeSummarize
+| 4. Validación | GuardrailsChecker
+|===
+
+[source,python]
+----
+from llama_index.core import Pipeline
+
+pipeline = Pipeline(
+    modules=[
+        SentenceSplitter(chunk_size=512),
+        OllamaEmbedding(model_name="llama3.1"),
+        AutoMergingRetriever()
+    ]
+)
+nodes = pipeline.run(documents)
+----
+
+== 6. Desarrollo de Aplicaciones con LlamaIndex
+
+=== Creación de motores de consulta y chatbots  
+Implementación de sistemas conversacionales y motores RAG personalizados:
+
+.Motor de consulta básico con Ollama:
+[source,python]
+----
+from llama_index.core import VectorStoreIndex
+
+index = VectorStoreIndex.load_from_disk("indice/")
+query_engine = index.as_query_engine(
+    similarity_top_k=3,
+    llm=Ollama(model="llama3.1"),
+    response_mode="compact"
+)
+
+respuesta = query_engine.query("¿Cómo configurar el firewall?")
+----
+
+.Chatbot conversacional con historial:
+[source,python]
+----
+from llama_index.core.chat_engine import CondenseQuestionChatEngine
+
+chat_engine = CondenseQuestionChatEngine.from_defaults(
+    query_engine=query_engine,
+    chat_history=[],
+    llm=Ollama(model="llama3.1")
+)
+
+# Interacción multi-turno
+respuesta = chat_engine.chat("Requisitos del sistema")
+respuesta = chat_engine.chat("¿Y para la versión Enterprise?")
+----
+
+=== Integración con interfaces (Streamlit, Gradio)  
+Implementación de interfaces web interactivas:
+
+.Interfaz Streamlit básica:
+[source,python]
+----
+import streamlit as st
+from llama_index.core import VectorStoreIndex
+
+def main():
+    st.title("Asistente Técnico")
+    index = VectorStoreIndex.load_from_disk("indice/")
+    
+    query = st.text_input("Haz tu pregunta:")
+    if query:
+        response = index.as_query_engine().query(query)
+        st.markdown(f"**Respuesta:** {response.response}")
+
+if __name__ == "__main__":
+    main()
+----
+
+.Interfaz Gradio avanzada:
+[source,python]
+----
+import gradio as gr
+from llama_index.core import VectorStoreIndex
+
+index = VectorStoreIndex.load_from_disk("indice/")
+
+def responder(pregunta, historia):
+    response = index.as_chat_engine().chat(pregunta)
+    return f"{historia}\nUsuario: {pregunta}\nAsistente: {response.response}"
+
+gr.ChatInterface(
+    responder,
+    title="Asistente Virtual",
+    examples=["¿Cómo reiniciar el servicio?", "Errores comunes de instalación"]
+).launch()
+----
+
+=== Ejemplo práctico: desarrollo de un asistente de documentación  
+Flujo completo para un asistente técnico empresarial:
+
+**Carga de documentos**:
+[source,python]
+----
+from llama_parse import LlamaParse
+
+parser = LlamaParse(result_type="markdown")
+manuales = parser.load_data("./docs/manuales.pdf")
+----
+
+**Configuración de embeddings en español**:
+[source,python]
+----
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="BAAI/bge-small-es-v1.5"
+)
+----
+
+**Indexación con metadatos**:
+[source,python]
+----
+index = VectorStoreIndex.from_documents(
+    manuales,
+    metadata_extractor=lambda doc: {
+        "seccion": doc.metadata.get("page_label", ""),
+        "fecha": "2024-03-01"
+    }
+)
+----
+
+**Implementación con filtros**:
+[source,python]
+----
+query_engine = index.as_query_engine(
+    vector_store_query_mode="hybrid",
+    filters=MetadataFilters(
+        filters=[
+            ExactMatchFilter(key="seccion", value="configuracion")
+        ]
+    )
+)
+----
+
+**Despliegue como API REST**:
+[source,python]
+----
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.post("/consulta")
+async def consultar(pregunta: str):
+    return {"respuesta": query_engine.query(pregunta).response}
+----
+
+.Ciclo de vida completo:
+[source,bash]
+----
+# 1. Procesar documentos
+python procesar_docs.py
+
+# 2. Entrenar embeddings
+python entrenar_indice.py
+
+# 3. Lanzar interfaz
+streamlit run app.py
+----
+
+== 7. Funcionalidades Avanzadas
+
+=== Uso de almacenes vectoriales para búsquedas semánticas eficientes  
+LlamaIndex soporta 20+ almacenes vectoriales para producción y desarrollo local:
+
+.Comparativa de almacenes populares:
+[cols="1,2,2", options="header"]
+|===
+| Almacén | Ventajas | Caso de uso
+| FAISS | Optimizado para CPU, local | Desarrollo rápido
+| LanceDB | Open-source, versionado | Datos multimodales
+| Qdrant | Escalable en Kubernetes | Entornos productivos
+|===
+
+.Implementación con FAISS y Ollama:
+[source,python]
+----
+from llama_index.core import VectorStoreIndex
+from llama_index.vector_stores.faiss import FaissVectorStore
+from llama_index.embeddings.ollama import OllamaEmbedding
+
+embed_model = OllamaEmbedding(model_name="llama3.1")
+vector_store = FaissVectorStore(faiss_index=faiss.IndexFlatL2(768))
+index = VectorStoreIndex.from_documents(
+    documents,
+    embed_model=embed_model,
+    vector_store=vector_store
+)
+
+# Búsqueda híbrida vector + metadatos
+retriever = index.as_retriever(
+    vector_store_query_mode="hybrid",
+    filters=MetadataFilters(filters=[
+        ExactMatchFilter(key="departamento", value="finanzas")
+    ])
+)
+----
+
+=== Implementación de agentes inteligentes (ReAct, OpenAI Function Agents)  
+Arquitecturas agentivas avanzadas usando Ollamad:
+
+.Agente ReAct con herramientas múltiples:
+[source,python]
+----
+from llama_index.core.agent import ReActAgent
+from llama_index.tools.database import DatabaseToolSpec
+from llama_index.llms.ollama import Ollama
+
+# Herramienta 1: Acceso a base de datos
+db_tool = DatabaseToolSpec(uri="sqlite:///datos.db")
+
+# Herramienta 2: RAG interno
+rag_tool = QueryEngineTool.from_defaults(
+    query_engine=index.as_query_engine()
+)
+
+agente = ReActAgent.from_tools(
+    tools=[db_tool.to_tool_list()[0], rag_tool],
+    llm=Ollama(model="llama3.1"),
+    verbose=True
+)
+
+respuesta = agente.chat("Total ventas 2023 y política de devoluciones")
+----
+
+.Flujo de ejecución del agente:
+1. Pensamiento: "Necesito consultar ventas en DB y políticas en documentos"
+2. Acción 1: Ejecutar consulta SQL `SELECT SUM(monto) FROM ventas...`
+3. Acción 2: Buscar "política de devoluciones" en índice RAG
+4. Síntesis: Combinar resultados en respuesta natural
+
+=== Personalización y extensión con plugins y herramientas externas  
+Mecanismos de extensión avanzados:
+
+.Plugin personalizado para GitHub:
+[source,python]
+----
+from llama_index.core import BaseReader
+from github import Github
+
+class GitHubRepoReader(BaseReader):
+    def __init__(self, access_token):
+        self.g = Github(access_token)
+        
+    def load_data(self, repo_name):
+        repo = self.g.get_repo(repo_name)
+        contents = []
+        for file in repo.get_contents(""):
+            if file.type == "file":
+                contents.append(file.decoded_content.decode())
+        return [Document(text="\n".join(contents))]
+
+# Uso
+reader = GitHubRepoReader("ghp_...")
+docs = reader.load_data("usuario/repo")
+----
+
+.Pipeline personalizado con transformaciones:
+[source,python]
+----
+from llama_index.core import IngestionPipeline
+from llama_index.core.node_parser import CodeSplitter
+
+pipeline = IngestionPipeline(
+    transformations=[
+        CodeSplitter(language="python"),
+        OllamaEmbedding(model_name="llama3.1"),
+        MetadataExtractor(fields=["lenguaje", "clases"])
+    ]
+)
+nodes = pipeline.run(documents)
+----
+
+.Integración con herramientas externas:
+[cols="1,2", options="header"]
+|===
+| Herramienta | Caso de uso
+| Apache Airflow | Orchestrar pipelines ETL
+| MLflow | Tracking de experimentos
+| Grafana | Monitorización de queries
+|===
+
+
+
+== 8. Persistencia y Gestión de Datos
+
+=== Métodos de almacenamiento y recuperación de índices  
+LlamaIndex ofrece múltiples estrategias para almacenar y recuperar índices:
+
+**1. Persistencia local básica:**
+[source,python]
+----
+from llama_index.core import StorageContext
+
+# Guardar índice en disco
+index.storage_context.persist(persist_dir="mi_indice")
+
+# Recuperar
+storage_context = StorageContext.from_defaults(persist_dir="mi_indice")
+index_recuperado = load_index_from_storage(storage_context)  # 
+----
+
+**2. Almacenamiento en la nube (AWS S3/R2):**
+[source,python]
+----
+import s3fs
+s3 = s3fs.S3FileSystem(
+    key="AWS_ACCESS_KEY",
+    secret="AWS_SECRET_KEY",
+    endpoint_url="https://tu_endpoint.cloud"
+)
+
+# Persistir en bucket S3
+index.storage_context.persist(
+    persist_dir="s3://bucket/indices/",
+    fs=s3
+)
+
+# Cargar desde S3
+storage_context = StorageContext.from_defaults(
+    persist_dir="s3://bucket/indices/", 
+    fs=s3
+)
+----
+
+**3. Bases de datos especializadas:**
+[cols="1,2", options="header"]
+|===
+| Sistema | Implementación
+| MongoDB | `MongoDocumentStore`
+| PostgreSQL | `PGVectorStore`
+| Redis | `RedisVectorStore`
+|===
+
+=== Persistencia de datos indexados y recarga de contextos  
+Flujo completo para gestión de datos a largo plazo:
+
+**1. Guardado con metadatos:**
+[source,python]
+----
+# Configurar contexto de almacenamiento personalizado
+storage_context = StorageContext.from_defaults(
+    docstore=SimpleDocumentStore(),
+    vector_store=FaissVectorStore(),
+    index_store=SimpleIndexStore()
+)
+
+# Persistir todo el contexto
+storage_context.persist(persist_dir="storage_full")  # 
+----
+
+**2. Carga incremental de documentos:**
+[source,python]
+----
+# Cargar índice existente
+index_base = load_index_from_storage(storage_context)
+
+# Añadir nuevos documentos
+nuevos_docs = SimpleDirectoryReader("nuevos_datos").load_data()
+index_base.insert(Document.from_docs(nuevos_docs))  # 
+
+# Actualizar persistencia
+index_base.storage_context.persist(persist_dir="storage_full")
+----
+
+**3. Recarga con configuraciones personalizadas:**
+[source,python]
+----
+from llama_index.embeddings.ollama import OllamaEmbedding
+
+# Reconstruir con mismas configuraciones originales
+storage_context = StorageContext.from_defaults(
+    persist_dir="storage_full",
+    embed_model=OllamaEmbedding(model="llama3.1")  # 
+)
+
+index = load_index_from_storage(
+    storage_context,
+    index_id="mi_indice_principal"  # Requerido si hay múltiples índices
+)
+----
+
+**Mejores prácticas:**
+- Usar `index.set_index_id()` para gestión multi-índice
+- Implementar hashing de documentos para detectar cambios
+- Combinar `persist()` con versionado manual para rollbacks
+
+**Ejemplo de flujo completo:**
+[source,python]
+----
+# 1. Creación inicial
+index = VectorStoreIndex.from_documents(docs)
+index.storage_context.persist("indice_v1")
+
+# 2. Actualización mensual
+nuevos_docs = cargar_docs_nuevos()
+index.insert(nuevos_docs)
+index.storage_context.persist("indice_v2")
+
+# 3. Recuperación de versión específica
+storage_context = StorageContext.from_defaults(
+    persist_dir="indice_v1",
+    embed_model=OllamaEmbedding(model="llama3.1")
+)
+index_anterior = load_index_from_storage(storage_context)
+----
+
+== 9. Ingeniería de Prompts y Estrategias de Consulta
+
+=== Técnicas: cadena de pensamiento, few-shot prompting, ReAct
+
+**Cadena de Pensamiento (Chain-of-Thought - CoT):**  
+Técnica que guía al LLM a mostrar su proceso de razonamiento paso a paso:
+[source,python]
+----
+prompt = """
+Calcula el IVA de un producto de 200€ con tasa del 21%. 
+Piensa paso a paso y muestra los cálculos intermedios.
+"""
+respuesta = query_engine.query(prompt)  # Output: 200 * 0.21 = 42€
+----
+
+**Few-Shot Prompting:**  
+Proporciona ejemplos para enseñar el formato y lógica esperadosd:
+[source,python]
+----
+ejemplos = '''
+Pregunta: "Clasifica: 'Odio este servicio'"
+Respuesta: Negativo
+
+Pregunta: "Clasifica: 'Increíble atención al cliente'"
+Respuesta: Positivo
+
+Pregunta: "Clasifica: 'El producto es regular'"
+Respuesta:'''
+respuesta = llm.complete(ejemplos + " Neutral")d
+----
+
+**ReAct (Reasoning + Action):**  
+Combina razonamiento lógico con ejecución de acciones:
+[source,python]
+----
+prompt_react = """
+Pensamiento: Necesito comparar población de Madrid y Barcelona
+Acción: Buscar población actual de Madrid
+Observación: 3.3 millones
+Acción: Buscar población actual de Barcelona
+Observación: 1.6 millones
+Respuesta: Madrid tiene mayor población
+"""
+----
+
+=== Mejores prácticas para optimizar la interacción con el LLM
+
+[cols="1,3", options="header"]
+|===
+| Práctica | Implementación
+| **Claridad contextual** | Especificar rol y formato:  
+`Eres un experto en finanzas. Responde en JSON con {monto, iva, total}`
+| **Gestión de tokens** | Usar `SentenceSplitter(chunk_size=512)` para documentos largos
+| **Validación estructurada** | Forzar salidas con Pydantic:  
+`response_model=IVAResponse`
+| **Optimización iterativa** | Pruebas A/B con diferentes temperaturas (0.1-0.7)
+| **Control de sesgos** | Neutralizar lenguaje:  
+`Evita suposiciones sobre género o cultura`
+|===
+
+**Ejemplo avanzado de pipeline:**  
+[source,python]
+----
+from llama_index.core import PromptTemplate
+
+template = PromptTemplate("""
+Contexto: {context}
+Instrucciones:
+1. Identifica los conceptos clave
+2. Explica en máximo 3 pasos
+3. Usa analogías cotidianas
+""")
+
+response = index.as_query_engine(
+    text_qa_template=template
+).query("Explica la teoría de la relatividad")
+----
+
+**Recomendaciones clave:**  
+- Priorizar modelos instruction-tuned (ej: Llama3.1-instruct)  
+- Usar `temperature=0.3` para tareas técnicas  
+- Implementar `MetadataFilter` para precisión en RAG  
+- Versionar prompts con Git para control de cambios
+
+== 10. Implementación, Escalado y Optimización
+
+=== Despliegue de aplicaciones basadas en LlamaIndex  
+Estrategias clave para entornos productivos:
+
+[cols="1,3", options="header"]
+|===
+| Plataforma | Configuración
+| **Serverless (AWS Lambda)** |  
+[source,python]
+----
+# Ejemplo AWS Lambda Handler
+import os
+from llama_index.core import StorageContext
+
+def handler(event, context):
+    storage = StorageContext.from_defaults(
+        persist_dir="s3://bucket/indices/",
+        fs=s3fs.S3FileSystem()
+    )
+    index = load_index_from_storage(storage)
+    return index.as_query_engine().query(event["query"]).response
+----
+
+
+| **Contenedores (Docker)** |  
+[source,Dockerfile]
+----
+FROM nvidia/cuda:12.2.0-base
+RUN pip install llama-index[gpu] faiss-gpu
+COPY app.py .
+CMD ["gunicorn", "-w 4", "-b :8080", "app:server"]
+----
+
+| **Kubernetes** |
+[source,yaml]
+----
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+name: llamaindex-hpa
+spec:
+scaleTargetRef:
+apiVersion: apps/v1
+kind: Deployment
+name: llamaindex
+minReplicas: 3
+maxReplicas: 20
+metrics:
+    type: Resource
+    resource:
+    name: cpu
+    target:
+    type: Utilization
+    averageUtilization: 70
+----
+|===
+
+=== Escalado para alto rendimiento y grandes volúmenes de datos  
+Técnicas avanzadas para datasets >1TB:
+
+**Arquitectura multi-nivel:**
+[cols="1,2", options="header"]
+|===
+| Capa | Tecnología
+| Almacenamiento | MinIO Cluster + Parquet
+| Indexación | Milvus/Pinecone con sharding
+| Procesamiento | Apache Spark + GPU Nodes
+|===
+
+**Optimización de índices jerárquicos:**
+[source,python]
+----
+from llama_index.core import VectorStoreIndex
+from llama_index.core.indices.multi_modal import MultiModalVectorStoreIndex
+
+# Configuración para 10M+ documentos
+index = MultiModalVectorStoreIndex.from_documents(
+    documents,
+    vector_store=QdrantVectorStore(
+        url="http://qdrant-cluster:6333",
+        collection_name="enterprise_data",
+        shard_number=8
+    ),
+    batch_size=1000,
+    show_progress=True
+)
+----
+
+
+**Parámetros clave:**
+- `chunk_size=768` (óptimo para modelos españoles)d
+- `similarity_top_k=5` (balance precisión-rendimiento)d
+- `max_retries=5` con backoff exponencial
+
+=== Monitorización y optimización de aplicaciones  
+Métricas esenciales y herramientas:
+
+[cols="1,3", options="header"]
+|===
+| KPI | Herramienta
+| Latencia P95 | Datadog APM
+| Precisión RAG | TruLens + Ragas
+| Uso Memoria | Prometheus + Grafana
+| Throughput | AWS CloudWatch
+|===
+
+**Implementación de observabilidad:**
+[source,python]
+----
+from llama_index.core import set_global_handler
+import langfuse
+
+# Configurar monitorización en tiempo real
+set_global_handler(
+    "langfuse",
+    public_key="pk-lf-...",
+    secret_key="sk-lf-..."
+)
+
+# Ejemplo traza personalizada
+with langfuse.trace(name="consulta_compleja"):
+    response = agent.chat("Analizar tendencias Q3 2025")
+----
+
+
+**Checklist de optimización:**
+1. Re-indexar datos cada 6h con jobs programados
+2. Usar `BAAI/bge-large-es-v1.5` para embeddings en españold
+3. Implementar caché L2 con Redis Cluster
+4. Balancear carga entre 3+ instancias Ollama
+
+== 11. Futuro de LlamaIndex y Próximos Pasos
+
+=== Tendencias en orquestación de datos y LLMs  
+.El ecosistema evoluciona hacia arquitecturas multiagente y sistemas autónomos:
+[cols="1,3", options="header"]
+|===
+| Tendencia 2025-2030 | Impacto en LlamaIndex
+| **IA Agentiva** | Sistemas que planifican/ejecutan flujos complejos sin intervención humana
+| **Orquestación Humano-AI** | Colaboración en tiempo real usando <<Digital Twins>> y <<Cobots>>
+| **Modelos Especializados** | Fine-tuning de LLMs para dominios específicos (legal, médico, financiero)
+| **Gobernanza Automatizada** | Sistemas auto-auditables con trazabilidad completa
+| **Computación Neuro-Simbólica** | Combinación de redes neuronales y lógica formal para RAG preciso
+|===
+
+.Ejemplo de sistema multiagente:
+[source,python]
+----
+from llama_index.core.agent import MultiAgentCollaboration
+
+agente_analista = FinancialAnalystAgent(llm=Ollama(model="llama3.1"))
+agente_visual = DataVizAgent(llm=Ollama(model="llama3.1"))
+agente_auditor = ComplianceAgent(llm=Ollama(model="llama3.1"))
+
+workflow = MultiAgentCollaboration(
+    agents=[agente_analista, agente_visual, agente_auditor],
+    orchestration_strategy="hierarchical"
+)
+----
+
+=== Actualizaciones y roadmap de LlamaIndex  
+
+.Próximos hitos tecnológicos (Q3 2025 - Q1 2026):
+* **LlamaCloud EU**: Implementación regional con compliance GDPR para empresas europeasd
+* **LlamaParse 2.0**: Soporte nativo para 50+ formatos complejos (CAD, BIM, SEC filings)
+* **Auto-RAG Framework**: Configuración automática de parámetros de indexación/consulta
+* **Quantum-Ready Indexing**: Algoritmos preparados para hardware cuántico (colaboración IBM)
+* **Ethical AI Toolkit**: Módulos para detección de sesgos y explicabilidad de respuestas
+
+.Roadmap técnico 2025:
+[source,text]
+----
+2025-Q3: Lanzamiento LlamaIndex 3.0 con API estable y soporte LTS
+2025-Q4: Integración nativa con modelos cuánticos (IBM Qiskit)
+2026-Q1: Motor de ejecución WASM para edge computing
+----
+
+=== Recursos adicionales y comunidad  
+Ecosistema para desarrolladores y empresasd:
+
+* **LlamaHub**: 250+ conectores certificados (SAP, Salesforce, SWIFT)
+* **Formación Certificada**: Programas de entrenamiento oficiales (Developer/Architect tracks)
+* **Comunidad Activa**: 300K+ miembros en Discord, 15K+ proyectos en GitHubd
+* **Eventos Globales**: LlamaCon 2025 (Madrid, CDMX, Singapore)
+* **Plantillas Empresariales**: Soluciones preconfiguradas para:
+  - Due Diligence Automatizado
+  - Generación de Informes Regulatorios
+  - Monitoreo de Riesgos en Tiempo Real
+
+.Enlace rápido a recursos:
+[source,bash]
+----
+# Documentación oficial
+https://docs.llamaindex.ai
+
+# Acceso a LlamaCloud
+https://cloud.llamaindex.ai
+
+# Contribuir al código
+https://github.com/run-llama/llama_index
+----

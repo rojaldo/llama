@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Curso de Pandas: Análisis de Datos con Python</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
+/* Uncomment the following line when using as a custom stylesheet */
+/* @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"; */
+html{font-family:sans-serif;-webkit-text-size-adjust:100%}
+a{background:none}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+b,strong{font-weight:bold}
+abbr{font-size:.9em}
+abbr[title]{cursor:help;border-bottom:1px dotted #dddddf;text-decoration:none}
+dfn{font-style:italic}
+hr{height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+audio,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type=checkbox],input[type=radio]{padding:0}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,::before,::after{box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;line-height:1;position:relative;cursor:auto;-moz-tab-size:4;-o-tab-size:4;tab-size:4;word-wrap:anywhere;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:0}
+p{line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #dddddf;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
+table thead,table tfoot{background:#f7f8f7}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt{background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.center{margin-left:auto;margin-right:auto}
+.stretch{width:100%}
+.clearfix::before,.clearfix::after,.float-group::before,.float-group::after{content:" ";display:table}
+.clearfix::after,.float-group::after{clear:both}
+:not(pre).nobreak{word-wrap:normal}
+:not(pre).nowrap{white-space:nowrap}
+:not(pre).pre-wrap{white-space:pre-wrap}
+:not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
+pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
+pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
+pre>code{display:block}
+pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background:#f7f7f7;border:1px solid #ccc;border-radius:3px;box-shadow:0 1px 0 rgba(0,0,0,.2),inset 0 0 0 .1em #fff;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menuref{color:#000}
+.menuseq b:not(.caret),.menuref{font-weight:inherit}
+.menuseq{word-spacing:-.02em}
+.menuseq b.caret{font-size:1.25em;line-height:.8}
+.menuseq i.caret{font-weight:bold;text-align:center;width:.45em}
+b.button::before,b.button::after{position:relative;top:-1px;font-weight:400}
+b.button::before{content:"[";padding:0 3px 0 2px}
+b.button::after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin:0 auto;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header::before,#header::after,#content::before,#content::after,#footnotes::before,#footnotes::after,#footer::before,#footer::after{content:" ";display:table}
+#header::after,#content::after,#footnotes::after,#footer::after{clear:both}
+#content{margin-top:1.25em}
+#content::before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span::before{content:"\00a0\2013\00a0"}
+#header .details br+span.author::before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark::before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber::after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #dddddf;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #e7e7e9;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+@media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:none;background:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:hsla(0,0%,100%,.8);line-height:1.44}
+#content{margin-bottom:.625em}
+.sect1{padding-bottom:.625em}
+@media screen and (min-width:768px){#content{margin-bottom:1.25em}
+.sect1{padding-bottom:1.25em}}
+.sect1:last-child{padding-bottom:0}
+.sect1+.sect1{border-top:1px solid #e7e7e9}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor::before,h2>a.anchor::before,h3>a.anchor::before,#toctitle>a.anchor::before,.sidebarblock>.content>.title>a.anchor::before,h4>a.anchor::before,h5>a.anchor::before,h6>a.anchor::before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+details{margin-left:1.25rem}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
+details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
+details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
+.paragraph.lead>p,#preamble>.sectionbody>[class=paragraph]:first-of-type p{font-size:1.21875em;line-height:1.6;color:rgba(0,0,0,.85)}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
+.sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
+@media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
+@media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
+.literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
+.literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
+.listingblock:hover code[data-lang]::before{display:block}
+.listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
+.listingblock.terminal pre .command:not([data-prompt])::before{content:"$"}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.prettyprint{background:#f7f7f8}
+pre.prettyprint .linenums{line-height:1.45;margin-left:2em}
+pre.prettyprint li{background:none;list-style-type:inherit;padding-left:0}
+pre.prettyprint li code[data-lang]::before{opacity:1}
+pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
+table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
+table.linenotable td.code{padding-left:.75em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote::before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.75em;margin-right:.5ex;text-align:right}
+.verseblock{margin:0 1em 1.25em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans-serif;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract blockquote::before,.quoteblock.excerpt blockquote::before,.quoteblock .quoteblock blockquote::before{display:none}
+.quoteblock.abstract blockquote,.quoteblock.abstract p,.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{line-height:1.6;word-spacing:0}
+.quoteblock.abstract{margin:0 1em 1.25em;display:block}
+.quoteblock.abstract>.title{margin:0 0 .375em;font-size:1.15em;text-align:center}
+.quoteblock.excerpt>blockquote,.quoteblock .quoteblock{padding:0 0 .25em 1em;border-left:.25em solid #dddddf}
+.quoteblock.excerpt,.quoteblock .quoteblock{margin-left:0}
+.quoteblock.excerpt blockquote,.quoteblock.excerpt p,.quoteblock .quoteblock blockquote,.quoteblock .quoteblock p{color:inherit;font-size:1.0625rem}
+.quoteblock.excerpt .attribution,.quoteblock .quoteblock .attribution{color:inherit;font-size:.85rem;text-align:left;margin-right:0}
+p.tableblock:last-child{margin-bottom:0}
+td.tableblock>.content{margin-bottom:1.25em;word-wrap:anywhere}
+td.tableblock>.content>:last-child{margin-bottom:-1.25em}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all>*>tr>*{border-width:1px}
+table.grid-cols>*>tr>*{border-width:0 1px}
+table.grid-rows>*>tr>*{border-width:1px 0}
+table.frame-all{border-width:1px}
+table.frame-ends{border-width:1px 0}
+table.frame-sides{border-width:0 1px}
+table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-child>*{border-top-width:0}
+table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
+table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
+table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
+ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
+ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
+ul.checklist>li>p:first-child{margin-left:-1em}
+ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
+ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
+ul.inline{display:flex;flex-flow:row wrap;list-style:none;margin:0 0 .625em -1.25em}
+ul.inline>li{margin-left:1.25em}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+td.hdlist2{word-wrap:anywhere}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist td:not([class]):first-child{padding:.4em .75em 0;line-height:1;vertical-align:top}
+.colist td:not([class]):first-child img{max-width:none}
+.colist td:not([class]):last-child{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:4px solid #fff;box-shadow:0 0 0 1px #ddd}
+.imageblock.left{margin:.25em .625em 1.25em 0}
+.imageblock.right{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background:#00fafa}
+.black{color:#000}
+.black-background{background:#000}
+.blue{color:#0000bf}
+.blue-background{background:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background:#fa00fa}
+.gray{color:#606060}
+.gray-background{background:#7d7d7d}
+.green{color:#006000}
+.green-background{background:#007d00}
+.lime{color:#00bf00}
+.lime-background{background:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background:#7d0000}
+.navy{color:#000060}
+.navy-background{background:#00007d}
+.olive{color:#606000}
+.olive-background{background:#7d7d00}
+.purple{color:#600060}
+.purple-background{background:#7d007d}
+.red{color:#bf0000}
+.red-background{background:#fa0000}
+.silver{color:#909090}
+.silver-background{background:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background:#fafa00}
+span.icon>.fa{cursor:default}
+a span.icon>.fa{cursor:inherit}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note::before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip::before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning::before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution::before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important::before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background:rgba(0,0,0,.8);border-radius:50%;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]::after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@page{margin:1.25cm .75cm}
+@media print{*{box-shadow:none!important;text-shadow:none!important}
+html{font-size:80%}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]{border-bottom:1px dotted}
+abbr[title]::after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#header,#content,#footnotes,#footer{max-width:none}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span::before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]::before{display:block}
+#footer{padding:0 .9375em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+@media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
+.sect1{padding:0!important}
+.sect1+.sect1{border:0}
+#footer{background:none}
+#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+@media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
+</style>
+<style>
+/*! Stylesheet for CodeRay to loosely match GitHub themes | MIT License */
+pre.CodeRay{background:#f7f7f8}
+.CodeRay .line-numbers{border-right:1px solid;opacity:.35;padding:0 .5em 0 0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.75em}
+.CodeRay .line-numbers strong{color:#000}
+table.CodeRay{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.CodeRay td{vertical-align:top;line-height:inherit}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.code{padding:0 0 0 .75em}
+.CodeRay .debug{color:#fff!important;background:navy!important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:navy}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:teal}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:teal}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:teal}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword{color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:teal}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>Curso de Pandas: Análisis de Datos con Python</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Índice de contenidos</div>
+<ul class="sectlevel1">
+<li><a href="#_módulo_1_introducción_a_pandas">1. Módulo 1: Introducción a Pandas</a>
+<ul class="sectlevel2">
+<li><a href="#_qué_es_pandas">1.1. ¿Qué es Pandas?</a></li>
+<li><a href="#_instalación_de_pandas">1.2. Instalación de Pandas</a></li>
+<li><a href="#_lectura_de_datos_de_un_archivo_csv_con_pandas">1.3. Lectura de Datos de un Archivo CSV con Pandas</a>
+<ul class="sectlevel3">
+<li><a href="#_leer_un_archivo_csv">1.3.1. Leer un Archivo CSV</a></li>
+<li><a href="#_parámetros_comunes_de_read_csv">1.3.2. Parámetros Comunes de <code>read_csv()</code></a></li>
+<li><a href="#_manejo_de_errores_comunes">1.3.3. Manejo de Errores Comunes</a></li>
+<li><a href="#_inspección_de_datos">1.3.4. Inspección de Datos</a></li>
+<li><a href="#_escritura_de_datos_en_un_archivo_csv">1.3.5. Escritura de Datos en un Archivo CSV</a></li>
+</ul>
+</li>
+<li><a href="#_creación_de_dataframes_y_series">1.4. Creación de DataFrames y Series</a>
+<ul class="sectlevel3">
+<li><a href="#_creación_de_una_serie">1.4.1. Creación de una Serie</a></li>
+<li><a href="#_creación_de_un_dataframe">1.4.2. Creación de un DataFrame</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_módulo_2_operaciones_básicas_con_dataframes">2. Módulo 2: Operaciones básicas con DataFrames</a>
+<ul class="sectlevel2">
+<li><a href="#_indexación_y_selección_de_datos">2.1. Indexación y selección de datos</a></li>
+<li><a href="#_filtrado_de_datos">2.2. Filtrado de datos</a></li>
+<li><a href="#_modificación_de_datos">2.3. Modificación de datos</a>
+<ul class="sectlevel3">
+<li><a href="#_agregar_columnas">2.3.1. Agregar columnas</a></li>
+<li><a href="#_modificar_valores_de_una_columna">2.3.2. Modificar valores de una columna</a></li>
+<li><a href="#_eliminar_columnas_y_filas">2.3.3. Eliminar columnas y filas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_módulo_3_limpieza_de_datos">3. Módulo 3: Limpieza de datos</a>
+<ul class="sectlevel2">
+<li><a href="#_manejo_de_valores_faltantes_nan">3.1. Manejo de valores faltantes (NaN)</a>
+<ul class="sectlevel3">
+<li><a href="#_identificación_de_valores_faltantes">3.1.1. Identificación de valores faltantes</a></li>
+<li><a href="#_eliminar_valores_faltantes">3.1.2. Eliminar valores faltantes</a></li>
+<li><a href="#_rellenar_valores_faltantes">3.1.3. Rellenar valores faltantes</a></li>
+</ul>
+</li>
+<li><a href="#_eliminación_de_duplicados">3.2. Eliminación de duplicados</a></li>
+<li><a href="#_conversión_de_tipos_de_datos">3.3. Conversión de tipos de datos</a>
+<ul class="sectlevel3">
+<li><a href="#_convertir_tipos_de_datos">3.3.1. Convertir tipos de datos</a></li>
+<li><a href="#_manejo_de_fechas">3.3.2. Manejo de fechas</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_módulo_4_operaciones_avanzadas">4. Módulo 4: Operaciones avanzadas</a>
+<ul class="sectlevel2">
+<li><a href="#_agrupación_de_datos_con_groupby">4.1. Agrupación de datos con <code>groupby()</code></a></li>
+<li><a href="#_ordenación_de_datos">4.2. Ordenación de datos</a></li>
+<li><a href="#_fusión_y_combinación_de_dataframes">4.3. Fusión y combinación de DataFrames</a>
+<ul class="sectlevel3">
+<li><a href="#_fusión_de_dataframes_con_merge">4.3.1. Fusión de DataFrames con <code>merge()</code></a></li>
+<li><a href="#_concatenación_de_dataframes_con_concat">4.3.2. Concatenación de DataFrames con <code>concat()</code></a></li>
+<li><a href="#_unión_de_dataframes_con_join">4.3.3. Unión de DataFrames con <code>join()</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_módulo_5_visualización_de_datos">5. Módulo 5: Visualización de datos</a>
+<ul class="sectlevel2">
+<li><a href="#_integración_de_pandas_con_matplotlib">5.1. Integración de Pandas con Matplotlib</a>
+<ul class="sectlevel3">
+<li><a href="#_gráficos_básicos_con_pandas">5.1.1. Gráficos básicos con Pandas</a></li>
+<li><a href="#_gráficos_de_líneas">5.1.2. Gráficos de líneas</a></li>
+</ul>
+</li>
+<li><a href="#_generación_de_gráficos_con_seaborn">5.2. Generación de gráficos con Seaborn</a>
+<ul class="sectlevel3">
+<li><a href="#_gráficos_de_dispersión">5.2.1. Gráficos de dispersión</a></li>
+<li><a href="#_gráficos_de_cajas_boxplots">5.2.2. Gráficos de cajas (Boxplots)</a></li>
+<li><a href="#_gráficos_de_barras">5.2.3. Gráficos de barras</a></li>
+</ul>
+</li>
+<li><a href="#_personalización_de_gráficos">5.3. Personalización de gráficos</a></li>
+</ul>
+</li>
+<li><a href="#_módulo_6_importación_y_exportación_de_datos">6. Módulo 6: Importación y exportación de datos</a>
+<ul class="sectlevel2">
+<li><a href="#_lectura_de_archivos_csv">6.1. Lectura de archivos CSV</a>
+<ul class="sectlevel3">
+<li><a href="#_lectura_de_un_archivo_csv">6.1.1. Lectura de un archivo CSV</a></li>
+<li><a href="#_opciones_de_lectura">6.1.2. Opciones de lectura</a></li>
+</ul>
+</li>
+<li><a href="#_lectura_de_archivos_excel">6.2. Lectura de archivos Excel</a>
+<ul class="sectlevel3">
+<li><a href="#_lectura_de_un_archivo_excel">6.2.1. Lectura de un archivo Excel</a></li>
+<li><a href="#_opciones_de_lectura_2">6.2.2. Opciones de lectura</a></li>
+</ul>
+</li>
+<li><a href="#_exportación_de_datos_a_csv_y_excel">6.3. Exportación de datos a CSV y Excel</a>
+<ul class="sectlevel3">
+<li><a href="#_exportación_a_un_archivo_csv">6.3.1. Exportación a un archivo CSV</a></li>
+<li><a href="#_exportación_a_un_archivo_excel">6.3.2. Exportación a un archivo Excel</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_módulo_7_trabajo_con_series_temporales">7. Módulo 7: Trabajo con series temporales</a>
+<ul class="sectlevel2">
+<li><a href="#_fechas_en_pandas">7.1. Fechas en Pandas</a>
+<ul class="sectlevel3">
+<li><a href="#_creación_de_objetos_de_fecha">7.1.1. Creación de objetos de fecha</a></li>
+<li><a href="#_indexación_por_fechas">7.1.2. Indexación por fechas</a></li>
+</ul>
+</li>
+<li><a href="#_resampleo_de_datos">7.2. Resampleo de datos</a>
+<ul class="sectlevel3">
+<li><a href="#_resampleo_de_datos_2">7.2.1. Resampleo de datos</a></li>
+<li><a href="#_otras_funciones_de_resampleo">7.2.2. Otras funciones de resampleo</a></li>
+<li><a href="#_ejemplo_de_resampleo_con_agregación_múltiple">7.2.3. Ejemplo de resampleo con agregación múltiple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_módulo_8_ejericios_y_proyectos">8. Módulo 8: Ejericios y proyectos</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_módulo_1_introducción_a_pandas">1. Módulo 1: Introducción a Pandas</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_qué_es_pandas">1.1. ¿Qué es Pandas?</h3>
+<div class="paragraph">
+<p>Pandas es una librería de Python especializada en el análisis y manipulación de datos. Facilita el trabajo con datos estructurados (tabulares) mediante estructuras llamadas <strong>DataFrames</strong> y <strong>Series</strong>. Es ampliamente utilizada en la ciencia de datos y el análisis financiero, entre otros campos.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_instalación_de_pandas">1.2. Instalación de Pandas</h3>
+<div class="paragraph">
+<p>Para instalar Pandas, utilizamos el gestor de paquetes <code>pip</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash"># Instalación
+pip install pandas</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Una vez instalada, se puede importar la librería en cualquier script o entorno de Python:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Importación de la librería</span>
+<span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lectura_de_datos_de_un_archivo_csv_con_pandas">1.3. Lectura de Datos de un Archivo CSV con Pandas</h3>
+<div class="paragraph">
+<p>La librería <strong>Pandas</strong> proporciona una forma sencilla y eficiente de leer y manipular datos en formato CSV. A continuación, se describen los pasos para realizar la lectura de datos desde un archivo CSV y algunas operaciones básicas que puedes llevar a cabo con el DataFrame resultante.</p>
+</div>
+<div class="sect3">
+<h4 id="_leer_un_archivo_csv">1.3.1. Leer un Archivo CSV</h4>
+<div class="paragraph">
+<p>Puedes leer un archivo CSV utilizando la función <code>pd.read_csv()</code>. A continuación se muestra un ejemplo básico.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Leer un archivo CSV</span>
+df = pd.read_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.csv</span><span class="delimiter">'</span></span>)
+
+<span class="comment"># Mostrar las primeras 5 filas del DataFrame</span>
+print(df.head())</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_parámetros_comunes_de_read_csv">1.3.2. Parámetros Comunes de <code>read_csv()</code></h4>
+<div class="paragraph">
+<p>La función <code>read_csv()</code> tiene varios parámetros útiles que puedes ajustar según tus necesidades:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>sep</strong>: Especifica el delimitador. Por defecto es <code>,</code>, pero puede cambiarse a <code>;</code>, <code>\t</code>, etc.</p>
+</li>
+<li>
+<p><strong>header</strong>: Indica si la primera fila debe ser utilizada como cabecera. Puedes establecerlo en <code>None</code> si no tienes cabecera.</p>
+</li>
+<li>
+<p><strong>index_col</strong>: Define qué columna se usará como índice del DataFrame.</p>
+</li>
+<li>
+<p><strong>usecols</strong>: Permite especificar qué columnas leer.</p>
+</li>
+<li>
+<p><strong>dtype</strong>: Especifica el tipo de datos a usar para las columnas.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ejemplo con parámetros:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Leer un archivo CSV con delimitador punto y coma y establecer la primera columna como índice</span>
+df = pd.read_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.csv</span><span class="delimiter">'</span></span>, sep=<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>, index_col=<span class="integer">0</span>)
+
+<span class="comment"># Mostrar las primeras 5 filas del DataFrame</span>
+print(df.head())</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manejo_de_errores_comunes">1.3.3. Manejo de Errores Comunes</h4>
+<div class="paragraph">
+<p>Al leer un archivo CSV, es posible que te enfrentes a ciertos errores comunes, como archivos faltantes, datos mal formateados, o problemas de codificación. Asegúrate de manejar estas situaciones de manera adecuada:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>FileNotFoundError</strong>: Asegúrate de que la ruta del archivo es correcta.</p>
+</li>
+<li>
+<p><strong>UnicodeDecodeError</strong>: Prueba diferentes codificaciones, como <code>encoding='utf-8'</code> o <code>encoding='latin1'</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ejemplo de manejo de errores:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">try</span>:
+    df = pd.read_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.csv</span><span class="delimiter">'</span></span>)
+<span class="keyword">except</span> FileNotFoundError:
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">El archivo no fue encontrado.</span><span class="delimiter">&quot;</span></span>)
+<span class="keyword">except</span> <span class="exception">UnicodeDecodeError</span>:
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Error en la codificación del archivo.</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_inspección_de_datos">1.3.4. Inspección de Datos</h4>
+<div class="paragraph">
+<p>Una vez que hayas leído los datos en un DataFrame, puedes utilizar varias funciones de Pandas para inspeccionar y manipular los datos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>df.info()</code>: Muestra información resumida sobre el DataFrame.</p>
+</li>
+<li>
+<p><code>df.describe()</code>: Genera estadísticas descriptivas de las columnas numéricas.</p>
+</li>
+<li>
+<p><code>df.columns</code>: Devuelve el nombre de las columnas del DataFrame.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Ejemplo de inspección:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Inspeccionar el DataFrame</span>
+print(df.info())
+print(df.describe())
+print(df.columns)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_escritura_de_datos_en_un_archivo_csv">1.3.5. Escritura de Datos en un Archivo CSV</h4>
+<div class="paragraph">
+<p>Además de leer archivos CSV, <strong>Pandas</strong> también permite escribir DataFrames en archivos CSV utilizando la función <code>df.to_csv()</code>. Puedes especificar la ruta y algunos parámetros opcionales.</p>
+</div>
+<div class="paragraph">
+<p>Ejemplo de escritura:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Escribir el DataFrame en un archivo CSV</span>
+df.to_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/nuevo_archivo.csv</span><span class="delimiter">'</span></span>, index=<span class="predefined-constant">False</span>)
+
+<span class="comment"># Opciones adicionales</span>
+<span class="comment"># df.to_csv('ruta/al/nuevo_archivo.csv', sep=';', encoding='utf-8', columns=['columna1', 'columna2'])</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creación_de_dataframes_y_series">1.4. Creación de DataFrames y Series</h3>
+<div class="paragraph">
+<p>Los <strong>DataFrames</strong> y <strong>Series</strong> son las estructuras fundamentales en Pandas.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Una <strong>Serie</strong> es una estructura unidimensional similar a un array o lista.</p>
+</li>
+<li>
+<p>Un <strong>DataFrame</strong> es una estructura bidimensional que se asemeja a una tabla, con etiquetas para las filas y columnas.</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_creación_de_una_serie">1.4.1. Creación de una Serie</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+
+<span class="comment"># Crear una Serie desde una lista</span>
+serie = pd.Series([<span class="integer">10</span>, <span class="integer">20</span>, <span class="integer">30</span>, <span class="integer">40</span>])
+print(serie)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_creación_de_un_dataframe">1.4.2. Creación de un DataFrame</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear un DataFrame desde un diccionario</span>
+datos = {<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="integer">25</span>, <span class="integer">22</span>]}
+df = pd.DataFrame(datos)
+print(df)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_2_operaciones_básicas_con_dataframes">2. Módulo 2: Operaciones básicas con DataFrames</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_indexación_y_selección_de_datos">2.1. Indexación y selección de datos</h3>
+<div class="paragraph">
+<p>Pandas ofrece varias formas de acceder y seleccionar datos dentro de un <strong>DataFrame</strong>. Las más comunes son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Acceso a columnas: Puedes seleccionar columnas utilizando su nombre.</p>
+</li>
+<li>
+<p><code>.loc[]</code>: Permite seleccionar filas y columnas por etiquetas.</p>
+</li>
+<li>
+<p><code>.iloc[]</code>: Permite seleccionar filas y columnas por índices.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+
+<span class="comment"># Crear un DataFrame</span>
+df = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="integer">25</span>, <span class="integer">22</span>]})
+
+<span class="comment"># Seleccionar una columna</span>
+print(df[<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>])
+
+<span class="comment"># Seleccionar filas con loc</span>
+print(df.loc[<span class="integer">0</span>])  <span class="comment"># Selecciona la primera fila</span>
+
+<span class="comment"># Seleccionar por índice con iloc</span>
+print(df.iloc[<span class="integer">1</span>])  <span class="comment"># Selecciona la segunda fila</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_filtrado_de_datos">2.2. Filtrado de datos</h3>
+<div class="paragraph">
+<p>El filtrado de datos consiste en aplicar condiciones para obtener subconjuntos específicos de un <strong>DataFrame</strong>. Las condiciones se expresan como comparaciones que resultan en valores booleanos.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Filtrar filas donde la edad es mayor que 23</span>
+df_filtrado = df[df[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>] &gt; <span class="integer">23</span>]
+print(df_filtrado)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>También es posible combinar múltiples condiciones con operadores lógicos como <code>&amp;</code> (AND) y <code>|</code> (OR).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Filtrar filas donde la edad es mayor que 23 y el nombre es 'Luis'</span>
+df_filtrado = df[(df[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>] &gt; <span class="integer">23</span>) &amp; (df[<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>] == <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>)]
+print(df_filtrado)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_modificación_de_datos">2.3. Modificación de datos</h3>
+<div class="paragraph">
+<p>Modificar datos en un <strong>DataFrame</strong> incluye agregar, modificar o eliminar columnas y filas.</p>
+</div>
+<div class="sect3">
+<h4 id="_agregar_columnas">2.3.1. Agregar columnas</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Agregar una nueva columna al DataFrame</span>
+df[<span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>] = [<span class="string"><span class="delimiter">'</span><span class="content">Madrid</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Barcelona</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Sevilla</span><span class="delimiter">'</span></span>]
+print(df)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_modificar_valores_de_una_columna">2.3.2. Modificar valores de una columna</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Modificar los valores de una columna específica</span>
+df[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>] = df[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>] + <span class="integer">1</span>  <span class="comment"># Aumentar la edad en 1</span>
+print(df)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_eliminar_columnas_y_filas">2.3.3. Eliminar columnas y filas</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Eliminar una columna</span>
+df = df.drop(<span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>, axis=<span class="integer">1</span>)
+
+<span class="comment"># Eliminar una fila por índice</span>
+df = df.drop(<span class="integer">1</span>)  <span class="comment"># Eliminar la fila con índice 1</span>
+print(df)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_3_limpieza_de_datos">3. Módulo 3: Limpieza de datos</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_manejo_de_valores_faltantes_nan">3.1. Manejo de valores faltantes (NaN)</h3>
+<div class="paragraph">
+<p>En los conjuntos de datos reales, es común encontrar valores faltantes representados como <code>NaN</code> (Not a Number). Pandas ofrece varias funciones para identificar, eliminar o reemplazar estos valores.</p>
+</div>
+<div class="sect3">
+<h4 id="_identificación_de_valores_faltantes">3.1.1. Identificación de valores faltantes</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+
+<span class="comment"># Crear un DataFrame con valores faltantes</span>
+df = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="predefined-constant">None</span>, <span class="integer">22</span>], <span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>: [<span class="predefined-constant">None</span>, <span class="string"><span class="delimiter">'</span><span class="content">Barcelona</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Sevilla</span><span class="delimiter">'</span></span>]})
+
+<span class="comment"># Detectar valores faltantes</span>
+print(df.isna())</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_eliminar_valores_faltantes">3.1.2. Eliminar valores faltantes</h4>
+<div class="paragraph">
+<p>Puedes eliminar las filas o columnas que contengan valores faltantes utilizando <code>dropna()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Eliminar filas con valores faltantes</span>
+df_sin_nan = df.dropna()
+print(df_sin_nan)
+
+<span class="comment"># Eliminar columnas con valores faltantes</span>
+df_sin_nan_col = df.dropna(axis=<span class="integer">1</span>)
+print(df_sin_nan_col)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rellenar_valores_faltantes">3.1.3. Rellenar valores faltantes</h4>
+<div class="paragraph">
+<p>Otra opción es reemplazar los valores <code>NaN</code> con valores específicos usando <code>fillna()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Rellenar los valores faltantes con un valor específico</span>
+df_filled = df.fillna({<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: <span class="integer">0</span>, <span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>: <span class="string"><span class="delimiter">'</span><span class="content">Desconocido</span><span class="delimiter">'</span></span>})
+print(df_filled)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_eliminación_de_duplicados">3.2. Eliminación de duplicados</h3>
+<div class="paragraph">
+<p>Los datos duplicados pueden afectar los análisis y los resultados. Pandas permite identificar y eliminar estas duplicaciones con <code>drop_duplicates()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear un DataFrame con duplicados</span>
+df_dup = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="integer">25</span>, <span class="integer">23</span>]})
+
+<span class="comment"># Eliminar filas duplicadas</span>
+df_sin_duplicados = df_dup.drop_duplicates()
+print(df_sin_duplicados)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_conversión_de_tipos_de_datos">3.3. Conversión de tipos de datos</h3>
+<div class="paragraph">
+<p>A veces es necesario convertir el tipo de datos de una columna, especialmente cuando se trabajan con fechas o valores numéricos que se han importado como cadenas de texto.</p>
+</div>
+<div class="sect3">
+<h4 id="_convertir_tipos_de_datos">3.3.1. Convertir tipos de datos</h4>
+<div class="paragraph">
+<p>Usa <code>astype()</code> para cambiar el tipo de datos de una columna.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear un DataFrame con tipos incorrectos</span>
+df_tipos = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">23</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">25</span><span class="delimiter">'</span></span>]})
+
+<span class="comment"># Convertir la columna 'Edad' a tipo entero</span>
+df_tipos[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>] = df_tipos[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>].astype(<span class="predefined">int</span>)
+print(df_tipos.dtypes)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manejo_de_fechas">3.3.2. Manejo de fechas</h4>
+<div class="paragraph">
+<p>Para trabajar con fechas, Pandas proporciona la función <code>to_datetime()</code> que convierte cadenas de texto a objetos de fecha.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Convertir una columna de texto a fecha</span>
+df_fechas = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">2023-01-01</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">2023-01-02</span><span class="delimiter">'</span></span>]})
+df_fechas[<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>] = pd.to_datetime(df_fechas[<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>])
+print(df_fechas.dtypes)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_4_operaciones_avanzadas">4. Módulo 4: Operaciones avanzadas</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_agrupación_de_datos_con_groupby">4.1. Agrupación de datos con <code>groupby()</code></h3>
+<div class="paragraph">
+<p>La función <code>groupby()</code> en Pandas permite agrupar datos en función de los valores de una o más columnas y luego aplicar funciones agregadas como <code>sum()</code>, <code>mean()</code>, <code>count()</code>, entre otras.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+
+<span class="comment"># Crear un DataFrame de ejemplo</span>
+data = {<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="integer">25</span>, <span class="integer">22</span>, <span class="integer">23</span>, <span class="integer">30</span>], <span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Madrid</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Barcelona</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Sevilla</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Madrid</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Barcelona</span><span class="delimiter">'</span></span>]}
+
+df = pd.DataFrame(data)
+
+<span class="comment"># Agrupar por la columna 'Nombre' y calcular la edad media</span>
+grupo = df.groupby(<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>)[<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>].mean()
+print(grupo)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>También es posible agrupar por varias columnas y aplicar varias funciones agregadas.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Agrupar por 'Ciudad' y 'Nombre', y calcular la suma y la cuenta de las edades</span>
+grupo = df.groupby([<span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>]).agg({<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">sum</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">count</span><span class="delimiter">'</span></span>]})
+print(grupo)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ordenación_de_datos">4.2. Ordenación de datos</h3>
+<div class="paragraph">
+<p>Pandas permite ordenar los datos en un DataFrame utilizando el método <code>sort_values()</code>. Puedes ordenar por una o más columnas, y definir si quieres que el orden sea ascendente o descendente.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Ordenar por la columna 'Edad' en orden ascendente</span>
+df_ordenado = df.sort_values(<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>)
+print(df_ordenado)
+
+<span class="comment"># Ordenar por la columna 'Edad' en orden descendente</span>
+df_ordenado_desc = df.sort_values(<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>, ascending=<span class="predefined-constant">False</span>)
+print(df_ordenado_desc)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>También es posible ordenar por múltiples columnas.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Ordenar primero por 'Ciudad' y luego por 'Edad' en cada ciudad</span>
+df_multi_orden = df.sort_values([<span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>])
+print(df_multi_orden)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fusión_y_combinación_de_dataframes">4.3. Fusión y combinación de DataFrames</h3>
+<div class="paragraph">
+<p>Pandas ofrece varias maneras de combinar DataFrames, incluyendo las funciones <code>merge()</code>, <code>concat()</code>, y <code>join()</code>. Estas se utilizan para unir diferentes conjuntos de datos en función de una clave común.</p>
+</div>
+<div class="sect3">
+<h4 id="_fusión_de_dataframes_con_merge">4.3.1. Fusión de DataFrames con <code>merge()</code></h4>
+<div class="paragraph">
+<p>La función <code>merge()</code> se utiliza para realizar uniones tipo SQL, uniendo DataFrames en función de una columna común.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear dos DataFrames</span>
+df1 = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">ID</span><span class="delimiter">'</span></span>: [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>], <span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>]})
+df2 = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">ID</span><span class="delimiter">'</span></span>: [<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">4</span>], <span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Madrid</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Barcelona</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Valencia</span><span class="delimiter">'</span></span>]})
+
+<span class="comment"># Realizar una unión por la columna 'ID'</span>
+df_merged = pd.merge(df1, df2, on=<span class="string"><span class="delimiter">'</span><span class="content">ID</span><span class="delimiter">'</span></span>, how=<span class="string"><span class="delimiter">'</span><span class="content">inner</span><span class="delimiter">'</span></span>)
+print(df_merged)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Los tipos de uniones disponibles son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>inner</code>: Devuelve las filas que tienen coincidencia en ambas tablas.</p>
+</li>
+<li>
+<p><code>left</code>: Devuelve todas las filas de la tabla izquierda, y las coincidencias de la derecha (rellena con NaN si no hay coincidencia).</p>
+</li>
+<li>
+<p><code>right</code>: Devuelve todas las filas de la tabla derecha y las coincidencias de la izquierda.</p>
+</li>
+<li>
+<p><code>outer</code>: Devuelve todas las filas de ambas tablas, con NaN donde no haya coincidencias.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_concatenación_de_dataframes_con_concat">4.3.2. Concatenación de DataFrames con <code>concat()</code></h4>
+<div class="paragraph">
+<p>La función <code>concat()</code> se utiliza para concatenar DataFrames a lo largo de un eje (filas o columnas).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Concatenar DataFrames por filas (uno debajo del otro)</span>
+df_concat = pd.concat([df1, df2], axis=<span class="integer">0</span>, ignore_index=<span class="predefined-constant">True</span>)
+print(df_concat)
+
+<span class="comment"># Concatenar DataFrames por columnas (lado a lado)</span>
+df_concat_cols = pd.concat([df1, df2], axis=<span class="integer">1</span>)
+print(df_concat_cols)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_unión_de_dataframes_con_join">4.3.3. Unión de DataFrames con <code>join()</code></h4>
+<div class="paragraph">
+<p>El método <code>join()</code> se utiliza para unir DataFrames utilizando los índices.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear dos DataFrames con índices</span>
+df1 = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>]}, index=[<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>])
+df2 = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Ciudad</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Madrid</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Barcelona</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Sevilla</span><span class="delimiter">'</span></span>]}, index=[<span class="integer">1</span>, <span class="integer">2</span>, <span class="integer">3</span>])
+
+<span class="comment"># Unir los DataFrames usando el índice</span>
+df_join = df1.join(df2)
+print(df_join)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_5_visualización_de_datos">5. Módulo 5: Visualización de datos</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_integración_de_pandas_con_matplotlib">5.1. Integración de Pandas con Matplotlib</h3>
+<div class="paragraph">
+<p>Pandas se integra fácilmente con Matplotlib, una de las bibliotecas más populares para la visualización de datos en Python. Puedes crear gráficos directamente desde un <strong>DataFrame</strong> o una <strong>Serie</strong>.</p>
+</div>
+<div class="sect3">
+<h4 id="_gráficos_básicos_con_pandas">5.1.1. Gráficos básicos con Pandas</h4>
+<div class="paragraph">
+<p>Pandas permite crear gráficos sencillos con un solo comando. Aquí hay algunos ejemplos de diferentes tipos de gráficos.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+<span class="keyword">import</span> <span class="include">matplotlib.pyplot</span> <span class="keyword">as</span> plt
+
+<span class="comment"># Crear un DataFrame de ejemplo</span>
+df = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Ana</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Luis</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">María</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="integer">25</span>, <span class="integer">22</span>]})
+
+<span class="comment"># Gráfico de barras</span>
+df.plot(kind=<span class="string"><span class="delimiter">'</span><span class="content">bar</span><span class="delimiter">'</span></span>, x=<span class="string"><span class="delimiter">'</span><span class="content">Nombre</span><span class="delimiter">'</span></span>, y=<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>)
+plt.title(<span class="string"><span class="delimiter">'</span><span class="content">Edad por Nombre</span><span class="delimiter">'</span></span>)
+plt.ylabel(<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>)
+plt.show()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gráficos_de_líneas">5.1.2. Gráficos de líneas</h4>
+<div class="paragraph">
+<p>Puedes crear gráficos de líneas para mostrar tendencias a lo largo del tiempo.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear un DataFrame de ejemplo</span>
+df_lineas = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Mes</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">Enero</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Febrero</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">Marzo</span><span class="delimiter">'</span></span>], <span class="string"><span class="delimiter">'</span><span class="content">Ventas</span><span class="delimiter">'</span></span>: [<span class="integer">200</span>, <span class="integer">300</span>, <span class="integer">250</span>]})
+
+<span class="comment"># Gráfico de líneas</span>
+df_lineas.plot(kind=<span class="string"><span class="delimiter">'</span><span class="content">line</span><span class="delimiter">'</span></span>, x=<span class="string"><span class="delimiter">'</span><span class="content">Mes</span><span class="delimiter">'</span></span>, y=<span class="string"><span class="delimiter">'</span><span class="content">Ventas</span><span class="delimiter">'</span></span>)
+plt.title(<span class="string"><span class="delimiter">'</span><span class="content">Ventas por Mes</span><span class="delimiter">'</span></span>)
+plt.ylabel(<span class="string"><span class="delimiter">'</span><span class="content">Ventas</span><span class="delimiter">'</span></span>)
+plt.show()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generación_de_gráficos_con_seaborn">5.2. Generación de gráficos con Seaborn</h3>
+<div class="paragraph">
+<p>Seaborn es una biblioteca de visualización de datos basada en Matplotlib que proporciona una interfaz más sencilla y atractiva para crear gráficos estadísticos.</p>
+</div>
+<div class="sect3">
+<h4 id="_gráficos_de_dispersión">5.2.1. Gráficos de dispersión</h4>
+<div class="paragraph">
+<p>Los gráficos de dispersión son útiles para visualizar la relación entre dos variables.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">seaborn</span> <span class="keyword">as</span> sns
+
+<span class="comment"># Crear un DataFrame de ejemplo</span>
+df_seaborn = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>: [<span class="integer">23</span>, <span class="integer">25</span>, <span class="integer">22</span>, <span class="integer">30</span>, <span class="integer">29</span>], <span class="string"><span class="delimiter">'</span><span class="content">Salario</span><span class="delimiter">'</span></span>: [<span class="integer">40000</span>, <span class="integer">50000</span>, <span class="integer">45000</span>, <span class="integer">60000</span>, <span class="integer">55000</span>]})
+
+<span class="comment"># Gráfico de dispersión</span>
+sns.scatterplot(data=df_seaborn, x=<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>, y=<span class="string"><span class="delimiter">'</span><span class="content">Salario</span><span class="delimiter">'</span></span>)
+plt.title(<span class="string"><span class="delimiter">'</span><span class="content">Salario según Edad</span><span class="delimiter">'</span></span>)
+plt.show()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gráficos_de_cajas_boxplots">5.2.2. Gráficos de cajas (Boxplots)</h4>
+<div class="paragraph">
+<p>Los boxplots son útiles para mostrar la distribución de los datos y detectar outliers.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Gráfico de cajas</span>
+sns.boxplot(data=df_seaborn, x=<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>, y=<span class="string"><span class="delimiter">'</span><span class="content">Salario</span><span class="delimiter">'</span></span>)
+plt.title(<span class="string"><span class="delimiter">'</span><span class="content">Distribución de Salarios según Edad</span><span class="delimiter">'</span></span>)
+plt.show()</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gráficos_de_barras">5.2.3. Gráficos de barras</h4>
+<div class="paragraph">
+<p>Puedes crear gráficos de barras para comparar categorías.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Gráfico de barras</span>
+sns.barplot(data=df_seaborn, x=<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>, y=<span class="string"><span class="delimiter">'</span><span class="content">Salario</span><span class="delimiter">'</span></span>)
+plt.title(<span class="string"><span class="delimiter">'</span><span class="content">Salario promedio por Edad</span><span class="delimiter">'</span></span>)
+plt.show()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_personalización_de_gráficos">5.3. Personalización de gráficos</h3>
+<div class="paragraph">
+<p>Tanto Matplotlib como Seaborn permiten personalizar los gráficos con títulos, etiquetas, colores y estilos para mejorar la presentación visual.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Personalización de un gráfico</span>
+plt.figure(figsize=(<span class="integer">10</span>, <span class="integer">5</span>))
+sns.barplot(data=df_seaborn, x=<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>, y=<span class="string"><span class="delimiter">'</span><span class="content">Salario</span><span class="delimiter">'</span></span>, palette=<span class="string"><span class="delimiter">'</span><span class="content">viridis</span><span class="delimiter">'</span></span>)
+plt.title(<span class="string"><span class="delimiter">'</span><span class="content">Salario Promedio por Edad</span><span class="delimiter">'</span></span>)
+plt.xlabel(<span class="string"><span class="delimiter">'</span><span class="content">Edad</span><span class="delimiter">'</span></span>)
+plt.ylabel(<span class="string"><span class="delimiter">'</span><span class="content">Salario</span><span class="delimiter">'</span></span>)
+plt.show()</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_6_importación_y_exportación_de_datos">6. Módulo 6: Importación y exportación de datos</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_lectura_de_archivos_csv">6.1. Lectura de archivos CSV</h3>
+<div class="paragraph">
+<p>Pandas facilita la lectura de archivos CSV utilizando la función <code>read_csv()</code>. Esta función permite cargar datos en un <strong>DataFrame</strong> de manera rápida y sencilla.</p>
+</div>
+<div class="sect3">
+<h4 id="_lectura_de_un_archivo_csv">6.1.1. Lectura de un archivo CSV</h4>
+<div class="paragraph">
+<p>Para leer un archivo CSV, simplemente especifica la ruta del archivo. Aquí hay un ejemplo:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+
+<span class="comment"># Leer un archivo CSV</span>
+df_csv = pd.read_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.csv</span><span class="delimiter">'</span></span>)
+print(df_csv.head())  <span class="comment"># Muestra las primeras filas del DataFrame</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_opciones_de_lectura">6.1.2. Opciones de lectura</h4>
+<div class="paragraph">
+<p>Puedes personalizar la lectura de archivos CSV con varios parámetros, como <code>sep</code>, <code>header</code>, <code>index_col</code>, entre otros.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Leer un archivo CSV con un separador diferente y sin encabezado</span>
+df_csv_custom = pd.read_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.csv</span><span class="delimiter">'</span></span>, sep=<span class="string"><span class="delimiter">'</span><span class="content">;</span><span class="delimiter">'</span></span>, header=<span class="predefined-constant">None</span>)
+print(df_csv_custom.head())</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_lectura_de_archivos_excel">6.2. Lectura de archivos Excel</h3>
+<div class="paragraph">
+<p>Pandas también permite la lectura de archivos Excel mediante la función <code>read_excel()</code>. Necesitarás tener instalado <code>openpyxl</code> o <code>xlrd</code> para manejar archivos Excel.</p>
+</div>
+<div class="sect3">
+<h4 id="_lectura_de_un_archivo_excel">6.2.1. Lectura de un archivo Excel</h4>
+<div class="paragraph">
+<p>Para leer un archivo Excel, especifica la ruta del archivo y la hoja que deseas cargar.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Leer un archivo Excel</span>
+df_excel = pd.read_excel(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.xlsx</span><span class="delimiter">'</span></span>, sheet_name=<span class="string"><span class="delimiter">'</span><span class="content">Hoja1</span><span class="delimiter">'</span></span>)
+print(df_excel.head())</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_opciones_de_lectura_2">6.2.2. Opciones de lectura</h4>
+<div class="paragraph">
+<p>Puedes personalizar la lectura de archivos Excel con parámetros como <code>header</code>, <code>index_col</code>, <code>usecols</code>, etc.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Leer un archivo Excel especificando columnas</span>
+df_excel_custom = pd.read_excel(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/archivo.xlsx</span><span class="delimiter">'</span></span>, usecols=[<span class="string"><span class="delimiter">'</span><span class="content">A</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">B</span><span class="delimiter">'</span></span>])
+print(df_excel_custom.head())</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exportación_de_datos_a_csv_y_excel">6.3. Exportación de datos a CSV y Excel</h3>
+<div class="paragraph">
+<p>Pandas permite exportar <strong>DataFrames</strong> a archivos CSV y Excel usando las funciones <code>to_csv()</code> y <code>to_excel()</code>.</p>
+</div>
+<div class="sect3">
+<h4 id="_exportación_a_un_archivo_csv">6.3.1. Exportación a un archivo CSV</h4>
+<div class="paragraph">
+<p>Para exportar un <strong>DataFrame</strong> a CSV, utiliza <code>to_csv()</code>. Puedes personalizar el formato de salida con varios parámetros.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Exportar un DataFrame a CSV</span>
+df_csv_export = df_csv.to_csv(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/nuevo_archivo.csv</span><span class="delimiter">'</span></span>, index=<span class="predefined-constant">False</span>)
+print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Datos exportados a CSV.</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exportación_a_un_archivo_excel">6.3.2. Exportación a un archivo Excel</h4>
+<div class="paragraph">
+<p>Para exportar un <strong>DataFrame</strong> a Excel, utiliza <code>to_excel()</code>. Especifica el nombre del archivo y la hoja.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Exportar un DataFrame a Excel</span>
+df_excel_export = df_excel.to_excel(<span class="string"><span class="delimiter">'</span><span class="content">ruta/al/nuevo_archivo.xlsx</span><span class="delimiter">'</span></span>, sheet_name=<span class="string"><span class="delimiter">'</span><span class="content">Hoja1</span><span class="delimiter">'</span></span>, index=<span class="predefined-constant">False</span>)
+print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Datos exportados a Excel.</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_7_trabajo_con_series_temporales">7. Módulo 7: Trabajo con series temporales</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_fechas_en_pandas">7.1. Fechas en Pandas</h3>
+<div class="paragraph">
+<p>Pandas proporciona potentes herramientas para trabajar con fechas y horas. Las fechas se pueden manejar usando el tipo de datos <code>datetime</code>, que permite realizar operaciones y análisis temporales.</p>
+</div>
+<div class="sect3">
+<h4 id="_creación_de_objetos_de_fecha">7.1.1. Creación de objetos de fecha</h4>
+<div class="paragraph">
+<p>Puedes crear objetos de fecha directamente desde cadenas de texto o utilizando la función <code>pd.to_datetime()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+
+<span class="comment"># Crear un DataFrame con fechas</span>
+fechas = pd.date_range(start=<span class="string"><span class="delimiter">'</span><span class="content">2023-01-01</span><span class="delimiter">'</span></span>, periods=<span class="integer">5</span>, freq=<span class="string"><span class="delimiter">'</span><span class="content">D</span><span class="delimiter">'</span></span>)
+df_fechas = pd.DataFrame({<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>: fechas, <span class="string"><span class="delimiter">'</span><span class="content">Valores</span><span class="delimiter">'</span></span>: [<span class="integer">10</span>, <span class="integer">20</span>, <span class="integer">15</span>, <span class="integer">30</span>, <span class="integer">25</span>]})
+print(df_fechas)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_indexación_por_fechas">7.1.2. Indexación por fechas</h4>
+<div class="paragraph">
+<p>Pandas permite indexar y seleccionar datos utilizando fechas. Esto es especialmente útil en análisis de series temporales.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Establecer la columna 'Fecha' como índice</span>
+df_fechas.set_index(<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>, inplace=<span class="predefined-constant">True</span>)
+
+<span class="comment"># Seleccionar datos por fecha</span>
+print(df_fechas.loc[<span class="string"><span class="delimiter">'</span><span class="content">2023-01-03</span><span class="delimiter">'</span></span>])</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resampleo_de_datos">7.2. Resampleo de datos</h3>
+<div class="paragraph">
+<p>El resampleo es una técnica que permite reorganizar y resumir datos temporales a diferentes frecuencias. Esto es útil para obtener promedios, sumas, conteos, etc., en diferentes intervalos de tiempo.</p>
+</div>
+<div class="sect3">
+<h4 id="_resampleo_de_datos_2">7.2.1. Resampleo de datos</h4>
+<div class="paragraph">
+<p>La función <code>resample()</code> permite especificar la frecuencia deseada y aplicar funciones de agregación.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Crear un DataFrame con datos aleatorios y fechas</span>
+data = {<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>: pd.date_range(start=<span class="string"><span class="delimiter">'</span><span class="content">2023-01-01</span><span class="delimiter">'</span></span>, periods=<span class="integer">10</span>, freq=<span class="string"><span class="delimiter">'</span><span class="content">D</span><span class="delimiter">'</span></span>), <span class="string"><span class="delimiter">'</span><span class="content">Valores</span><span class="delimiter">'</span></span>: [<span class="integer">10</span>, <span class="integer">20</span>, <span class="integer">15</span>, <span class="integer">30</span>, <span class="integer">25</span>, <span class="integer">10</span>, <span class="integer">5</span>, <span class="integer">20</span>, <span class="integer">15</span>, <span class="integer">10</span>]}
+df_resample = pd.DataFrame(data).set_index(<span class="string"><span class="delimiter">'</span><span class="content">Fecha</span><span class="delimiter">'</span></span>)
+
+<span class="comment"># Resamplear datos a frecuencia semanal y calcular la suma</span>
+resample_semanal = df_resample.resample(<span class="string"><span class="delimiter">'</span><span class="content">W</span><span class="delimiter">'</span></span>).sum()
+print(resample_semanal)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_otras_funciones_de_resampleo">7.2.2. Otras funciones de resampleo</h4>
+<div class="paragraph">
+<p>Además de <code>sum()</code>, se pueden aplicar otras funciones como <code>mean()</code>, <code>max()</code>, <code>min()</code>, entre otras.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Resamplear y calcular la media semanal</span>
+resample_media_semanal = df_resample.resample(<span class="string"><span class="delimiter">'</span><span class="content">W</span><span class="delimiter">'</span></span>).mean()
+print(resample_media_semanal)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejemplo_de_resampleo_con_agregación_múltiple">7.2.3. Ejemplo de resampleo con agregación múltiple</h4>
+<div class="paragraph">
+<p>Se pueden aplicar múltiples funciones de agregación al mismo tiempo utilizando <code>agg()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Resamplear y aplicar múltiples funciones de agregación</span>
+resample_multifunciones = df_resample.resample(<span class="string"><span class="delimiter">'</span><span class="content">W</span><span class="delimiter">'</span></span>).agg({<span class="string"><span class="delimiter">'</span><span class="content">Valores</span><span class="delimiter">'</span></span>: [<span class="string"><span class="delimiter">'</span><span class="content">sum</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">mean</span><span class="delimiter">'</span></span>, <span class="string"><span class="delimiter">'</span><span class="content">max</span><span class="delimiter">'</span></span>]})
+print(resample_multifunciones)</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_módulo_8_ejericios_y_proyectos">8. Módulo 8: Ejericios y proyectos</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<div class="title">Lista de 20 problemas prácticos utilizando la librería Pandas:</div>
+<ol class="arabic">
+<li>
+<p>Crea un DataFrame a partir de un diccionario que contenga información sobre estudiantes (nombre, edad, y nota).</p>
+</li>
+<li>
+<p>Carga un archivo CSV en un DataFrame y muestra las primeras 5 filas del conjunto de datos.</p>
+</li>
+<li>
+<p>Filtra un DataFrame para mostrar solo las filas donde la columna "edad" sea mayor a 18.</p>
+</li>
+<li>
+<p>Agrupa un DataFrame por una columna categórica y calcula la media de otra columna numérica.</p>
+</li>
+<li>
+<p>Crea una nueva columna en un DataFrame que contenga el resultado de aplicar una función a otra columna existente.</p>
+</li>
+<li>
+<p>Lee un archivo Excel en un DataFrame y exporta el DataFrame resultante a un nuevo archivo CSV.</p>
+</li>
+<li>
+<p>Combina dos DataFrames utilizando la función <code>merge</code>, basándote en una columna clave común.</p>
+</li>
+<li>
+<p>Reemplaza valores en un DataFrame utilizando un diccionario para mapear valores antiguos a nuevos.</p>
+</li>
+<li>
+<p>Encuentra y elimina las filas con valores nulos en un DataFrame.</p>
+</li>
+<li>
+<p>Ordena un DataFrame por múltiples columnas y muestra el resultado.</p>
+</li>
+<li>
+<p>Convierte una columna de texto en tipo fecha y extrae el año, mes y día en columnas separadas.</p>
+</li>
+<li>
+<p>Crea un DataFrame con datos de ventas y calcula el total de ventas por producto utilizando <code>groupby</code>.</p>
+</li>
+<li>
+<p>Filtra un DataFrame para mostrar solo las filas donde los valores de dos columnas cumplan con una condición específica.</p>
+</li>
+<li>
+<p>Crea un gráfico de barras que muestre la distribución de una columna categórica en un DataFrame.</p>
+</li>
+<li>
+<p>Utiliza la función <code>pivot_table</code> para reorganizar los datos en un DataFrame, calculando la suma de una columna para cada combinación de valores en dos columnas categóricas.</p>
+</li>
+<li>
+<p>Cambia el índice de un DataFrame a una columna existente y restablece el índice.</p>
+</li>
+<li>
+<p>Aplica una función personalizada a cada elemento de una columna en un DataFrame utilizando <code>apply</code>.</p>
+</li>
+<li>
+<p>Utiliza la función <code>value_counts</code> para contar la frecuencia de valores únicos en una columna.</p>
+</li>
+<li>
+<p>Crea un DataFrame de múltiples índices (multi-index) y muestra cómo acceder a datos específicos en él.</p>
+</li>
+<li>
+<p>Realiza una operación de concatenación de DataFrames en el eje de las filas y muestra el DataFrame resultante.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2025-06-05 00:57:38 +0200
+</div>
+</div>
+</body>
+</html>
