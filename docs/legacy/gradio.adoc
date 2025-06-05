@@ -1,0 +1,293 @@
+= Gradio
+:toc: 
+:toc-title: Índice de contenidos
+:sectnums:
+:toclevels: 3
+:source-highlighter: coderay
+
+== Introducción
+
+
+Gradio es una biblioteca de Python que facilita la creación de interfaces de usuario para modelos de aprendizaje automático y aplicaciones de ciencia de datos. Permite a los desarrolladores crear rápidamente interfaces interactivas para sus modelos y aplicaciones, sin necesidad de conocimientos profundos sobre desarrollo web.
+
+.Características Principales
+* *Facilidad de uso:* Gradio simplifica la creación de interfaces de usuario mediante un enfoque de "arrastrar y soltar" para diseñar la interfaz y configurar la entrada y salida de los modelos de aprendizaje automático.
+
+* *Compatibilidad con múltiples marcos de aprendizaje automático:* Gradio es compatible con una variedad de marcos y bibliotecas populares de aprendizaje automático en Python, como TensorFlow, PyTorch, scikit-learn, entre otros.
+
+* *Interfaz de usuario interactiva:* Permite a los usuarios interactuar con los modelos de aprendizaje automático de forma intuitiva, ya sea mediante carga de archivos, entrada de texto o selección de opciones.
+
+* *Personalización:* Gradio ofrece opciones de personalización para adaptar la apariencia y el comportamiento de la interfaz de usuario según las necesidades del desarrollador.
+
+En resumen, Gradio simplifica el proceso de desarrollo de interfaces de usuario para modelos de aprendizaje automático, permitiendo a los desarrolladores crear aplicaciones interactivas de manera rápida y sencilla.
+
+
+== Instalación
+
+Para instalar Gradio, puedes utilizar pip, el gestor de paquetes de Python. Abre una terminal y ejecuta el siguiente comando:
+
+```bash
+pip install gradio
+```
+
+== Hola Mundo
+
+A continuación, se muestra un ejemplo simple de cómo utilizar Gradio para crear una interfaz de usuario para una función de saludo. En este caso, la función toma un nombre como entrada y devuelve un saludo personalizado.
+
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario para una función de saludo
+def greet(name):
+    output = f"Hello, {name}!"
+    return output
+
+# Definir el componente de entrada
+name = gr.inputs.Textbox(label="Name")
+
+# Definir el componente de salida
+output = gr.outputs.Textbox(label="Greeting")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=name,
+    outputs=output
+).launch()
+```
+
+== Ejemplo
+
+A continuación, se muestra un ejemplo de cómo utilizar Gradio para crear una interfaz de usuario para un modelo de clasificación de imágenes. En este caso, se utilizará un modelo pre-entrenado de clasificación de imágenes de la biblioteca `torchvision` de PyTorch. El modelo pre-entrenado se descargará automáticamente al ejecutar el código.
+
+```python
+import gradio as gr
+import torch
+import torchvision.transforms as transforms
+from PIL import Image
+
+# Cargar el modelo pre-entrenado
+model = torch.hub.load('pytorch/vision:v0.6.0', 'resnet18', pretrained=True)
+model.eval()
+
+# Definir la función de preprocesamiento
+def preprocess(image):
+    image = Image.fromarray(image.astype('uint8'), 'RGB')
+    preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+    image = preprocess(image)
+    image = image.unsqueeze(0)
+    return image
+
+# Definir la función de clasificación
+def classify_image(image):
+    image = preprocess(image)
+    output = model(image)
+    _, predicted = output.max(1)
+    return predicted.item()
+
+# Crear la interfaz de usuario
+image = gr.inputs.Image(shape=(224, 224))
+label = gr.outputs.Label(num_top_classes=3)
+gr.Interface(fn=classify_image, inputs=image, outputs=label, capture_session=True).launch()
+```
+
+Al ejecutar este código, se abrirá una ventana del navegador con la interfaz de usuario para el modelo de clasificación de imágenes. Puedes cargar una imagen y ver la predicción del modelo en tiempo real. La interfaz también permite ajustar los parámetros del modelo y explorar su comportamiento de manera interactiva.
+
+== Block Layouts
+
+=== Row
+
+El bloque de diseño de fila (`Row`) permite organizar los componentes en una fila horizontal. Puedes utilizar este bloque para alinear varios componentes en una sola fila.
+
+.Ejemplo de uso de `Row`:
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario con componentes organizados en una fila
+def greet(name, age):
+    output = f"Hello, {name}! You are {age} years old."
+    return output
+
+# Definir los componentes de entrada
+name = gr.inputs.Textbox(label="Name")
+
+# Definir los componentes de salida
+age = gr.inputs.Slider(minimum=0, maximum=100, default=25, label="Age")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=gr.inputs.Row([name, age]),
+    outputs=gr.outputs.Textbox(label="Greeting")
+).launch()
+``` 
+=== Column
+
+El bloque de diseño de columna (`Column`) permite organizar los componentes en una columna vertical. Puedes utilizar este bloque para alinear varios componentes en una sola columna.
+
+.Ejemplo de uso de `Column`:
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario con componentes organizados en una columna
+def greet(name, age):
+    output = f"Hello, {name}! You are {age} years old."
+    return output
+
+# Definir los componentes de entrada
+name = gr.inputs.Textbox(label="Name")
+age = gr.inputs.Slider(minimum=0, maximum=100, default=25, label="Age")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=gr.inputs.Column([name, age]),
+    outputs=gr.outputs.Textbox(label="Greeting")
+).launch()
+```
+
+=== Tab
+
+Los bloques de diseño de pestañas (`Tab`) permiten organizar los componentes en pestañas. 
+
+.Ejemplo de uso de `Tab`:
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario con componentes organizados en pestañas
+def greet(name, age):
+    output = f"Hello, {name}! You are {age} years old."
+    return output
+
+# Definir los componentes de entrada
+name = gr.inputs.Textbox(label="Name")
+age = gr.inputs.Slider(minimum=0, maximum=100, default=25, label="Age")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=gr.inputs.Tab([name, age]),
+    outputs=gr.outputs.Textbox(label="Greeting")
+).launch()
+```
+
+=== Group
+
+El bloque de diseño de grupo (`Group`) permite organizar los componentes en un grupo. Puedes utilizar este bloque para agrupar varios componentes juntos.
+
+.Ejemplo de uso de `Group`:
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario con componentes organizados en un grupo
+
+def greet(name, age):
+    output = f"Hello, {name}! You are {age} years old."
+    return output
+
+# Definir los componentes de entrada
+name = gr.inputs.Textbox(label="Name")
+age = gr.inputs.Slider(minimum=0, maximum=100, default=25, label="Age")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=gr.inputs.Group([name, age]),
+    outputs=gr.outputs.Textbox(label="Greeting")
+).launch()
+```
+
+=== Accordion
+
+El bloque de diseño de acordeón (`Accordion`) permite organizar los componentes en un acordeón. Puedes utilizar este bloque para ocultar y mostrar varios componentes juntos.
+
+.Ejemplo de uso de `Accordion`:
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario con componentes organizados en un acordeón
+def greet(name, age):
+    output = f"Hello, {name}! You are {age} years old."
+    return output
+
+# Definir los componentes de entrada
+name = gr.inputs.Textbox(label="Name")
+age = gr.inputs.Slider(minimum=0, maximum=100, default=25, label="Age")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=gr.inputs.Accordion([name, age]),
+    outputs=gr.outputs.Textbox(label="Greeting")
+).launch()
+```
+
+== Componentes en Gradio
+
+.Componentes en Gradio:
+1. *Interface:* La clase principal que representa la interfaz de usuario.
+2. *Slider:* Un control deslizante para ajustar valores numéricos dentro de un rango.
+3. *Textbox:* Una caja de texto para ingresar texto.
+4. *Checkbox:* Un componente de casilla de verificación para seleccionar opciones.
+5. *Dropdown:* Un menú desplegable para seleccionar una opción de una lista.
+6. *Image:* Un componente para cargar y mostrar imágenes.
+7. *Video:* Similar al componente de imagen, pero para videos.
+8. *Button:* Un botón para activar acciones específicas.
+9. *Output:* Un área para mostrar resultados de operaciones.
+10. *Label:* Una etiqueta de texto estático para proporcionar información.
+11. *Progress:* Una barra de progreso para indicar el estado de una operación.
+
+.Ejemplo de uso de componentes en Gradio:
+```python
+import gradio as gr
+
+# Crear una interfaz de usuario con componentes
+def greet(name
+            , age
+            , email
+            , is_student
+            , color
+            , fruit
+            , number
+            , image
+            , video
+            , button
+            , output
+            , label
+            , progress
+            ):
+
+    # Mostrar el nombre ingresado
+    output = f"Hello, {name}!"
+
+    return output
+
+# Definir los componentes de entrada
+name = gr.inputs.Textbox(label="Name")
+age = gr.inputs.Slider(minimum=0, maximum=100, default=25, label="Age")
+email = gr.inputs.Textbox(label="Email")
+is_student = gr.inputs.Checkbox(label="Are you a student?")
+color = gr.inputs.Dropdown(["Red", "Green", "Blue"], label="Favorite color")
+fruit = gr.inputs.CheckboxGroup(["Apple", "Banana", "Orange"], label="Favorite fruit")
+number = gr.inputs.Number(default=3, label="Pick a number")
+image = gr.inputs.Image(label="Profile picture")
+video = gr.inputs.Video(label="Introduction video")
+button = gr.inputs.Button(label="Submit")
+
+# Definir los componentes de salida
+output = gr.outputs.Textbox(label="Greeting")
+label = gr.outputs.Label(label="Result")
+progress = gr.outputs.Progress(label="Progress")
+
+# Crear la interfaz de usuario
+gr.Interface(
+    fn=greet,
+    inputs=[name, age, email, is_student, color, fruit, number, image, video, button],
+    outputs=[output, label, progress]
+).launch()
+```
