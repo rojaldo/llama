@@ -10,6 +10,19 @@ def current_time() -> str:
 
 messages = [{'role': 'user', 'content': 'what time is it?'}]
 
+current_time_tool = {
+  'type': 'function',
+  'function': {
+    'name': 'current_time',
+    'description': 'Get the current time in the format YYYY-MM-DD HH:MM:SS',
+    'parameters': {
+      'type': 'object',
+      'properties': {},
+      'required': [],
+    },
+  }
+}
+
 available_functions = {
   'current_time': current_time,
 }
@@ -19,7 +32,7 @@ async def send_request(text):
     response: ChatResponse = await client.chat(
     'llama3.2',
     messages= [{'role': 'user', 'content': text}],
-    tools=[current_time],
+    tools=[current_time_tool],
   )
 
     if response.message.tool_calls:
@@ -33,20 +46,18 @@ async def send_request(text):
           print('Function output:', output)
           messages.append(response.message)
           messages.append({'role': 'tool', 'content': str(output), 'name': tool.function.name})
-          #  create a response message
-          message = {
-            'role': 'assistant',
-            'content': 'the current time is: ' + str(output),
-          }
-          
-          return message['content']
+          #  write text to the output textbox
+          return str(output)
+
         else:
           print('Function', tool.function.name, 'not found')
+          return f'Function {tool.function.name} not found'
 
       # Return the output of the last tool call
 
     else:
       print('No tool calls returned from model')
+      return response.message.content
 
 async def gradio_app():
   import gradio as gr

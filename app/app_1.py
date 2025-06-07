@@ -4,7 +4,7 @@ from ollama import AsyncClient
 
 # connect to ollama server: localhost:11434
 async def main():
-    client = AsyncClient()
+    client = AsyncClient(host='http://10.182.0.249:11434')
     messages = [
     {
       'role': 'assistant',
