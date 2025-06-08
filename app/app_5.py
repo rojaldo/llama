@@ -18,7 +18,7 @@ Settings.embed_model = OllamaEmbedding(
 # Cargar documentos desde directorio, unicamente los .md
 
 documents = SimpleDirectoryReader(
-    input_dir="./docs",
+    input_dir="./data",
     required_exts=[".md"],
     file_extractor = {
         ".md": MarkdownReader()

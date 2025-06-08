@@ -1,48 +1,39 @@
-from llama_index.core import Document
-from llama_index.core.node_parser import SentenceSplitter
-from llama_index.core.extractors import TitleExtractor
-from llama_index.core.ingestion import IngestionPipeline
+# Instalar dependencias primero (ejecutar en terminal):
+# pip install llama-index-core llama-index-embeddings-huggingface llama-index-llms-ollama
+
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
-from llama_index.embeddings.ollama import OllamaEmbedding
 
-# Configura el modelo Ollama para LLM y embeddings
-ollama_llm = Ollama(
-    model="gemma3:1b",  # Modelo de lenguaje
-    base_url="http://10.182.0.249:11434",
-    temperature=0.1  # Más determinista para búsquedas
+# 1. Configurar modelos locales
+Settings.llm = Ollama(
+    model="llama3.2",  # Descargar previamente: ollama pull llama3.1
+    temperature=0.3,
+    context_window=4096,
+    request_timeout=120
 )
 
-embed_model = OllamaEmbedding(
-    model_name="nomic-embed-text",
-    base_url="http://10.182.0.249:11434"
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="BAAI/bge-small-en-v1.5",  # Se descarga automáticamente la primera vez
+    device="cpu",  # Usar 'cuda' para GPU NVIDIA o 'mps' para Apple Silicon
 )
 
-# Prepara tus documentos (puedes cargar desde archivos, aquí un ejemplo simple)
-documents = [
-    Document(text="Este es el manual de usuario. Explica las políticas de devolución y garantías."),
-    Document(text="Para devolver un producto, contacte con soporte y siga las instrucciones del sitio web.")
-]
+# 2. Cargar e indexar documentos
+documentos = SimpleDirectoryReader(
+    input_dir="data",  # Carpeta con archivos .txt, .pdf, etc.
+    required_exts=[".pdf", ".txt", ".md"]
+).load_data()
 
-# Crea el extractor de títulos usando Ollama como LLM
-title_extractor = TitleExtractor(llm=ollama_llm, 
-                                 title_prompt="Extrae el título de este texto, unicamente el titulo, no des explicaciones de criterios, una frase concisa",
-                                 max_length=1)  # Longitud máxima del título
-
-# Define la pipeline de ingesta
-pipeline = IngestionPipeline(
-    transformations=[
-        SentenceSplitter(chunk_size=64, chunk_overlap=0),
-        title_extractor,
-        embed_model
-    ]
+indice = VectorStoreIndex.from_documents(
+    documentos,
+    show_progress=True
 )
 
-# Ejecuta la pipeline sobre los documentos
-nodes = pipeline.run(documents=documents)
+# 3. Crear motor de consulta
+motor_consulta = indice.as_query_engine()
 
-# Visualiza los nodos resultantes
-for node in nodes:
-    print("--- Nodo ---")
-    print("Texto:", node.text)
-    print("Título:", node.metadata)
-    print("Embeddings (primeros valores):", node.embedding[:5], "...")
+# 4. Ejemplo de uso
+if __name__ == "__main__":
+    respuesta = motor_consulta.query("Explica los conceptos clave del documento")
+    print("Respuesta:\n", respuesta)
+    print("\nFuentes usadas:", respuesta.get_formatted_sources())

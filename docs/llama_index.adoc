@@ -56,26 +56,70 @@ respuesta = query_engine.query("¿qué es AlphaStar?")
 print("Respuesta basada en documentos:\n", respuesta.response)
 ----
 
-=== Papel de LlamaIndex en el ecosistema de los LLM (Large Language Models)
+=== Elementos clave de LlamaIndex
 
-.LlamaIndex actúa como la capa de orquestación y acceso a datos en el ecosistema de aplicaciones con LLMs. Permite:
-* Integrar cualquier LLM (OpenAI, Hugging Face, LangChain, etc.) a través de una interfaz unificada
-* Utilizar los LLMs tanto para generación de texto como para chat, completado de texto, agentes autónomos y más
-* Gestionar la ingesta, el almacenamiento y la recuperación de datos, así como la interacción con los modelos de lenguaje
-* Implementar flujos de trabajo avanzados como Retrieval-Augmented Generation (RAG), donde el LLM responde usando información recuperada y contextualizada desde los índices creados por LlamaIndex
-* Facilitar la experimentación, evaluación y monitorización de aplicaciones mediante módulos de observabilidad y workflows personalizables
+==== Agentes
 
-=== Casos de uso: chatbots, agentes, asistentes de conocimiento, análisis de datos
+Un *agente* es un sistema automatizado de toma de decisiones impulsado por un LLM que interactúa con el mundo a través de un conjunto de herramientas. Los agentes pueden realizar una cantidad arbitraria de pasos para completar una tarea determinada, decidiendo dinámicamente el mejor curso de acción en lugar de seguir pasos predefinidos. Esto les da una flexibilidad adicional para abordar tareas más complejas.
 
-.LlamaIndex es utilizado en una amplia variedad de sectores y escenarios, incluyendo:
+==== Flujos de trabajo
 
-* **Chatbots empresariales**: Sistemas de atención al cliente y soporte técnico que responden preguntas usando documentación interna o bases de conocimiento de la empresa
-* **Agentes autónomos**: Bots que pueden realizar investigaciones, extraer datos estructurados de documentos complejos o automatizar tareas a partir de información no estructurada
-* **Asistentes de conocimiento**: Herramientas internas para empleados que permiten consultas en lenguaje natural sobre manuales, reportes, políticas, etc.
-* **Análisis de datos y extracción de información**: Procesamiento de grandes volúmenes de documentos (PDFs, informes, emails) para extraer insights, estructurar información o alimentar sistemas de BI
-* **Aplicaciones multimodales**: Combinación de texto, imágenes y otros formatos para enriquecer la interacción y el análisis de datos
+Un *flujo de trabajo* en LlamaIndex es una abstracción específica basada en eventos que permite orquestar una secuencia de pasos y llamadas a LLMs. Los flujos de trabajo pueden utilizarse para implementar cualquier aplicación basada en agentes y son un componente central de LlamaIndex.
 
-.Ejemplo de chatbot con LlamaIndex:
+==== Extracción de datos estructurados
+
+Los *extractores Pydantic* permiten especificar una estructura de datos precisa que se desea extraer y utilizar LLMs para completar las piezas faltantes de manera segura en cuanto a tipos. Esto es útil para extraer datos estructurados de fuentes no estructuradas como archivos PDF, sitios web y más, y es clave para automatizar flujos de trabajo.
+
+==== QueryEngines
+
+[mermaid, "diagrama-flujo", svg]
+----
+graph TD
+  A[Inicio] --> B[Consulta]
+  B --> C{¿Respuesta útil?}
+  C -- Sí --> D[Mostrar respuesta]
+  C -- No --> E[Reformular consulta]
+  E --> B
+  D --> F[Fin]
+----
+
+
+Un *QueryEngine* es un flujo completo que permite realizar preguntas sobre tus datos. Recibe una consulta en lenguaje natural y devuelve una respuesta junto con el contexto de referencia recuperado y pasado al LLM.
+
+.Ejemplo de QueryEngine:
+[source,python]
+----
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
+from llama_index.llms.ollama import Ollama
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+# Configura el modelo de embedding y el LLM de Ollama
+Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-base-en-v1.5")
+Settings.llm = Ollama(
+    model="llama3",
+    request_timeout=120.0,  # Aumenta el timeout si tu modelo es grande
+    context_window=8000     # Ajusta según la RAM disponible
+)
+
+# Carga documentos desde un directorio local (por ejemplo, ./data)
+documents = SimpleDirectoryReader("data").load_data()
+
+# Crea el índice vectorial
+index = VectorStoreIndex.from_documents(documents)
+
+# Crea el query engine
+query_engine = index.as_query_engine()
+
+# Realiza una consulta
+response = query_engine.query("¿De qué trata el documento principal?")
+print(response)
+----
+
+==== ChatEngines
+
+Un *ChatEngine* es un flujo completo para mantener un diálogo con tus datos (interacciones múltiples en lugar de una sola pregunta y respuesta).
+
+.Ejemplo de ChatEngine con Ollama:
 [source,python]
 ----
 from llama_index.llms.ollama import Ollama
@@ -131,7 +175,40 @@ respuesta = chat_engine.chat("¿Qué debo hacer si recibo un error 404?")
 print("Respuesta del asistente:\n", respuesta)
 ----
 
-LlamaIndex ha sido adoptado por empresas de sectores como finanzas, manufactura, tecnología y consultoría para acelerar la creación de asistentes de conocimiento, automatizar la extracción de datos y potenciar la adopción de IA generativa de forma segura y escalable.
+
+.ChatEngine vs QueryEngine:
+[cols="1,2,2", options="header"]
+|===
+| Característica | QueryEngine | ChatEngine
+
+| Propósito principal
+| Responder a consultas individuales sobre tus datos.
+| Mantener una conversación (varias preguntas y respuestas) con memoria de contexto.
+
+| Memoria de conversación
+| No guarda historial de preguntas y respuestas previas. Cada consulta es independiente.
+| Guarda y utiliza el historial de la conversación para dar respuestas más contextuales.
+
+| Interfaz de uso
+| .query("Pregunta")
+| .chat("Mensaje")
+
+| Casos de uso
+| Búsquedas puntuales, preguntas únicas, extracción de información específica.
+| Chatbots, asistentes conversacionales, flujos de diálogo continuos sobre los datos.
+
+| Soporte de contexto
+| Solo usa el contexto de la pregunta actual y los datos indexados.
+| Usa el contexto de la conversación previa y los datos indexados.
+
+| Ejemplo de uso
+| response = query_engine.query("¿Quién es Paul Graham?")
+| response = chat_engine.chat("Hola, ¿quién es Paul Graham?")
+
+| Composición avanzada
+| Puede combinar varios índices o motores para consultas complejas.
+| Puede combinar memoria, herramientas y lógica de flujo conversacional.
+|===
 
 == 2. Instalación y Configuración
 
@@ -332,7 +409,7 @@ print(resumen)
 === Uso de cargadores y conectores de datos (LlamaHub)  
 LlamaHub ofrece 160+ conectores para:  
 
-**Flujo de trabajo típico:**  
+.**Flujo de trabajo típico:**  
 1. Instalar conector específico  
 2. Configurar parámetros de conexión  
 3. Cargar datos como documentos  
@@ -648,7 +725,7 @@ La fase de indexación en LlamaIndex transforma los datos brutos en estructuras 
 |===
 
 
-==== Índices vectoriales
+==== VectorStoreIndex
 
 .Proceso básico:
 * División de documentos en nodos (fragmentos de 2048 tokens por defecto) para gestionar contextos extensos.
@@ -696,9 +773,18 @@ Personalización:
 
     Inclusión de metadatos (etiquetas, fechas, categorías) para filtrado híbrido.
 
-===== Índice de resumen (SummaryIndex)
+==== SummaryIndex
 
-Organiza los nodos en secuencia lineal para síntesis global.
+Es una estructura de datos diseñada para almacenar y consultar información de manera eficiente, centrándose en la síntesis de resúmenes de documentos.
+
+.Funcionamiento del summary index:
+* **Construcción del índice:** Durante la creación del summary index, los textos de los documentos se fragmentan ("chunked"), se convierten en nodos y se almacenan en una secuencia (lista). Cada nodo representa una parte del texto original
+
+* **Consulta:** Cuando se realiza una consulta, el summary index itera sobre los nodos (fragmentos) y sintetiza una respuesta utilizando todos ellos, aplicando filtros opcionales si es necesario
+
+* **Resumen por documento:** En el caso del "document summary index", se extrae un resumen de cada documento y se almacena junto con los nodos correspondientes a ese documento. Al consultar, primero se seleccionan los documentos relevantes basándose en sus resúmenes, y luego se recuperan los fragmentos asociados a esos documentos para generar la respuesta final
+
+.Organiza los nodos en secuencia lineal para síntesis global.
 [source,python]
 ----
 from llama_index.core import SimpleDirectoryReader, SummaryIndex
@@ -731,7 +817,7 @@ print(response)
 ----
 Ideal para generar resúmenes ejecutivos o respuestas panorámicas.
 
-===== Índice de palabras clave (KeywordTableIndex)
+===== KeywordTableIndex
 KeywordTableIndex es un mecanismo de Indexación por Palabras Clave que permite búsquedas rápidas y precisas basadas en términos clave. Utiliza una tabla hash para almacenar pares de palabras clave y nodos documentales, facilitando la recuperación de información relevante.
 
 .Características clave:
@@ -802,7 +888,7 @@ print(response)
 ----
 Permite búsquedas exactas por etiquetas o metadatos.
 
-===== Índice de árbol (TreeIndex)
+===== TreeIndex
 
 El `TreeIndex` es una estructura de índice jerárquica en la que cada nodo representa un resumen de sus nodos hijos. Se construye siguiendo un enfoque de abajo hacia arriba: los fragmentos de texto (nodos hoja) se agrupan y se sintetizan resúmenes en niveles superiores, formando así un árbol de resúmenes hasta llegar a uno o varios nodos raíz.
 
@@ -834,8 +920,8 @@ Durante la consulta, existen dos modos principales:
 | build_tree        | bool      | Construir árbol al crear el índice             | True              |
 | show_progress     | bool      | Mostrar barra de progreso                      | False             |
 |===
-.Ventajas y Usos
 
+.Ventajas y Usos
 * Ideal para documentos largos o jerárquicos.
 * Permite síntesis progresiva y respuestas más estructuradas.
 * Escalable y eficiente para consultas que requieren visión global o resúmenes de alto nivel.
@@ -1061,7 +1147,7 @@ nodes_reranked = reranker.postprocess_nodes(nodes, query_str=query)
 
 ==== Síntesis de Respuesta (RAG)
 
-*Proceso:*
+.*Proceso:*
 1. Los nodos relevantes se inyectan como contexto en el prompt.
 2. El LLM genera una respuesta natural basada en el contexto y la pregunta.
 
@@ -1201,26 +1287,62 @@ query_engine = index.as_query_engine(
 |===
 
 === Herramientas y agentes: definición, usos y ejemplos  
-Principales tipos de herramientas y su implementación:
+
+
 
 **1. FunctionTool (Herramientas básicas):**
+
+FunctionTool encapsula una función Python, permitiendo que agentes como ReActAgent la invoquen durante el procesamiento de consultas. Esto es útil para tareas específicas que requieren lógica personalizada, como cálculos matemáticos, acceso a APIs externas o manipulación de datos.
+
+.Ejemplo de uso de FunctionTool para una calculadora simple:
 [source,python]
 ----
+# Instala primero las dependencias (ejecutar en terminal):
+# pip install llama-index-llms-ollama llama-index-core
+
 from llama_index.core.tools import FunctionTool
+from llama_index.llms.ollama import Ollama
+from llama_index.core.agent import ReActAgent
 
-def calcular_iva(monto: float) -> float:
-    """Calcula el IVA del 21% para un monto dado"""
-    return monto * 0.21
+# 1. Definir función matemática
+def multiplicar(a: float, b: float) -> float:
+    """Multiplica dos números y devuelve el resultado."""
+    return a * b
 
-tool = FunctionTool.from_defaults(
-    calcular_iva,
-    name="calculadora_iva",
-    description="Calcula impuestos IVA para facturas"
+# 2. Crear herramienta funcional
+herramienta_multiplicar = FunctionTool.from_defaults(
+    fn=multiplicar,
+    name="calculadora_multiplicacion",
+    description="Útil para realizar multiplicaciones matemáticas"
 )
+
+# 3. Configurar modelo local con Ollama
+llm = Ollama(
+    model="llama3.2",  # Modelo instalado previamente: ollama pull llama3.1
+    temperature=0.3,
+    context_window=4096,
+    request_timeout=120
+)
+
+# 4. Crear y ejecutar agente
+agente = ReActAgent.from_tools(
+    tools=[herramienta_multiplicar],
+    llm=llm,
+    verbose=True
+)
+
+# Prueba de funcionamiento
+if __name__ == "__main__":
+    respuesta = agente.query("¿Cuánto es 8 multiplicado por 7.5?")
+    print("Respuesta final:", respuesta)  # Debería mostrar: 60.0
+
 ----
 
 
 **2. QueryEngineTool (Integración RAG):**
+
+Un QueryEngineTool es una herramienta que envuelve un motor de consulta (query engine) y lo expone como un "tool" reutilizable dentro de flujos de trabajo de agentes o sistemas multiagente.
+
 [source,python]
 ----
 from llama_index.core.tools import QueryEngineTool
@@ -1909,7 +2031,7 @@ with langfuse.trace(name="consulta_compleja"):
 ----
 
 
-**Checklist de optimización:**
+.**Checklist de optimización:**
 1. Re-indexar datos cada 6h con jobs programados
 2. Usar `BAAI/bge-large-es-v1.5` para embeddings en españold
 3. Implementar caché L2 con Redis Cluster
