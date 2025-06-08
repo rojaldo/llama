@@ -5,7 +5,7 @@
 :toclevels: 3
 :source-highlighter: coderay
 
-== 1. Introducción a LlamaIndex
+== Introducción a LlamaIndex
 
 === ¿Qué es LlamaIndex y para qué sirve?
 
@@ -64,7 +64,7 @@ Un *agente* es un sistema automatizado de toma de decisiones impulsado por un LL
 
 ==== Flujos de trabajo
 
-Un *flujo de trabajo* en LlamaIndex es una abstracción específica basada en eventos que permite orquestar una secuencia de pasos y llamadas a LLMs. Los flujos de trabajo pueden utilizarse para implementar cualquier aplicación basada en agentes y son un componente central de LlamaIndex.
+Un *workflow* en LlamaIndex es una abstracción específica basada en eventos que permite orquestar una secuencia de pasos y llamadas a LLMs. Los flujos de trabajo pueden utilizarse para implementar cualquier aplicación basada en agentes y son un componente central de LlamaIndex.
 
 ==== Extracción de datos estructurados
 
@@ -210,7 +210,7 @@ print("Respuesta del asistente:\n", respuesta)
 | Puede combinar memoria, herramientas y lógica de flujo conversacional.
 |===
 
-== 2. Instalación y Configuración
+== Instalación y Configuración
 
 === Requisitos previos (Python, APIs, conocimientos básicos de IA)
 
@@ -287,7 +287,7 @@ print(respuesta.response)
 ----
 
 
-== 3. Fundamentos de Indexación de Datos
+== Fundamentos de Indexación de Datos
 
 === Conceptos básicos de indexación y recuperación  
 .La indexación en LlamaIndex transforma datos brutos en **representaciones matemáticas optimizadas** mediante estos procesos claved:  
@@ -409,7 +409,7 @@ print(resumen)
 === Uso de cargadores y conectores de datos (LlamaHub)  
 LlamaHub ofrece 160+ conectores para:  
 
-.**Flujo de trabajo típico:**  
+.**workflow típico:**  
 1. Instalar conector específico  
 2. Configurar parámetros de conexión  
 3. Cargar datos como documentos  
@@ -573,7 +573,7 @@ query = """
 documents = reader.load_data(query=query)  # 
 ----
 
-== 4. Fases Principales del Flujo de Trabajo
+== Fases de Indexación y Carga de Datos
 
 === Fase de ingesta y carga de datos  
 Proceso inicial para integrar datos desde múltiples fuentes usando **160+ conectores** de LlamaHub:  
@@ -913,12 +913,12 @@ Durante la consulta, existen dos modos principales:
 
 .Tabla de Parámetros Clave
 |===
-| Nombre            | Tipo      | Descripción                                    | Valor por defecto |
-| summary_template  | Template  | Prompt para resumir nodos hijos                | None              |
-| insert_prompt     | Template  | Prompt para inserción de nodos                 | None              |
-| num_children      | int       | Hijos por nodo padre                           | 10                |
-| build_tree        | bool      | Construir árbol al crear el índice             | True              |
-| show_progress     | bool      | Mostrar barra de progreso                      | False             |
+| Nombre            | Tipo      | Descripción                                    | Valor por defecto 
+| summary_template  | Template  | Prompt para resumir nodos hijos                | None              
+| insert_prompt     | Template  | Prompt para inserción de nodos                 | None              
+| num_children      | int       | Hijos por nodo padre                           | 10                
+| build_tree        | bool      | Construir árbol al crear el índice             | True              
+| show_progress     | bool      | Mostrar barra de progreso                      | False             
 |===
 
 .Ventajas y Usos
@@ -1017,7 +1017,7 @@ print(response)
 - En un TreeIndex, los nodos hoja son los fragmentos originales y los nodos internos son resúmenes de estos.
 - En un KeywordTableIndex, los nodos se indexan por las palabras clave que contienen.
 
-.Ejemplo de flujo de trabajo
+.Ejemplo de workflow
 1. Cargar documentos y dividirlos en nodos.
 2. Crear relaciones entre nodos si es necesario.
 3. Construir el índice deseado (vectorial, jerárquico, etc.) usando la lista de nodos.
@@ -1232,7 +1232,7 @@ response = query_engine.query("¿Qué es el aprendizaje automático?")
 print("\nRespuesta generada:", response)
 ----
 
-== 5. Componentes Clave de LlamaIndex
+== Componentes Clave de LlamaIndex
 
 === Componentes: prompts, modelos, bases de datos, motores de consulta (QueryEngine)  
 LlamaIndex se estructura alrededor de cuatro pilares fundamentales:
@@ -1343,238 +1343,445 @@ if __name__ == "__main__":
 
 Un QueryEngineTool es una herramienta que envuelve un motor de consulta (query engine) y lo expone como un "tool" reutilizable dentro de flujos de trabajo de agentes o sistemas multiagente.
 
+.Ejemplo de uso de QueryEngineTool para consultar documentos locales:
 [source,python]
 ----
-from llama_index.core.tools import QueryEngineTool
+# Instalar dependencias:
+# pip install llama-index-core llama-index-llms-ollama llama-index-embeddings-huggingface
 
-rag_tool = QueryEngineTool(
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Settings
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.llms.ollama import Ollama
+from llama_index.core.tools import QueryEngineTool, ToolMetadata
+from llama_index.core.agent import ReActAgent
+
+# 1. Configuración de modelos locales
+Settings.llm = Ollama(
+    model="llama3.2",  # Descargar previamente: ollama pull llama3.2
+    temperature=0.3,
+    context_window=4096,
+    request_timeout=120
+)
+
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name="BAAI/bge-small-en-v1.5",
+    device="cpu"
+)
+
+# 2. Cargar e indexar documentos
+documentos = SimpleDirectoryReader(
+    input_dir="data",  # Carpeta con archivos .txt, .pdf, etc.
+    required_exts=[".pdf", ".txt", ".md"]
+).load_data()
+
+indice = VectorStoreIndex.from_documents(
+    documentos,
+    show_progress=True
+)
+
+# 3. Crear QueryEngine y QueryEngineTool
+query_engine = indice.as_query_engine(llm=Settings.llm)
+herramienta_query_engine = QueryEngineTool(
     query_engine=query_engine,
     metadata=ToolMetadata(
-        name="manual_tecnico",
-        description="Contiene documentación de sistemas internos"
+        name="consulta_documentos",
+        description="Herramienta para consultar información en documentos locales"
     )
 )
+
+# 4. Crear agente y consultar
+agente = ReActAgent.from_tools(
+    tools=[herramienta_query_engine],
+    llm=Settings.llm,
+    verbose=True
+)
+
+if __name__ == "__main__":
+    pregunta = "Resume los puntos clave del documento sobre IA"
+    respuesta = agente.query(pregunta)
+    print("Respuesta:\n", respuesta)
+
 ----
 
 
 **3. AgentWorkflow (Sistemas multiagente):**
+
+Un AgentWorkflow es un sistema de orquestación que permite crear flujos de trabajo con múltiples agentes de IA que colaboran entre sí, mantienen estado compartido y transfieren tareas según su especialización. Facilita la construcción de aplicaciones complejas donde diferentes agentes interactúan secuencial o paralelamente para resolver problemas.
+
+.Características clave
+* Estado compartido: Mantiene contexto entre agentes
+* Transferencia dinámica: Los agentes pueden pasar tareas entre sí
+* Ejecución asíncrona: Soporte nativo para operaciones concurrentes
+* Observabilidad: Registro detallado de cada paso del flujo
+
+
 [source,python]
 ----
+# Instalar dependencias primero:
+# pip install llama-index-core llama-index-llms-ollama
+
+import asyncio
 from llama_index.core.agent.workflow import AgentWorkflow, ReActAgent
+from llama_index.core.workflow import Context
+from llama_index.llms.ollama import Ollama
 
-agente_finanzas = ReActAgent(
-    tools=[tool, rag_tool],
-    llm=Ollama(model="llama3.1"),
-    system_prompt="Eres un asistente financiero especializado"
-)
+# 1. Configurar modelo local
+llm = Ollama(model="llama3.2", temperature=0.3)
 
-workflow = AgentWorkflow(
-    agents=[agente_finanzas],
-    root_agent="agente_finanzas"
-)
-----
-
-
-=== Flujos de trabajo y pipelines con agentes 
-Implementación de pipelines complejos con gestión de estado:
-
-**Pipeline de procesamiento documental:**
-[source,python]
-----
-from llama_index.core.workflow import Workflow, step
-
-class ProcesadorDocs(Workflow):
-    @step
-    async def carga(self, ev: StartEvent) -> ProcessingEvent:
-        docs = SimpleDirectoryReader("docs").load_data()
-        return ProcessingEvent(docs=docs)
+# 2. Definir herramientas y agentes
+async def buscar_informacion(ctx: Context, tema: str) -> str:
+    """Busca datos sobre un tema en fuentes externas (simulado)"""
+    estado = await ctx.get("state")
+    estado["busquedas"] += 1
+    await ctx.set("state", estado)
     
+    # Simulación de búsqueda
+    return f"Datos sobre {tema}: ..."
+
+async def analizar_datos(ctx: Context, datos: str) -> str:
+    """Analiza información y genera conclusiones"""
+    estado = await ctx.get("state")
+    estado["analisis"] += 1
+    await ctx.set("state", estado)
+    
+    return f"Análisis de '{datos[:20]}...': Conclusiones clave..."
+
+# 3. Crear agentes especializados
+agente_buscador = ReActAgent(
+    name="buscador",
+    description="Especialista en recopilar información",
+    tools=[buscar_informacion],
+    llm=llm
+)
+
+agente_analista = ReActAgent(
+    name="analista",
+    description="Especialista en análisis de datos",
+    tools=[analizar_datos],
+    llm=llm
+)
+
+# 4. Configurar workflow
+workflow = AgentWorkflow(
+    agents=[agente_buscador, agente_analista],
+    root_agent="buscador",
+    initial_state={"busquedas": 0, "analisis": 0},
+    state_prompt="Estado actual: {state}\nConsulta: {msg}"
+)
+
+# 5. Función de ejecución
+async def main():
+    contexto = Context(workflow)
+    respuesta = await workflow.run(
+        user_msg="Investigar el impacto de la IA en la medicina",
+        ctx=contexto
+    )
+    
+    estado_final = await contexto.get("state")
+    print(f"\nRespuesta final:\n{respuesta}")
+    print(f"\nEstadísticas:\n- Búsquedas: {estado_final['busquedas']}\n- Análisis: {estado_final['analisis']}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+----
+
+
+=== Workflows en LlamaIndex
+
+Los *Workflows* en LlamaIndex son una abstracción dirigida por eventos para encadenar varios pasos y eventos en aplicaciones de IA. Permiten construir flujos de trabajo complejos, coordinando agentes, herramientas y pasos de procesamiento de manera estructurada y observable
+
+.Características clave
+* Arquitectura basada en eventos: cada paso maneja ciertos tipos de eventos y puede emitir nuevos eventos.
+* Decoradores tipados: los pasos se definen con `@step`, lo que permite la validación automática de entradas y salidas.
+* Estado global compartido: mediante el objeto `Context`, los pasos pueden compartir y modificar variables globales.
+* Ejecución asíncrona: soporte nativo para operaciones concurrentes.
+* Observabilidad y visualización: generación de diagramas de flujo y registro detallado de la ejecución.
+* Flexibilidad: pueden usarse para agentes, RAG, extracción de datos, flujos interactivos, etc.
+
+.Elementos principales de un Workflow
+* **Events**: Clases que representan mensajes o datos que fluyen entre pasos. Ejemplos incluyen `StartEvent`, `StopEvent`, y eventos personalizados.
+* **Steps**: Funciones decoradas con `@step` que definen la lógica de cada etapa del workflow. Pueden recibir eventos y devolver nuevos eventos.
+* **Workflow**: Clase base que define el flujo general, maneja la ejecución y la orquestación de los pasos.
+* **Context**: Objeto global que permite compartir estado y datos entre pasos sin necesidad de pasarlos explícitamente.
+* **Event Handlers**: Métodos que responden a eventos específicos, permitiendo la personalización del comportamiento del workflow.
+
+
+.Ejemplo básico: transformación de datos
+
+[source,python]
+----
+from llama_index.core.workflow import (
+    Event,
+    StartEvent,
+    StopEvent,
+    Workflow,
+    step,
+)
+
+# Definimos eventos personalizados para pasar datos entre pasos
+class TransformEvent(Event):
+    transformed_data: str
+
+class MyWorkflow(Workflow):
     @step
-    async def analisis(self, ev: ProcessingEvent) -> StopEvent:
-        resultados = await self.llm.complete(
-            f"Analiza: {ev.docs[0].text[:1000]}"
-        )
-        return StopEvent(result=resultados)
+    async def first_step(self, ev: StartEvent) -> TransformEvent:
+        # Recibe el StartEvent, extrae el dato inicial (p.ej., "input")
+        data = ev.input
+        # Transforma el dato
+        transformed = f"Transformed: {data.upper()}"
+        return TransformEvent(transformed_data=transformed)
 
-# Ejecución
-pipeline = ProcesadorDocs(llm=Ollama(model="llama3.1"))
-resultado = await pipeline.run()
+    @step
+    async def second_step(self, ev: TransformEvent) -> StopEvent:
+        # Recibe el evento intermedio y finaliza el workflow
+        result = f"Final result: {ev.transformed_data}"
+        return StopEvent(result=result)
+
+# Ejecutamos el workflow de forma asíncrona
+async def main():
+    workflow = MyWorkflow(timeout=60, verbose=False)
+    result = await workflow.run(input="hello world")
+    print(result)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+
 ----
 
+==== Uso de Context para compartir datos entre steps
 
-**Flujo multiagente con toma de decisiones:**
-[cols="1,2", options="header"]
+LlamaIndex proporciona la clase Context como un objeto global para gestionar el estado y los datos compartidos durante la ejecución de un workflow. Permite almacenar, recuperar y sincronizar información entre los distintos pasos del workflow, facilitando la cooperación entre ellos y evitando la necesidad de pasar explícitamente datos entre funciones.
+
+.Propiedades y Métodos Principales de Context
+[cols="1,3"]
 |===
-| Etapa | Componentes
-| 1. Clasificación | RouterQueryEngine
-| 2. Recuperación | VectorIndexRetriever
-| 3. Síntesis | TreeSummarize
-| 4. Validación | GuardrailsChecker
+|Propiedad/Método |Descripción
+
+|set(key: str, value: Any, make_private: bool = False)
+|Guarda un valor bajo una clave única en el contexto. Si make_private es True y la clave ya existe, lanza un ValueError.
+
+|get(key: str, default: Optional[Any] = Ellipsis)
+|Recupera el valor asociado a una clave. Si no existe, devuelve el valor por defecto o lanza un ValueError si no hay valor accesible.
+
+|collect_events(ev: Event, expected: List[Type[Event]], buffer_id: Optional[str] = None)
+|Permite recolectar y sincronizar eventos para flujos donde varios pasos deben esperar diferentes tipos de eventos.
+
+|mark_in_progress(name: str, ev: Event)
+|Marca un paso como "en progreso" junto con el evento de entrada asociado.
+
+|add_holding_event(event: Event)
+|Agrega un evento a la lista de eventos retenidos en la ejecución paso a paso.
+
+|get_holding_events()
+|Devuelve una copia de la lista de eventos retenidos.
+
+|send_event(message: Event, step: Optional[str] = None)
+|Envía un evento a un paso específico del workflow o a todos los receptores si step es None.
 |===
 
+.Ejemplo de uso de Context en un workflow simple
 [source,python]
 ----
-from llama_index.core import Pipeline
+from llama_index.core.workflow import Workflow, step, Context, Event, StartEvent, StopEvent
 
-pipeline = Pipeline(
-    modules=[
-        SentenceSplitter(chunk_size=512),
-        OllamaEmbedding(model_name="llama3.1"),
-        AutoMergingRetriever()
-    ]
-)
-nodes = pipeline.run(documents)
+# Evento personalizado opcional, pero StartEvent siempre es necesario
+class MyStartEvent(StartEvent):
+    user_input: str
+
+class SaveToContextEvent(Event):
+    pass
+
+class MyWorkflow(Workflow):
+    @step
+    async def start(self, ctx: Context, ev: MyStartEvent) -> SaveToContextEvent:
+        # Guarda el input en el contexto
+        await ctx.set("input", ev.user_input)
+        return SaveToContextEvent()
+
+    @step
+    async def show(self, ctx: Context, ev: SaveToContextEvent) -> StopEvent:
+        # Recupera el input del contexto
+        value = await ctx.get("input")
+        print("Valor recuperado del contexto:", value)
+        return StopEvent(result=value)
+
+# Ejecución del workflow
+async def main():
+    w = MyWorkflow()
+    result = await w.run(user_input="Hola LlamaIndex")  # Esto crea un MyStartEvent
+    print("Resultado final:", result)
+
+# Para ejecutarlo:
+# import asyncio
+# asyncio.run(main())
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
 ----
 
-== 6. Desarrollo de Aplicaciones con LlamaIndex
+==== Visualización del flujo
 
-=== Creación de motores de consulta y chatbots  
-Implementación de sistemas conversacionales y motores RAG personalizados:
-
-.Motor de consulta básico con Ollama:
 [source,python]
 ----
-from llama_index.core import VectorStoreIndex
+# Asegúrate de tener instalados los paquetes necesarios:
+# pip install llama-index-core llama-index-utils-workflow
 
-index = VectorStoreIndex.load_from_disk("indice/")
-query_engine = index.as_query_engine(
-    similarity_top_k=3,
-    llm=Ollama(model="llama3.1"),
-    response_mode="compact"
-)
+import asyncio
+from llama_index.core.workflow import Event, StartEvent, StopEvent, Workflow, step
+from llama_index.utils.workflow import draw_all_possible_flows, draw_most_recent_execution
 
-respuesta = query_engine.query("¿Cómo configurar el firewall?")
+# Definición de un evento personalizado para el paso intermedio
+class ProcessingEvent(Event):
+    intermediate_result: str
+
+# Definición del workflow con dos pasos
+class MultiStepWorkflow(Workflow):
+    @step
+    async def step_one(self, ev: StartEvent) -> ProcessingEvent:
+        print("Ejecutando el primer paso...")
+        return ProcessingEvent(intermediate_result="Primer paso completado")
+
+    @step
+    async def step_two(self, ev: ProcessingEvent) -> StopEvent:
+        print("Ejecutando el segundo paso...")
+        final_result = f"Procesamiento finalizado: {ev.intermediate_result}"
+        return StopEvent(result=final_result)
+
+# Función principal para ejecutar el workflow y generar las visualizaciones
+async def main():
+    # Instancia del workflow
+    w = MultiStepWorkflow(timeout=10, verbose=False)
+    
+    # Ejecutar el workflow
+    result = await w.run()
+    print("Resultado final:", result)
+    
+    # Visualizar todos los posibles flujos del workflow
+    draw_all_possible_flows(MultiStepWorkflow, filename="multi_step_workflow.html")
+    print("Visualización de todos los posibles flujos guardada en 'multi_step_workflow.html'")
+    
+    # Visualizar la ejecución más reciente del workflow
+    draw_most_recent_execution(w, filename="recent_execution.html")
+    print("Visualización de la ejecución más reciente guardada en 'recent_execution.html'")
+
+# Ejecutar el main
+if __name__ == "__main__":
+    asyncio.run(main())
 ----
 
-.Chatbot conversacional con historial:
+==== Casos de uso comunes
+
+* RAG avanzado: recuperación, reranking y generación.
+* Agentes colaborativos: sistemas multiagente con especialización.
+* Generación estructurada y verificación de formato.
+* Flujos interactivos con entrada humana en tiempo real.
+* Orquestación de agentes, herramientas y motores de consulta.
+
+==== Ventajas principales
+
+* Modularidad y reutilización de pasos y agentes.
+* Observabilidad y trazabilidad de la ejecución.
+* Tolerancia a fallos y reintentos automáticos.
+* Escalabilidad y ejecución paralela de pasos independientes.
+
+
+=== Ejemplo práctico: desarrollo de un asistente de documentación  
+QueryPipeline es un componente de LlamaIndex que permite construir flujos de consulta complejos, integrando múltiples módulos y herramientas para procesar consultas de manera eficiente. En este ejemplo, crearemos un asistente que responde preguntas sobre el dataset del Titanic utilizando un pipeline de consulta.
+
+La tendencia es ir sustituyenndo los 'QueryPipeline' por 'Workflow' para aprovechar las ventajas de la arquitectura basada en eventos y la reutilización de pasos.
+
+**Carga de documentos**:
 [source,python]
 ----
-from llama_index.core.chat_engine import CondenseQuestionChatEngine
+# Instala los paquetes necesarios (si aún no lo has hecho)
+# %pip install llama-index llama-index-experimental llama-index-llms-ollama
 
-chat_engine = CondenseQuestionChatEngine.from_defaults(
-    query_engine=query_engine,
-    chat_history=[],
-    llm=Ollama(model="llama3.1")
-)
-
-# Interacción multi-turno
-respuesta = chat_engine.chat("Requisitos del sistema")
-respuesta = chat_engine.chat("¿Y para la versión Enterprise?")
-----
-
-=== Integración con interfaces (Streamlit, Gradio)  
-Implementación de interfaces web interactivas:
-
-.Interfaz Streamlit básica:
-[source,python]
-----
-import streamlit as st
-from llama_index.core import VectorStoreIndex
+import pandas as pd
+from llama_index.core.query_pipeline import QueryPipeline as QP, Link, InputComponent
+from llama_index.experimental.query_engine.pandas import PandasInstructionParser
+from llama_index.llms.ollama import Ollama
+from llama_index.core import PromptTemplate
 
 def main():
-    st.title("Asistente Técnico")
-    index = VectorStoreIndex.load_from_disk("indice/")
+    # Carga el CSV
+    df = pd.read_csv("data/titanic.csv")
     
-    query = st.text_input("Haz tu pregunta:")
-    if query:
-        response = index.as_query_engine().query(query)
-        st.markdown(f"**Respuesta:** {response.response}")
+    # Configuración de Ollama
+    llm = Ollama(model="llama3.2", base_url="http://localhost:11434")
+    
+    # Define las instrucciones y prompts
+    instruction_str = (
+        "1. Convierte la consulta a código Python ejecutable usando Pandas.\n"
+        "2. La última línea debe ser una expresión Python evaluable con eval().\n"
+        "3. El código debe resolver la consulta.\n"
+        "4. SOLO IMPRIMA LA EXPRESIÓN.\n"
+        "5. No ponga la expresión entre comillas.\n"
+    )
+
+    pandas_prompt_str = (
+        "Trabajas con un dataframe de pandas en Python.\n"
+        "El nombre del dataframe es `df`.\n"
+        "Esto es el resultado de `print(df.head())`:\n"
+        "{df_str}\n\n"
+        "Sigue estas instrucciones:\n"
+        "{instruction_str}\n"
+        "Consulta: {query_str}\n\n"
+        "Expresión:"
+    )
+
+    response_synthesis_prompt_str = (
+        "Dada una pregunta de entrada, sintetiza una respuesta a partir de los resultados de la consulta.\n"
+        "Consulta: {query_str}\n\n"
+        "Instrucciones de Pandas (opcional):\n{pandas_instructions}\n\n"
+        "Salida de Pandas: {pandas_output}\n\n"
+        "Respuesta: "
+    )
+
+    # Crea los prompts
+    pandas_prompt = PromptTemplate(pandas_prompt_str).partial_format(
+        instruction_str=instruction_str, df_str=df.head(5)
+    )
+    pandas_output_parser = PandasInstructionParser(df)
+    response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
+
+    # Construye el pipeline de consulta
+    qp = QP(
+        modules={
+            "input": InputComponent(),
+            "pandas_prompt": pandas_prompt,
+            "llm1": llm,
+            "pandas_output_parser": pandas_output_parser,
+            "response_synthesis_prompt": response_synthesis_prompt,
+            "llm2": llm,
+        },
+        verbose=True,
+    )
+    qp.add_chain(["input", "pandas_prompt", "llm1", "pandas_output_parser"])
+    qp.add_links(
+        [
+            Link("input", "response_synthesis_prompt", dest_key="query_str"),
+            Link("llm1", "response_synthesis_prompt", dest_key="pandas_instructions"),
+            Link("pandas_output_parser", "response_synthesis_prompt", dest_key="pandas_output"),
+        ]
+    )
+    qp.add_link("response_synthesis_prompt", "llm2")
+
+    # Ejemplo de consulta
+    response = qp.run(
+        query_str="¿Cuál es la edad media de los pasajeros supervivientes?"
+    )
+    
+    print("\nRespuesta final:")
+    print(response.message.content)
 
 if __name__ == "__main__":
     main()
 ----
 
-.Interfaz Gradio avanzada:
-[source,python]
-----
-import gradio as gr
-from llama_index.core import VectorStoreIndex
 
-index = VectorStoreIndex.load_from_disk("indice/")
-
-def responder(pregunta, historia):
-    response = index.as_chat_engine().chat(pregunta)
-    return f"{historia}\nUsuario: {pregunta}\nAsistente: {response.response}"
-
-gr.ChatInterface(
-    responder,
-    title="Asistente Virtual",
-    examples=["¿Cómo reiniciar el servicio?", "Errores comunes de instalación"]
-).launch()
-----
-
-=== Ejemplo práctico: desarrollo de un asistente de documentación  
-Flujo completo para un asistente técnico empresarial:
-
-**Carga de documentos**:
-[source,python]
-----
-from llama_parse import LlamaParse
-
-parser = LlamaParse(result_type="markdown")
-manuales = parser.load_data("./docs/manuales.pdf")
-----
-
-**Configuración de embeddings en español**:
-[source,python]
-----
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-
-Settings.embed_model = HuggingFaceEmbedding(
-    model_name="BAAI/bge-small-es-v1.5"
-)
-----
-
-**Indexación con metadatos**:
-[source,python]
-----
-index = VectorStoreIndex.from_documents(
-    manuales,
-    metadata_extractor=lambda doc: {
-        "seccion": doc.metadata.get("page_label", ""),
-        "fecha": "2024-03-01"
-    }
-)
-----
-
-**Implementación con filtros**:
-[source,python]
-----
-query_engine = index.as_query_engine(
-    vector_store_query_mode="hybrid",
-    filters=MetadataFilters(
-        filters=[
-            ExactMatchFilter(key="seccion", value="configuracion")
-        ]
-    )
-)
-----
-
-**Despliegue como API REST**:
-[source,python]
-----
-from fastapi import FastAPI
-app = FastAPI()
-
-@app.post("/consulta")
-async def consultar(pregunta: str):
-    return {"respuesta": query_engine.query(pregunta).response}
-----
-
-.Ciclo de vida completo:
-[source,bash]
-----
-# 1. Procesar documentos
-python procesar_docs.py
-
-# 2. Entrenar embeddings
-python entrenar_indice.py
-
-# 3. Lanzar interfaz
-streamlit run app.py
-----
-
-== 7. Funcionalidades Avanzadas
+== Funcionalidades Avanzadas
 
 === Uso de almacenes vectoriales para búsquedas semánticas eficientes  
 LlamaIndex soporta 20+ almacenes vectoriales para producción y desarrollo local:
@@ -1698,7 +1905,7 @@ nodes = pipeline.run(documents)
 
 
 
-== 8. Persistencia y Gestión de Datos
+== Persistencia y Gestión de Datos
 
 === Métodos de almacenamiento y recuperación de índices  
 LlamaIndex ofrece múltiples estrategias para almacenar y recuperar índices:
@@ -1821,7 +2028,7 @@ storage_context = StorageContext.from_defaults(
 index_anterior = load_index_from_storage(storage_context)
 ----
 
-== 9. Ingeniería de Prompts y Estrategias de Consulta
+== Ingeniería de Prompts y Estrategias de Consulta
 
 === Técnicas: cadena de pensamiento, few-shot prompting, ReAct
 
@@ -1905,7 +2112,7 @@ response = index.as_query_engine(
 - Implementar `MetadataFilter` para precisión en RAG  
 - Versionar prompts con Git para control de cambios
 
-== 10. Implementación, Escalado y Optimización
+== Implementación, Escalado y Optimización
 
 === Despliegue de aplicaciones basadas en LlamaIndex  
 Estrategias clave para entornos productivos:
@@ -2037,7 +2244,7 @@ with langfuse.trace(name="consulta_compleja"):
 3. Implementar caché L2 con Redis Cluster
 4. Balancear carga entre 3+ instancias Ollama
 
-== 11. Futuro de LlamaIndex y Próximos Pasos
+== Futuro de LlamaIndex y Próximos Pasos
 
 === Tendencias en orquestación de datos y LLMs  
 .El ecosistema evoluciona hacia arquitecturas multiagente y sistemas autónomos:

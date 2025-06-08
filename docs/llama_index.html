@@ -529,35 +529,43 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div id="toc" class="toc">
 <div id="toctitle">Índice de contenidos</div>
 <ul class="sectlevel1">
-<li><a href="#_1_introducción_a_llamaindex">1. 1. Introducción a LlamaIndex</a>
+<li><a href="#_introducción_a_llamaindex">1. Introducción a LlamaIndex</a>
 <ul class="sectlevel2">
 <li><a href="#_qué_es_llamaindex_y_para_qué_sirve">1.1. ¿Qué es LlamaIndex y para qué sirve?</a></li>
-<li><a href="#_papel_de_llamaindex_en_el_ecosistema_de_los_llm_large_language_models">1.2. Papel de LlamaIndex en el ecosistema de los LLM (Large Language Models)</a></li>
-<li><a href="#_casos_de_uso_chatbots_agentes_asistentes_de_conocimiento_análisis_de_datos">1.3. Casos de uso: chatbots, agentes, asistentes de conocimiento, análisis de datos</a></li>
+<li><a href="#_elementos_clave_de_llamaindex">1.2. Elementos clave de LlamaIndex</a>
+<ul class="sectlevel3">
+<li><a href="#_agentes">1.2.1. Agentes</a></li>
+<li><a href="#_flujos_de_trabajo">1.2.2. Flujos de trabajo</a></li>
+<li><a href="#_extracción_de_datos_estructurados">1.2.3. Extracción de datos estructurados</a></li>
+<li><a href="#_queryengines">1.2.4. QueryEngines</a></li>
+<li><a href="#_chatengines">1.2.5. ChatEngines</a></li>
 </ul>
 </li>
-<li><a href="#_2_instalación_y_configuración">2. 2. Instalación y Configuración</a>
+</ul>
+</li>
+<li><a href="#_instalación_y_configuración">2. Instalación y Configuración</a>
 <ul class="sectlevel2">
 <li><a href="#_requisitos_previos_python_apis_conocimientos_básicos_de_ia">2.1. Requisitos previos (Python, APIs, conocimientos básicos de IA)</a></li>
 <li><a href="#_instalación_de_llamaindex_y_dependencias">2.2. Instalación de LlamaIndex y dependencias</a></li>
 <li><a href="#_configuración_del_entorno_de_desarrollo">2.3. Configuración del entorno de desarrollo</a></li>
 </ul>
 </li>
-<li><a href="#_3_fundamentos_de_indexación_de_datos">3. 3. Fundamentos de Indexación de Datos</a>
+<li><a href="#_fundamentos_de_indexación_de_datos">3. Fundamentos de Indexación de Datos</a>
 <ul class="sectlevel2">
 <li><a href="#_conceptos_básicos_de_indexación_y_recuperación">3.1. Conceptos básicos de indexación y recuperación</a></li>
 <li><a href="#_tipos_de_datos_soportados">3.2. Tipos de datos soportados</a></li>
 <li><a href="#_uso_de_cargadores_y_conectores_de_datos_llamahub">3.3. Uso de cargadores y conectores de datos (LlamaHub)</a></li>
 </ul>
 </li>
-<li><a href="#_4_fases_principales_del_flujo_de_trabajo">4. 4. Fases Principales del Flujo de Trabajo</a>
+<li><a href="#_fases_de_indexación_y_carga_de_datos">4. Fases de Indexación y Carga de Datos</a>
 <ul class="sectlevel2">
 <li><a href="#_fase_de_ingesta_y_carga_de_datos">4.1. Fase de ingesta y carga de datos</a></li>
 <li><a href="#_fase_de_indexación_creación_de_índices_vectoriales_y_otras_estructuras">4.2. Fase de indexación: creación de índices vectoriales y otras estructuras</a>
 <ul class="sectlevel3">
-<li><a href="#_índices_vectoriales">4.2.1. Índices vectoriales</a></li>
-<li><a href="#_indexnode">4.2.2. IndexNode</a></li>
-<li><a href="#_almacenamiento_y_reutilización_storagecontext_y_persistencia">4.2.3. Almacenamiento y reutilización: StorageContext y persistencia</a></li>
+<li><a href="#_vectorstoreindex">4.2.1. VectorStoreIndex</a></li>
+<li><a href="#_summaryindex">4.2.2. SummaryIndex</a></li>
+<li><a href="#_indexnode">4.2.3. IndexNode</a></li>
+<li><a href="#_almacenamiento_y_reutilización_storagecontext_y_persistencia">4.2.4. Almacenamiento y reutilización: StorageContext y persistencia</a></li>
 </ul>
 </li>
 <li><a href="#_fase_de_consulta_recuperación_y_generación_aumentada_por_recuperación_rag">4.3. Fase de consulta: recuperación y generación aumentada por recuperación (RAG)</a>
@@ -570,51 +578,52 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 </ul>
 </li>
-<li><a href="#_5_componentes_clave_de_llamaindex">5. 5. Componentes Clave de LlamaIndex</a>
+<li><a href="#_componentes_clave_de_llamaindex">5. Componentes Clave de LlamaIndex</a>
 <ul class="sectlevel2">
 <li><a href="#_componentes_prompts_modelos_bases_de_datos_motores_de_consulta_queryengine">5.1. Componentes: prompts, modelos, bases de datos, motores de consulta (QueryEngine)</a></li>
 <li><a href="#_herramientas_y_agentes_definición_usos_y_ejemplos">5.2. Herramientas y agentes: definición, usos y ejemplos</a></li>
-<li><a href="#_flujos_de_trabajo_y_pipelines_con_agentes">5.3. Flujos de trabajo y pipelines con agentes</a></li>
+<li><a href="#_workflows_en_llamaindex">5.3. Workflows en LlamaIndex</a>
+<ul class="sectlevel3">
+<li><a href="#_uso_de_context_para_compartir_datos_entre_steps">5.3.1. Uso de Context para compartir datos entre steps</a></li>
+<li><a href="#_visualización_del_flujo">5.3.2. Visualización del flujo</a></li>
+<li><a href="#_casos_de_uso_comunes">5.3.3. Casos de uso comunes</a></li>
+<li><a href="#_ventajas_principales">5.3.4. Ventajas principales</a></li>
 </ul>
 </li>
-<li><a href="#_6_desarrollo_de_aplicaciones_con_llamaindex">6. 6. Desarrollo de Aplicaciones con LlamaIndex</a>
-<ul class="sectlevel2">
-<li><a href="#_creación_de_motores_de_consulta_y_chatbots">6.1. Creación de motores de consulta y chatbots</a></li>
-<li><a href="#_integración_con_interfaces_streamlit_gradio">6.2. Integración con interfaces (Streamlit, Gradio)</a></li>
-<li><a href="#_ejemplo_práctico_desarrollo_de_un_asistente_de_documentación">6.3. Ejemplo práctico: desarrollo de un asistente de documentación</a></li>
+<li><a href="#_ejemplo_práctico_desarrollo_de_un_asistente_de_documentación">5.4. Ejemplo práctico: desarrollo de un asistente de documentación</a></li>
 </ul>
 </li>
-<li><a href="#_7_funcionalidades_avanzadas">7. 7. Funcionalidades Avanzadas</a>
+<li><a href="#_funcionalidades_avanzadas">6. Funcionalidades Avanzadas</a>
 <ul class="sectlevel2">
-<li><a href="#_uso_de_almacenes_vectoriales_para_búsquedas_semánticas_eficientes">7.1. Uso de almacenes vectoriales para búsquedas semánticas eficientes</a></li>
-<li><a href="#_implementación_de_agentes_inteligentes_react_openai_function_agents">7.2. Implementación de agentes inteligentes (ReAct, OpenAI Function Agents)</a></li>
-<li><a href="#_personalización_y_extensión_con_plugins_y_herramientas_externas">7.3. Personalización y extensión con plugins y herramientas externas</a></li>
+<li><a href="#_uso_de_almacenes_vectoriales_para_búsquedas_semánticas_eficientes">6.1. Uso de almacenes vectoriales para búsquedas semánticas eficientes</a></li>
+<li><a href="#_implementación_de_agentes_inteligentes_react_openai_function_agents">6.2. Implementación de agentes inteligentes (ReAct, OpenAI Function Agents)</a></li>
+<li><a href="#_personalización_y_extensión_con_plugins_y_herramientas_externas">6.3. Personalización y extensión con plugins y herramientas externas</a></li>
 </ul>
 </li>
-<li><a href="#_8_persistencia_y_gestión_de_datos">8. 8. Persistencia y Gestión de Datos</a>
+<li><a href="#_persistencia_y_gestión_de_datos">7. Persistencia y Gestión de Datos</a>
 <ul class="sectlevel2">
-<li><a href="#_métodos_de_almacenamiento_y_recuperación_de_índices">8.1. Métodos de almacenamiento y recuperación de índices</a></li>
-<li><a href="#_persistencia_de_datos_indexados_y_recarga_de_contextos">8.2. Persistencia de datos indexados y recarga de contextos</a></li>
+<li><a href="#_métodos_de_almacenamiento_y_recuperación_de_índices">7.1. Métodos de almacenamiento y recuperación de índices</a></li>
+<li><a href="#_persistencia_de_datos_indexados_y_recarga_de_contextos">7.2. Persistencia de datos indexados y recarga de contextos</a></li>
 </ul>
 </li>
-<li><a href="#_9_ingeniería_de_prompts_y_estrategias_de_consulta">9. 9. Ingeniería de Prompts y Estrategias de Consulta</a>
+<li><a href="#_ingeniería_de_prompts_y_estrategias_de_consulta">8. Ingeniería de Prompts y Estrategias de Consulta</a>
 <ul class="sectlevel2">
-<li><a href="#_técnicas_cadena_de_pensamiento_few_shot_prompting_react">9.1. Técnicas: cadena de pensamiento, few-shot prompting, ReAct</a></li>
-<li><a href="#_mejores_prácticas_para_optimizar_la_interacción_con_el_llm">9.2. Mejores prácticas para optimizar la interacción con el LLM</a></li>
+<li><a href="#_técnicas_cadena_de_pensamiento_few_shot_prompting_react">8.1. Técnicas: cadena de pensamiento, few-shot prompting, ReAct</a></li>
+<li><a href="#_mejores_prácticas_para_optimizar_la_interacción_con_el_llm">8.2. Mejores prácticas para optimizar la interacción con el LLM</a></li>
 </ul>
 </li>
-<li><a href="#_10_implementación_escalado_y_optimización">10. 10. Implementación, Escalado y Optimización</a>
+<li><a href="#_implementación_escalado_y_optimización">9. Implementación, Escalado y Optimización</a>
 <ul class="sectlevel2">
-<li><a href="#_despliegue_de_aplicaciones_basadas_en_llamaindex">10.1. Despliegue de aplicaciones basadas en LlamaIndex</a></li>
-<li><a href="#_escalado_para_alto_rendimiento_y_grandes_volúmenes_de_datos">10.2. Escalado para alto rendimiento y grandes volúmenes de datos</a></li>
-<li><a href="#_monitorización_y_optimización_de_aplicaciones">10.3. Monitorización y optimización de aplicaciones</a></li>
+<li><a href="#_despliegue_de_aplicaciones_basadas_en_llamaindex">9.1. Despliegue de aplicaciones basadas en LlamaIndex</a></li>
+<li><a href="#_escalado_para_alto_rendimiento_y_grandes_volúmenes_de_datos">9.2. Escalado para alto rendimiento y grandes volúmenes de datos</a></li>
+<li><a href="#_monitorización_y_optimización_de_aplicaciones">9.3. Monitorización y optimización de aplicaciones</a></li>
 </ul>
 </li>
-<li><a href="#_11_futuro_de_llamaindex_y_próximos_pasos">11. 11. Futuro de LlamaIndex y Próximos Pasos</a>
+<li><a href="#_futuro_de_llamaindex_y_próximos_pasos">10. Futuro de LlamaIndex y Próximos Pasos</a>
 <ul class="sectlevel2">
-<li><a href="#_tendencias_en_orquestación_de_datos_y_llms">11.1. Tendencias en orquestación de datos y LLMs</a></li>
-<li><a href="#_actualizaciones_y_roadmap_de_llamaindex">11.2. Actualizaciones y roadmap de LlamaIndex</a></li>
-<li><a href="#_recursos_adicionales_y_comunidad">11.3. Recursos adicionales y comunidad</a></li>
+<li><a href="#_tendencias_en_orquestación_de_datos_y_llms">10.1. Tendencias en orquestación de datos y LLMs</a></li>
+<li><a href="#_actualizaciones_y_roadmap_de_llamaindex">10.2. Actualizaciones y roadmap de LlamaIndex</a></li>
+<li><a href="#_recursos_adicionales_y_comunidad">10.3. Recursos adicionales y comunidad</a></li>
 </ul>
 </li>
 </ul>
@@ -622,7 +631,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_1_introducción_a_llamaindex">1. 1. Introducción a LlamaIndex</h2>
+<h2 id="_introducción_a_llamaindex">1. Introducción a LlamaIndex</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_qué_es_llamaindex_y_para_qué_sirve">1.1. ¿Qué es LlamaIndex y para qué sirve?</h3>
@@ -687,52 +696,78 @@ print(<span class="string"><span class="delimiter">&quot;</span><span class="con
 </div>
 </div>
 <div class="sect2">
-<h3 id="_papel_de_llamaindex_en_el_ecosistema_de_los_llm_large_language_models">1.2. Papel de LlamaIndex en el ecosistema de los LLM (Large Language Models)</h3>
-<div class="ulist">
-<div class="title">LlamaIndex actúa como la capa de orquestación y acceso a datos en el ecosistema de aplicaciones con LLMs. Permite:</div>
-<ul>
-<li>
-<p>Integrar cualquier LLM (OpenAI, Hugging Face, LangChain, etc.) a través de una interfaz unificada</p>
-</li>
-<li>
-<p>Utilizar los LLMs tanto para generación de texto como para chat, completado de texto, agentes autónomos y más</p>
-</li>
-<li>
-<p>Gestionar la ingesta, el almacenamiento y la recuperación de datos, así como la interacción con los modelos de lenguaje</p>
-</li>
-<li>
-<p>Implementar flujos de trabajo avanzados como Retrieval-Augmented Generation (RAG), donde el LLM responde usando información recuperada y contextualizada desde los índices creados por LlamaIndex</p>
-</li>
-<li>
-<p>Facilitar la experimentación, evaluación y monitorización de aplicaciones mediante módulos de observabilidad y workflows personalizables</p>
-</li>
-</ul>
+<h3 id="_elementos_clave_de_llamaindex">1.2. Elementos clave de LlamaIndex</h3>
+<div class="sect3">
+<h4 id="_agentes">1.2.1. Agentes</h4>
+<div class="paragraph">
+<p>Un <strong>agente</strong> es un sistema automatizado de toma de decisiones impulsado por un LLM que interactúa con el mundo a través de un conjunto de herramientas. Los agentes pueden realizar una cantidad arbitraria de pasos para completar una tarea determinada, decidiendo dinámicamente el mejor curso de acción en lugar de seguir pasos predefinidos. Esto les da una flexibilidad adicional para abordar tareas más complejas.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_casos_de_uso_chatbots_agentes_asistentes_de_conocimiento_análisis_de_datos">1.3. Casos de uso: chatbots, agentes, asistentes de conocimiento, análisis de datos</h3>
-<div class="ulist">
-<div class="title">LlamaIndex es utilizado en una amplia variedad de sectores y escenarios, incluyendo:</div>
-<ul>
-<li>
-<p><strong>Chatbots empresariales</strong>: Sistemas de atención al cliente y soporte técnico que responden preguntas usando documentación interna o bases de conocimiento de la empresa</p>
-</li>
-<li>
-<p><strong>Agentes autónomos</strong>: Bots que pueden realizar investigaciones, extraer datos estructurados de documentos complejos o automatizar tareas a partir de información no estructurada</p>
-</li>
-<li>
-<p><strong>Asistentes de conocimiento</strong>: Herramientas internas para empleados que permiten consultas en lenguaje natural sobre manuales, reportes, políticas, etc.</p>
-</li>
-<li>
-<p><strong>Análisis de datos y extracción de información</strong>: Procesamiento de grandes volúmenes de documentos (PDFs, informes, emails) para extraer insights, estructurar información o alimentar sistemas de BI</p>
-</li>
-<li>
-<p><strong>Aplicaciones multimodales</strong>: Combinación de texto, imágenes y otros formatos para enriquecer la interacción y el análisis de datos</p>
-</li>
-</ul>
+<div class="sect3">
+<h4 id="_flujos_de_trabajo">1.2.2. Flujos de trabajo</h4>
+<div class="paragraph">
+<p>Un <strong>workflow</strong> en LlamaIndex es una abstracción específica basada en eventos que permite orquestar una secuencia de pasos y llamadas a LLMs. Los flujos de trabajo pueden utilizarse para implementar cualquier aplicación basada en agentes y son un componente central de LlamaIndex.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_extracción_de_datos_estructurados">1.2.3. Extracción de datos estructurados</h4>
+<div class="paragraph">
+<p>Los <strong>extractores Pydantic</strong> permiten especificar una estructura de datos precisa que se desea extraer y utilizar LLMs para completar las piezas faltantes de manera segura en cuanto a tipos. Esto es útil para extraer datos estructurados de fuentes no estructuradas como archivos PDF, sitios web y más, y es clave para automatizar flujos de trabajo.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_queryengines">1.2.4. QueryEngines</h4>
+<div class="listingblock">
+<div class="content">
+<pre>graph TD
+  A[Inicio] --&gt; B[Consulta]
+  B --&gt; C{¿Respuesta útil?}
+  C -- Sí --&gt; D[Mostrar respuesta]
+  C -- No --&gt; E[Reformular consulta]
+  E --&gt; B
+  D --&gt; F[Fin]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Un <strong>QueryEngine</strong> es un flujo completo que permite realizar preguntas sobre tus datos. Recibe una consulta en lenguaje natural y devuelve una respuesta junto con el contexto de referencia recuperado y pasado al LLM.</p>
 </div>
 <div class="listingblock">
-<div class="title">Ejemplo de chatbot con LlamaIndex:</div>
+<div class="title">Ejemplo de QueryEngine:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">VectorStoreIndex</span>, <span class="include">SimpleDirectoryReader</span>, <span class="include">Settings</span>
+<span class="keyword">from</span> <span class="include">llama_index.llms.ollama</span> <span class="keyword">import</span> <span class="include">Ollama</span>
+<span class="keyword">from</span> <span class="include">llama_index.embeddings.huggingface</span> <span class="keyword">import</span> <span class="include">HuggingFaceEmbedding</span>
+
+<span class="comment"># Configura el modelo de embedding y el LLM de Ollama</span>
+Settings.embed_model = HuggingFaceEmbedding(model_name=<span class="string"><span class="delimiter">&quot;</span><span class="content">BAAI/bge-base-en-v1.5</span><span class="delimiter">&quot;</span></span>)
+Settings.llm = Ollama(
+    model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3</span><span class="delimiter">&quot;</span></span>,
+    request_timeout=<span class="float">120.0</span>,  <span class="comment"># Aumenta el timeout si tu modelo es grande</span>
+    context_window=<span class="integer">8000</span>     <span class="comment"># Ajusta según la RAM disponible</span>
+)
+
+<span class="comment"># Carga documentos desde un directorio local (por ejemplo, ./data)</span>
+documents = SimpleDirectoryReader(<span class="string"><span class="delimiter">&quot;</span><span class="content">data</span><span class="delimiter">&quot;</span></span>).load_data()
+
+<span class="comment"># Crea el índice vectorial</span>
+index = VectorStoreIndex.from_documents(documents)
+
+<span class="comment"># Crea el query engine</span>
+query_engine = index.as_query_engine()
+
+<span class="comment"># Realiza una consulta</span>
+response = query_engine.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">¿De qué trata el documento principal?</span><span class="delimiter">&quot;</span></span>)
+print(response)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_chatengines">1.2.5. ChatEngines</h4>
+<div class="paragraph">
+<p>Un <strong>ChatEngine</strong> es un flujo completo para mantener un diálogo con tus datos (interacciones múltiples en lugar de una sola pregunta y respuesta).</p>
+</div>
+<div class="listingblock">
+<div class="title">Ejemplo de ChatEngine con Ollama:</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.llms.ollama</span> <span class="keyword">import</span> <span class="include">Ollama</span>
 <span class="keyword">from</span> <span class="include">llama_index.embeddings.ollama</span> <span class="keyword">import</span> <span class="include">OllamaEmbedding</span>
@@ -787,14 +822,64 @@ respuesta = chat_engine.chat(<span class="string"><span class="delimiter">&quot;
 print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Respuesta del asistente:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>, respuesta)</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>LlamaIndex ha sido adoptado por empresas de sectores como finanzas, manufactura, tecnología y consultoría para acelerar la creación de asistentes de conocimiento, automatizar la extracción de datos y potenciar la adopción de IA generativa de forma segura y escalable.</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. ChatEngine vs QueryEngine:</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Característica</th>
+<th class="tableblock halign-left valign-top">QueryEngine</th>
+<th class="tableblock halign-left valign-top">ChatEngine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Propósito principal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Responder a consultas individuales sobre tus datos.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mantener una conversación (varias preguntas y respuestas) con memoria de contexto.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Memoria de conversación</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No guarda historial de preguntas y respuestas previas. Cada consulta es independiente.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Guarda y utiliza el historial de la conversación para dar respuestas más contextuales.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interfaz de uso</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.query("Pregunta")</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">.chat("Mensaje")</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Casos de uso</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Búsquedas puntuales, preguntas únicas, extracción de información específica.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Chatbots, asistentes conversacionales, flujos de diálogo continuos sobre los datos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Soporte de contexto</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Solo usa el contexto de la pregunta actual y los datos indexados.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usa el contexto de la conversación previa y los datos indexados.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ejemplo de uso</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response = query_engine.query("¿Quién es Paul Graham?")</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response = chat_engine.chat("Hola, ¿quién es Paul Graham?")</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Composición avanzada</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Puede combinar varios índices o motores para consultas complejas.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Puede combinar memoria, herramientas y lógica de flujo conversacional.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_2_instalación_y_configuración">2. 2. Instalación y Configuración</h2>
+<h2 id="_instalación_y_configuración">2. Instalación y Configuración</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_requisitos_previos_python_apis_conocimientos_básicos_de_ia">2.1. Requisitos previos (Python, APIs, conocimientos básicos de IA)</h3>
@@ -891,7 +976,7 @@ print(respuesta.response)</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_3_fundamentos_de_indexación_de_datos">3. 3. Fundamentos de Indexación de Datos</h2>
+<h2 id="_fundamentos_de_indexación_de_datos">3. Fundamentos de Indexación de Datos</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_conceptos_básicos_de_indexación_y_recuperación">3.1. Conceptos básicos de indexación y recuperación</h3>
@@ -1053,14 +1138,22 @@ print(resumen)</code></pre>
 <div class="paragraph">
 <p>LlamaHub ofrece 160+ conectores para:</p>
 </div>
-<div class="paragraph">
-<p><strong>Flujo de trabajo típico:</strong>
-1. Instalar conector específico
-2. Configurar parámetros de conexión
-3. Cargar datos como documentos</p>
+<div class="olist arabic">
+<div class="title"><strong>workflow típico:</strong></div>
+<ol class="arabic">
+<li>
+<p>Instalar conector específico</p>
+</li>
+<li>
+<p>Configurar parámetros de conexión</p>
+</li>
+<li>
+<p>Cargar datos como documentos</p>
+</li>
+</ol>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Los principales conectores incluyen:</caption>
+<caption class="title">Table 2. Los principales conectores incluyen:</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 75%;">
@@ -1259,7 +1352,7 @@ documents = reader.load_data(query=query)  <span class="comment">#</span></code>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_4_fases_principales_del_flujo_de_trabajo">4. 4. Fases Principales del Flujo de Trabajo</h2>
+<h2 id="_fases_de_indexación_y_carga_de_datos">4. Fases de Indexación y Carga de Datos</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_fase_de_ingesta_y_carga_de_datos">4.1. Fase de ingesta y carga de datos</h3>
@@ -1403,7 +1496,7 @@ asyncio.run(load_and_process_data())</code></pre>
 <p>La fase de indexación en LlamaIndex transforma los datos brutos en estructuras consultables, optimizando la recuperación de información en aplicaciones RAG. A continuación se describen los principales tipos de índices y su proceso de creación.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Tabla comparativa de índices</caption>
+<caption class="title">Table 3. Tabla comparativa de índices</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1440,7 +1533,7 @@ asyncio.run(load_and_process_data())</code></pre>
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_índices_vectoriales">4.2.1. Índices vectoriales</h4>
+<h4 id="_vectorstoreindex">4.2.1. VectorStoreIndex</h4>
 <div class="ulist">
 <div class="title">Proceso básico:</div>
 <ul>
@@ -1503,12 +1596,28 @@ print(response)</code></pre>
 <pre>Inclusión de metadatos (etiquetas, fechas, categorías) para filtrado híbrido.</pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="_índice_de_resumen_summaryindex">Índice de resumen (SummaryIndex)</h5>
+</div>
+<div class="sect3">
+<h4 id="_summaryindex">4.2.2. SummaryIndex</h4>
 <div class="paragraph">
-<p>Organiza los nodos en secuencia lineal para síntesis global.</p>
+<p>Es una estructura de datos diseñada para almacenar y consultar información de manera eficiente, centrándose en la síntesis de resúmenes de documentos.</p>
+</div>
+<div class="ulist">
+<div class="title">Funcionamiento del summary index:</div>
+<ul>
+<li>
+<p><strong>Construcción del índice:</strong> Durante la creación del summary index, los textos de los documentos se fragmentan ("chunked"), se convierten en nodos y se almacenan en una secuencia (lista). Cada nodo representa una parte del texto original</p>
+</li>
+<li>
+<p><strong>Consulta:</strong> Cuando se realiza una consulta, el summary index itera sobre los nodos (fragmentos) y sintetiza una respuesta utilizando todos ellos, aplicando filtros opcionales si es necesario</p>
+</li>
+<li>
+<p><strong>Resumen por documento:</strong> En el caso del "document summary index", se extrae un resumen de cada documento y se almacena junto con los nodos correspondientes a ese documento. Al consultar, primero se seleccionan los documentos relevantes basándose en sus resúmenes, y luego se recuperan los fragmentos asociados a esos documentos para generar la respuesta final</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
+<div class="title">Organiza los nodos en secuencia lineal para síntesis global.</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">SimpleDirectoryReader</span>, <span class="include">SummaryIndex</span>
 <span class="keyword">from</span> <span class="include">llama_index.core.node_parser</span> <span class="keyword">import</span> <span class="include">SentenceSplitter</span>
@@ -1541,9 +1650,8 @@ print(response)</code></pre>
 <div class="paragraph">
 <p>Ideal para generar resúmenes ejecutivos o respuestas panorámicas.</p>
 </div>
-</div>
 <div class="sect4">
-<h5 id="_índice_de_palabras_clave_keywordtableindex">Índice de palabras clave (KeywordTableIndex)</h5>
+<h5 id="_keywordtableindex">KeywordTableIndex</h5>
 <div class="paragraph">
 <p>KeywordTableIndex es un mecanismo de Indexación por Palabras Clave que permite búsquedas rápidas y precisas basadas en términos clave. Utiliza una tabla hash para almacenar pares de palabras clave y nodos documentales, facilitando la recuperación de información relevante.</p>
 </div>
@@ -1599,7 +1707,7 @@ print(response)</code></pre>
 - <code>retriever_mode</code>: Tipo de búsqueda (<code>simple</code>/<code>rake</code>/<code>default</code>)</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Ventajas Comparativas</caption>
+<caption class="title">Table 4. Ventajas Comparativas</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1675,7 +1783,7 @@ print(response)</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_índice_de_árbol_treeindex">Índice de árbol (TreeIndex)</h5>
+<h5 id="_treeindex">TreeIndex</h5>
 <div class="paragraph">
 <p>El <code>TreeIndex</code> es una estructura de índice jerárquica en la que cada nodo representa un resumen de sus nodos hijos. Se construye siguiendo un enfoque de abajo hacia arriba: los fragmentos de texto (nodos hoja) se agrupan y se sintetizan resúmenes en niveles superiores, formando así un árbol de resúmenes hasta llegar a uno o varios nodos raíz.</p>
 </div>
@@ -1717,13 +1825,12 @@ print(response)</code></pre>
 * <strong>Síntesis directa</strong>: Se genera una respuesta directamente a partir de los nodos raíz.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Tabla de Parámetros Clave</caption>
+<caption class="title">Table 5. Tabla de Parámetros Clave</caption>
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
 </colgroup>
 <tbody>
 <tr>
@@ -1731,42 +1838,36 @@ print(response)</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Tipo</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Descripción</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Valor por defecto</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">summary_template</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Template</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Prompt para resumir nodos hijos</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">insert_prompt</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Template</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Prompt para inserción de nodos</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">num_children</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Hijos por nodo padre</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">build_tree</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Construir árbol al crear el índice</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">True</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">show_progress</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">bool</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Mostrar barra de progreso</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">False</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -1819,7 +1920,7 @@ print(response)</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_indexnode">4.2.2. IndexNode</h4>
+<h4 id="_indexnode">4.2.3. IndexNode</h4>
 <div class="paragraph">
 <p>Un <code>IndexNode</code> en LlamaIndex es una estructura que representa un fragmento ("chunk") de un documento fuente, típicamente texto, aunque puede ser también una imagen u otro tipo de dato. Es una especialización de <code>TextNode</code>, por lo que hereda sus propiedades y funcionalidades, y está diseñado para ser utilizado dentro de los distintos índices de LlamaIndex, como VectorStoreIndex, TreeIndex, SummaryIndex, entre otros.</p>
 </div>
@@ -1895,7 +1996,7 @@ print(response)</code></pre>
 </ul>
 </div>
 <div class="olist arabic">
-<div class="title">Ejemplo de flujo de trabajo</div>
+<div class="title">Ejemplo de workflow</div>
 <ol class="arabic">
 <li>
 <p>Cargar documentos y dividirlos en nodos.</p>
@@ -1913,7 +2014,7 @@ print(response)</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_almacenamiento_y_reutilización_storagecontext_y_persistencia">4.2.3. Almacenamiento y reutilización: StorageContext y persistencia</h4>
+<h4 id="_almacenamiento_y_reutilización_storagecontext_y_persistencia">4.2.4. Almacenamiento y reutilización: StorageContext y persistencia</h4>
 <div class="ulist">
 <div class="title">El <code>StorageContext</code> es un contenedor utilitario que centraliza el almacenamiento de:</div>
 <ul>
@@ -1932,7 +2033,7 @@ print(response)</code></pre>
 </ul>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Componentes Principales</caption>
+<caption class="title">Table 6. Componentes Principales</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2105,10 +2206,16 @@ nodes_reranked = reranker.postprocess_nodes(nodes, query_str=query)</code></pre>
 </div>
 <div class="sect3">
 <h4 id="_síntesis_de_respuesta_rag">4.3.3. Síntesis de Respuesta (RAG)</h4>
-<div class="paragraph">
-<p><strong>Proceso:</strong>
-1. Los nodos relevantes se inyectan como contexto en el prompt.
-2. El LLM genera una respuesta natural basada en el contexto y la pregunta.</p>
+<div class="olist arabic">
+<div class="title"><strong>Proceso:</strong></div>
+<ol class="arabic">
+<li>
+<p>Los nodos relevantes se inyectan como contexto en el prompt.</p>
+</li>
+<li>
+<p>El LLM genera una respuesta natural basada en el contexto y la pregunta.</p>
+</li>
+</ol>
 </div>
 <div class="listingblock">
 <div class="title">El <code>QueryEngine</code> es el componente que integra todo el proceso, permitiendo consultas sobre el índice y generando respuestas contextuales.</div>
@@ -2198,7 +2305,7 @@ print(<span class="string"><span class="delimiter">&quot;</span><span class="cha
 </div>
 </div>
 <div class="sect1">
-<h2 id="_5_componentes_clave_de_llamaindex">5. 5. Componentes Clave de LlamaIndex</h2>
+<h2 id="_componentes_clave_de_llamaindex">5. Componentes Clave de LlamaIndex</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_componentes_prompts_modelos_bases_de_datos_motores_de_consulta_queryengine">5.1. Componentes: prompts, modelos, bases de datos, motores de consulta (QueryEngine)</h3>
@@ -2268,322 +2375,596 @@ query_engine = index.as_query_engine(
 <div class="sect2">
 <h3 id="_herramientas_y_agentes_definición_usos_y_ejemplos">5.2. Herramientas y agentes: definición, usos y ejemplos</h3>
 <div class="paragraph">
-<p>Principales tipos de herramientas y su implementación:</p>
-</div>
-<div class="paragraph">
 <p><strong>1. FunctionTool (Herramientas básicas):</strong></p>
 </div>
+<div class="paragraph">
+<p>FunctionTool encapsula una función Python, permitiendo que agentes como ReActAgent la invoquen durante el procesamiento de consultas. Esto es útil para tareas específicas que requieren lógica personalizada, como cálculos matemáticos, acceso a APIs externas o manipulación de datos.</p>
+</div>
 <div class="listingblock">
+<div class="title">Ejemplo de uso de FunctionTool para una calculadora simple:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.tools</span> <span class="keyword">import</span> <span class="include">FunctionTool</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Instala primero las dependencias (ejecutar en terminal):</span>
+<span class="comment"># pip install llama-index-llms-ollama llama-index-core</span>
 
-<span class="keyword">def</span> <span class="function">calcular_iva</span>(monto: <span class="predefined">float</span>) -&gt; <span class="predefined">float</span>:
-    <span class="docstring"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">Calcula el IVA del 21% para un monto dado</span><span class="delimiter">&quot;&quot;&quot;</span></span>
-    <span class="keyword">return</span> monto * <span class="float">0.21</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.tools</span> <span class="keyword">import</span> <span class="include">FunctionTool</span>
+<span class="keyword">from</span> <span class="include">llama_index.llms.ollama</span> <span class="keyword">import</span> <span class="include">Ollama</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.agent</span> <span class="keyword">import</span> <span class="include">ReActAgent</span>
 
-tool = FunctionTool.from_defaults(
-    calcular_iva,
-    name=<span class="string"><span class="delimiter">&quot;</span><span class="content">calculadora_iva</span><span class="delimiter">&quot;</span></span>,
-    description=<span class="string"><span class="delimiter">&quot;</span><span class="content">Calcula impuestos IVA para facturas</span><span class="delimiter">&quot;</span></span>
-)</code></pre>
+<span class="comment"># 1. Definir función matemática</span>
+<span class="keyword">def</span> <span class="function">multiplicar</span>(a: <span class="predefined">float</span>, b: <span class="predefined">float</span>) -&gt; <span class="predefined">float</span>:
+    <span class="docstring"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">Multiplica dos números y devuelve el resultado.</span><span class="delimiter">&quot;&quot;&quot;</span></span>
+    <span class="keyword">return</span> a * b
+
+<span class="comment"># 2. Crear herramienta funcional</span>
+herramienta_multiplicar = FunctionTool.from_defaults(
+    fn=multiplicar,
+    name=<span class="string"><span class="delimiter">&quot;</span><span class="content">calculadora_multiplicacion</span><span class="delimiter">&quot;</span></span>,
+    description=<span class="string"><span class="delimiter">&quot;</span><span class="content">Útil para realizar multiplicaciones matemáticas</span><span class="delimiter">&quot;</span></span>
+)
+
+<span class="comment"># 3. Configurar modelo local con Ollama</span>
+llm = Ollama(
+    model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.2</span><span class="delimiter">&quot;</span></span>,  <span class="comment"># Modelo instalado previamente: ollama pull llama3.1</span>
+    temperature=<span class="float">0.3</span>,
+    context_window=<span class="integer">4096</span>,
+    request_timeout=<span class="integer">120</span>
+)
+
+<span class="comment"># 4. Crear y ejecutar agente</span>
+agente = ReActAgent.from_tools(
+    tools=[herramienta_multiplicar],
+    llm=llm,
+    verbose=<span class="predefined-constant">True</span>
+)
+
+<span class="comment"># Prueba de funcionamiento</span>
+<span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
+    respuesta = agente.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">¿Cuánto es 8 multiplicado por 7.5?</span><span class="delimiter">&quot;</span></span>)
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Respuesta final:</span><span class="delimiter">&quot;</span></span>, respuesta)  <span class="comment"># Debería mostrar: 60.0</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><strong>2. QueryEngineTool (Integración RAG):</strong></p>
 </div>
+<div class="paragraph">
+<p>Un QueryEngineTool es una herramienta que envuelve un motor de consulta (query engine) y lo expone como un "tool" reutilizable dentro de flujos de trabajo de agentes o sistemas multiagente.</p>
+</div>
 <div class="listingblock">
+<div class="title">Ejemplo de uso de QueryEngineTool para consultar documentos locales:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.tools</span> <span class="keyword">import</span> <span class="include">QueryEngineTool</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Instalar dependencias:</span>
+<span class="comment"># pip install llama-index-core llama-index-llms-ollama llama-index-embeddings-huggingface</span>
 
-rag_tool = QueryEngineTool(
+<span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">SimpleDirectoryReader</span>, <span class="include">VectorStoreIndex</span>, <span class="include">Settings</span>
+<span class="keyword">from</span> <span class="include">llama_index.embeddings.huggingface</span> <span class="keyword">import</span> <span class="include">HuggingFaceEmbedding</span>
+<span class="keyword">from</span> <span class="include">llama_index.llms.ollama</span> <span class="keyword">import</span> <span class="include">Ollama</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.tools</span> <span class="keyword">import</span> <span class="include">QueryEngineTool</span>, <span class="include">ToolMetadata</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.agent</span> <span class="keyword">import</span> <span class="include">ReActAgent</span>
+
+<span class="comment"># 1. Configuración de modelos locales</span>
+Settings.llm = Ollama(
+    model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.2</span><span class="delimiter">&quot;</span></span>,  <span class="comment"># Descargar previamente: ollama pull llama3.2</span>
+    temperature=<span class="float">0.3</span>,
+    context_window=<span class="integer">4096</span>,
+    request_timeout=<span class="integer">120</span>
+)
+
+Settings.embed_model = HuggingFaceEmbedding(
+    model_name=<span class="string"><span class="delimiter">&quot;</span><span class="content">BAAI/bge-small-en-v1.5</span><span class="delimiter">&quot;</span></span>,
+    device=<span class="string"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>
+)
+
+<span class="comment"># 2. Cargar e indexar documentos</span>
+documentos = SimpleDirectoryReader(
+    input_dir=<span class="string"><span class="delimiter">&quot;</span><span class="content">data</span><span class="delimiter">&quot;</span></span>,  <span class="comment"># Carpeta con archivos .txt, .pdf, etc.</span>
+    required_exts=[<span class="string"><span class="delimiter">&quot;</span><span class="content">.pdf</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">.txt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">.md</span><span class="delimiter">&quot;</span></span>]
+).load_data()
+
+indice = VectorStoreIndex.from_documents(
+    documentos,
+    show_progress=<span class="predefined-constant">True</span>
+)
+
+<span class="comment"># 3. Crear QueryEngine y QueryEngineTool</span>
+query_engine = indice.as_query_engine(llm=Settings.llm)
+herramienta_query_engine = QueryEngineTool(
     query_engine=query_engine,
     metadata=ToolMetadata(
-        name=<span class="string"><span class="delimiter">&quot;</span><span class="content">manual_tecnico</span><span class="delimiter">&quot;</span></span>,
-        description=<span class="string"><span class="delimiter">&quot;</span><span class="content">Contiene documentación de sistemas internos</span><span class="delimiter">&quot;</span></span>
+        name=<span class="string"><span class="delimiter">&quot;</span><span class="content">consulta_documentos</span><span class="delimiter">&quot;</span></span>,
+        description=<span class="string"><span class="delimiter">&quot;</span><span class="content">Herramienta para consultar información en documentos locales</span><span class="delimiter">&quot;</span></span>
     )
-)</code></pre>
+)
+
+<span class="comment"># 4. Crear agente y consultar</span>
+agente = ReActAgent.from_tools(
+    tools=[herramienta_query_engine],
+    llm=Settings.llm,
+    verbose=<span class="predefined-constant">True</span>
+)
+
+<span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
+    pregunta = <span class="string"><span class="delimiter">&quot;</span><span class="content">Resume los puntos clave del documento sobre IA</span><span class="delimiter">&quot;</span></span>
+    respuesta = agente.query(pregunta)
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Respuesta:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>, respuesta)</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p><strong>3. AgentWorkflow (Sistemas multiagente):</strong></p>
 </div>
+<div class="paragraph">
+<p>Un AgentWorkflow es un sistema de orquestación que permite crear flujos de trabajo con múltiples agentes de IA que colaboran entre sí, mantienen estado compartido y transfieren tareas según su especialización. Facilita la construcción de aplicaciones complejas donde diferentes agentes interactúan secuencial o paralelamente para resolver problemas.</p>
+</div>
+<div class="ulist">
+<div class="title">Características clave</div>
+<ul>
+<li>
+<p>Estado compartido: Mantiene contexto entre agentes</p>
+</li>
+<li>
+<p>Transferencia dinámica: Los agentes pueden pasar tareas entre sí</p>
+</li>
+<li>
+<p>Ejecución asíncrona: Soporte nativo para operaciones concurrentes</p>
+</li>
+<li>
+<p>Observabilidad: Registro detallado de cada paso del flujo</p>
+</li>
+</ul>
+</div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.agent.workflow</span> <span class="keyword">import</span> <span class="include">AgentWorkflow</span>, <span class="include">ReActAgent</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Instalar dependencias primero:</span>
+<span class="comment"># pip install llama-index-core llama-index-llms-ollama</span>
 
-agente_finanzas = ReActAgent(
-    tools=[tool, rag_tool],
-    llm=Ollama(model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.1</span><span class="delimiter">&quot;</span></span>),
-    system_prompt=<span class="string"><span class="delimiter">&quot;</span><span class="content">Eres un asistente financiero especializado</span><span class="delimiter">&quot;</span></span>
+<span class="keyword">import</span> <span class="include">asyncio</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.agent.workflow</span> <span class="keyword">import</span> <span class="include">AgentWorkflow</span>, <span class="include">ReActAgent</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.workflow</span> <span class="keyword">import</span> <span class="include">Context</span>
+<span class="keyword">from</span> <span class="include">llama_index.llms.ollama</span> <span class="keyword">import</span> <span class="include">Ollama</span>
+
+<span class="comment"># 1. Configurar modelo local</span>
+llm = Ollama(model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.2</span><span class="delimiter">&quot;</span></span>, temperature=<span class="float">0.3</span>)
+
+<span class="comment"># 2. Definir herramientas y agentes</span>
+async <span class="keyword">def</span> <span class="function">buscar_informacion</span>(ctx: Context, tema: <span class="predefined">str</span>) -&gt; <span class="predefined">str</span>:
+    <span class="docstring"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">Busca datos sobre un tema en fuentes externas (simulado)</span><span class="delimiter">&quot;&quot;&quot;</span></span>
+    estado = await ctx.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>)
+    estado[<span class="string"><span class="delimiter">&quot;</span><span class="content">busquedas</span><span class="delimiter">&quot;</span></span>] += <span class="integer">1</span>
+    await ctx.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>, estado)
+
+    <span class="comment"># Simulación de búsqueda</span>
+    <span class="keyword">return</span> f<span class="string"><span class="delimiter">&quot;</span><span class="content">Datos sobre {tema}: ...</span><span class="delimiter">&quot;</span></span>
+
+async <span class="keyword">def</span> <span class="function">analizar_datos</span>(ctx: Context, datos: <span class="predefined">str</span>) -&gt; <span class="predefined">str</span>:
+    <span class="docstring"><span class="delimiter">&quot;&quot;&quot;</span><span class="content">Analiza información y genera conclusiones</span><span class="delimiter">&quot;&quot;&quot;</span></span>
+    estado = await ctx.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>)
+    estado[<span class="string"><span class="delimiter">&quot;</span><span class="content">analisis</span><span class="delimiter">&quot;</span></span>] += <span class="integer">1</span>
+    await ctx.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>, estado)
+
+    <span class="keyword">return</span> f<span class="string"><span class="delimiter">&quot;</span><span class="content">Análisis de '{datos[:20]}...': Conclusiones clave...</span><span class="delimiter">&quot;</span></span>
+
+<span class="comment"># 3. Crear agentes especializados</span>
+agente_buscador = ReActAgent(
+    name=<span class="string"><span class="delimiter">&quot;</span><span class="content">buscador</span><span class="delimiter">&quot;</span></span>,
+    description=<span class="string"><span class="delimiter">&quot;</span><span class="content">Especialista en recopilar información</span><span class="delimiter">&quot;</span></span>,
+    tools=[buscar_informacion],
+    llm=llm
 )
 
+agente_analista = ReActAgent(
+    name=<span class="string"><span class="delimiter">&quot;</span><span class="content">analista</span><span class="delimiter">&quot;</span></span>,
+    description=<span class="string"><span class="delimiter">&quot;</span><span class="content">Especialista en análisis de datos</span><span class="delimiter">&quot;</span></span>,
+    tools=[analizar_datos],
+    llm=llm
+)
+
+<span class="comment"># 4. Configurar workflow</span>
 workflow = AgentWorkflow(
-    agents=[agente_finanzas],
-    root_agent=<span class="string"><span class="delimiter">&quot;</span><span class="content">agente_finanzas</span><span class="delimiter">&quot;</span></span>
-)</code></pre>
+    agents=[agente_buscador, agente_analista],
+    root_agent=<span class="string"><span class="delimiter">&quot;</span><span class="content">buscador</span><span class="delimiter">&quot;</span></span>,
+    initial_state={<span class="string"><span class="delimiter">&quot;</span><span class="content">busquedas</span><span class="delimiter">&quot;</span></span>: <span class="integer">0</span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">analisis</span><span class="delimiter">&quot;</span></span>: <span class="integer">0</span>},
+    state_prompt=<span class="string"><span class="delimiter">&quot;</span><span class="content">Estado actual: {state}</span><span class="char">\n</span><span class="content">Consulta: {msg}</span><span class="delimiter">&quot;</span></span>
+)
+
+<span class="comment"># 5. Función de ejecución</span>
+async <span class="keyword">def</span> <span class="function">main</span>():
+    contexto = Context(workflow)
+    respuesta = await workflow.run(
+        user_msg=<span class="string"><span class="delimiter">&quot;</span><span class="content">Investigar el impacto de la IA en la medicina</span><span class="delimiter">&quot;</span></span>,
+        ctx=contexto
+    )
+
+    estado_final = await contexto.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">state</span><span class="delimiter">&quot;</span></span>)
+    print(f<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">Respuesta final:</span><span class="char">\n</span><span class="content">{respuesta}</span><span class="delimiter">&quot;</span></span>)
+    print(f<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">Estadísticas:</span><span class="char">\n</span><span class="content">- Búsquedas: {estado_final['busquedas']}</span><span class="char">\n</span><span class="content">- Análisis: {estado_final['analisis']}</span><span class="delimiter">&quot;</span></span>)
+
+<span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
+    asyncio.run(main())</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_flujos_de_trabajo_y_pipelines_con_agentes">5.3. Flujos de trabajo y pipelines con agentes</h3>
+<h3 id="_workflows_en_llamaindex">5.3. Workflows en LlamaIndex</h3>
 <div class="paragraph">
-<p>Implementación de pipelines complejos con gestión de estado:</p>
+<p>Los <strong>Workflows</strong> en LlamaIndex son una abstracción dirigida por eventos para encadenar varios pasos y eventos en aplicaciones de IA. Permiten construir flujos de trabajo complejos, coordinando agentes, herramientas y pasos de procesamiento de manera estructurada y observable</p>
 </div>
-<div class="paragraph">
-<p><strong>Pipeline de procesamiento documental:</strong></p>
+<div class="ulist">
+<div class="title">Características clave</div>
+<ul>
+<li>
+<p>Arquitectura basada en eventos: cada paso maneja ciertos tipos de eventos y puede emitir nuevos eventos.</p>
+</li>
+<li>
+<p>Decoradores tipados: los pasos se definen con <code>@step</code>, lo que permite la validación automática de entradas y salidas.</p>
+</li>
+<li>
+<p>Estado global compartido: mediante el objeto <code>Context</code>, los pasos pueden compartir y modificar variables globales.</p>
+</li>
+<li>
+<p>Ejecución asíncrona: soporte nativo para operaciones concurrentes.</p>
+</li>
+<li>
+<p>Observabilidad y visualización: generación de diagramas de flujo y registro detallado de la ejecución.</p>
+</li>
+<li>
+<p>Flexibilidad: pueden usarse para agentes, RAG, extracción de datos, flujos interactivos, etc.</p>
+</li>
+</ul>
+</div>
+<div class="ulist">
+<div class="title">Elementos principales de un Workflow</div>
+<ul>
+<li>
+<p><strong>Events</strong>: Clases que representan mensajes o datos que fluyen entre pasos. Ejemplos incluyen <code>StartEvent</code>, <code>StopEvent</code>, y eventos personalizados.</p>
+</li>
+<li>
+<p><strong>Steps</strong>: Funciones decoradas con <code>@step</code> que definen la lógica de cada etapa del workflow. Pueden recibir eventos y devolver nuevos eventos.</p>
+</li>
+<li>
+<p><strong>Workflow</strong>: Clase base que define el flujo general, maneja la ejecución y la orquestación de los pasos.</p>
+</li>
+<li>
+<p><strong>Context</strong>: Objeto global que permite compartir estado y datos entre pasos sin necesidad de pasarlos explícitamente.</p>
+</li>
+<li>
+<p><strong>Event Handlers</strong>: Métodos que responden a eventos específicos, permitiendo la personalización del comportamiento del workflow.</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
+<div class="title">Ejemplo básico: transformación de datos</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.workflow</span> <span class="keyword">import</span> <span class="include">Workflow</span>, <span class="include">step</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.workflow</span> <span class="keyword">import</span> (
+    Event,
+    StartEvent,
+    StopEvent,
+    Workflow,
+    step,
+)
 
-<span class="keyword">class</span> <span class="class">ProcesadorDocs</span>(Workflow):
+<span class="comment"># Definimos eventos personalizados para pasar datos entre pasos</span>
+<span class="keyword">class</span> <span class="class">TransformEvent</span>(Event):
+    transformed_data: <span class="predefined">str</span>
+
+<span class="keyword">class</span> <span class="class">MyWorkflow</span>(Workflow):
     <span class="decorator">@step</span>
-    async <span class="keyword">def</span> <span class="function">carga</span>(<span class="predefined-constant">self</span>, ev: StartEvent) -&gt; ProcessingEvent:
-        docs = SimpleDirectoryReader(<span class="string"><span class="delimiter">&quot;</span><span class="content">docs</span><span class="delimiter">&quot;</span></span>).load_data()
-        <span class="keyword">return</span> ProcessingEvent(docs=docs)
+    async <span class="keyword">def</span> <span class="function">first_step</span>(<span class="predefined-constant">self</span>, ev: StartEvent) -&gt; TransformEvent:
+        <span class="comment"># Recibe el StartEvent, extrae el dato inicial (p.ej., &quot;input&quot;)</span>
+        data = ev.input
+        <span class="comment"># Transforma el dato</span>
+        transformed = f<span class="string"><span class="delimiter">&quot;</span><span class="content">Transformed: {data.upper()}</span><span class="delimiter">&quot;</span></span>
+        <span class="keyword">return</span> TransformEvent(transformed_data=transformed)
 
     <span class="decorator">@step</span>
-    async <span class="keyword">def</span> <span class="function">analisis</span>(<span class="predefined-constant">self</span>, ev: ProcessingEvent) -&gt; StopEvent:
-        resultados = await <span class="predefined-constant">self</span>.llm.complete(
-            f<span class="string"><span class="delimiter">&quot;</span><span class="content">Analiza: {ev.docs[0].text[:1000]}</span><span class="delimiter">&quot;</span></span>
-        )
-        <span class="keyword">return</span> StopEvent(result=resultados)
+    async <span class="keyword">def</span> <span class="function">second_step</span>(<span class="predefined-constant">self</span>, ev: TransformEvent) -&gt; StopEvent:
+        <span class="comment"># Recibe el evento intermedio y finaliza el workflow</span>
+        result = f<span class="string"><span class="delimiter">&quot;</span><span class="content">Final result: {ev.transformed_data}</span><span class="delimiter">&quot;</span></span>
+        <span class="keyword">return</span> StopEvent(result=result)
 
-<span class="comment"># Ejecución</span>
-pipeline = ProcesadorDocs(llm=Ollama(model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.1</span><span class="delimiter">&quot;</span></span>))
-resultado = await pipeline.run()</code></pre>
+<span class="comment"># Ejecutamos el workflow de forma asíncrona</span>
+async <span class="keyword">def</span> <span class="function">main</span>():
+    workflow = MyWorkflow(timeout=<span class="integer">60</span>, verbose=<span class="predefined-constant">False</span>)
+    result = await workflow.run(input=<span class="string"><span class="delimiter">&quot;</span><span class="content">hello world</span><span class="delimiter">&quot;</span></span>)
+    print(result)
+
+<span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
+    <span class="keyword">import</span> <span class="include">asyncio</span>
+    asyncio.run(main())</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_uso_de_context_para_compartir_datos_entre_steps">5.3.1. Uso de Context para compartir datos entre steps</h4>
 <div class="paragraph">
-<p><strong>Flujo multiagente con toma de decisiones:</strong></p>
+<p>LlamaIndex proporciona la clase Context como un objeto global para gestionar el estado y los datos compartidos durante la ejecución de un workflow. Permite almacenar, recuperar y sincronizar información entre los distintos pasos del workflow, facilitando la cooperación entre ellos y evitando la necesidad de pasar explícitamente datos entre funciones.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. Propiedades y Métodos Principales de Context</caption>
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 66.6667%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Etapa</th>
-<th class="tableblock halign-left valign-top">Componentes</th>
+<th class="tableblock halign-left valign-top">Propiedad/Método</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1. Clasificación</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">RouterQueryEngine</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set(key: str, value: Any, make_private: bool = False)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Guarda un valor bajo una clave única en el contexto. Si make_private es True y la clave ya existe, lanza un ValueError.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2. Recuperación</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">VectorIndexRetriever</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">get(key: str, default: Optional[Any] = Ellipsis)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recupera el valor asociado a una clave. Si no existe, devuelve el valor por defecto o lanza un ValueError si no hay valor accesible.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3. Síntesis</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">TreeSummarize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">collect_events(ev: Event, expected: List[Type[Event]], buffer_id: Optional[str] = None)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite recolectar y sincronizar eventos para flujos donde varios pasos deben esperar diferentes tipos de eventos.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4. Validación</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GuardrailsChecker</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mark_in_progress(name: str, ev: Event)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marca un paso como "en progreso" junto con el evento de entrada asociado.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">add_holding_event(event: Event)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Agrega un evento a la lista de eventos retenidos en la ejecución paso a paso.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">get_holding_events()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Devuelve una copia de la lista de eventos retenidos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">send_event(message: Event, step: Optional[str] = None)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Envía un evento a un paso específico del workflow o a todos los receptores si step es None.</p></td>
 </tr>
 </tbody>
 </table>
 <div class="listingblock">
+<div class="title">Ejemplo de uso de Context en un workflow simple</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">Pipeline</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.workflow</span> <span class="keyword">import</span> <span class="include">Workflow</span>, <span class="include">step</span>, <span class="include">Context</span>, <span class="include">Event</span>, <span class="include">StartEvent</span>, <span class="include">StopEvent</span>
 
-pipeline = Pipeline(
-    modules=[
-        SentenceSplitter(chunk_size=<span class="integer">512</span>),
-        OllamaEmbedding(model_name=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.1</span><span class="delimiter">&quot;</span></span>),
-        AutoMergingRetriever()
-    ]
-)
-nodes = pipeline.run(documents)</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_6_desarrollo_de_aplicaciones_con_llamaindex">6. 6. Desarrollo de Aplicaciones con LlamaIndex</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_creación_de_motores_de_consulta_y_chatbots">6.1. Creación de motores de consulta y chatbots</h3>
-<div class="paragraph">
-<p>Implementación de sistemas conversacionales y motores RAG personalizados:</p>
-</div>
-<div class="listingblock">
-<div class="title">Motor de consulta básico con Ollama:</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">VectorStoreIndex</span>
+<span class="comment"># Evento personalizado opcional, pero StartEvent siempre es necesario</span>
+<span class="keyword">class</span> <span class="class">MyStartEvent</span>(StartEvent):
+    user_input: <span class="predefined">str</span>
 
-index = VectorStoreIndex.load_from_disk(<span class="string"><span class="delimiter">&quot;</span><span class="content">indice/</span><span class="delimiter">&quot;</span></span>)
-query_engine = index.as_query_engine(
-    similarity_top_k=<span class="integer">3</span>,
-    llm=Ollama(model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.1</span><span class="delimiter">&quot;</span></span>),
-    response_mode=<span class="string"><span class="delimiter">&quot;</span><span class="content">compact</span><span class="delimiter">&quot;</span></span>
-)
+<span class="keyword">class</span> <span class="class">SaveToContextEvent</span>(Event):
+    <span class="keyword">pass</span>
 
-respuesta = query_engine.query(<span class="string"><span class="delimiter">&quot;</span><span class="content">¿Cómo configurar el firewall?</span><span class="delimiter">&quot;</span></span>)</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Chatbot conversacional con historial:</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.core.chat_engine</span> <span class="keyword">import</span> <span class="include">CondenseQuestionChatEngine</span>
+<span class="keyword">class</span> <span class="class">MyWorkflow</span>(Workflow):
+    <span class="decorator">@step</span>
+    async <span class="keyword">def</span> <span class="function">start</span>(<span class="predefined-constant">self</span>, ctx: Context, ev: MyStartEvent) -&gt; SaveToContextEvent:
+        <span class="comment"># Guarda el input en el contexto</span>
+        await ctx.set(<span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>, ev.user_input)
+        <span class="keyword">return</span> SaveToContextEvent()
 
-chat_engine = CondenseQuestionChatEngine.from_defaults(
-    query_engine=query_engine,
-    chat_history=[],
-    llm=Ollama(model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.1</span><span class="delimiter">&quot;</span></span>)
-)
+    <span class="decorator">@step</span>
+    async <span class="keyword">def</span> <span class="function">show</span>(<span class="predefined-constant">self</span>, ctx: Context, ev: SaveToContextEvent) -&gt; StopEvent:
+        <span class="comment"># Recupera el input del contexto</span>
+        value = await ctx.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>)
+        print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Valor recuperado del contexto:</span><span class="delimiter">&quot;</span></span>, value)
+        <span class="keyword">return</span> StopEvent(result=value)
 
-<span class="comment"># Interacción multi-turno</span>
-respuesta = chat_engine.chat(<span class="string"><span class="delimiter">&quot;</span><span class="content">Requisitos del sistema</span><span class="delimiter">&quot;</span></span>)
-respuesta = chat_engine.chat(<span class="string"><span class="delimiter">&quot;</span><span class="content">¿Y para la versión Enterprise?</span><span class="delimiter">&quot;</span></span>)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_integración_con_interfaces_streamlit_gradio">6.2. Integración con interfaces (Streamlit, Gradio)</h3>
-<div class="paragraph">
-<p>Implementación de interfaces web interactivas:</p>
-</div>
-<div class="listingblock">
-<div class="title">Interfaz Streamlit básica:</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">streamlit</span> <span class="keyword">as</span> st
-<span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">VectorStoreIndex</span>
+<span class="comment"># Ejecución del workflow</span>
+async <span class="keyword">def</span> <span class="function">main</span>():
+    w = MyWorkflow()
+    result = await w.run(user_input=<span class="string"><span class="delimiter">&quot;</span><span class="content">Hola LlamaIndex</span><span class="delimiter">&quot;</span></span>)  <span class="comment"># Esto crea un MyStartEvent</span>
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Resultado final:</span><span class="delimiter">&quot;</span></span>, result)
 
-<span class="keyword">def</span> <span class="function">main</span>():
-    st.title(<span class="string"><span class="delimiter">&quot;</span><span class="content">Asistente Técnico</span><span class="delimiter">&quot;</span></span>)
-    index = VectorStoreIndex.load_from_disk(<span class="string"><span class="delimiter">&quot;</span><span class="content">indice/</span><span class="delimiter">&quot;</span></span>)
-
-    query = st.text_input(<span class="string"><span class="delimiter">&quot;</span><span class="content">Haz tu pregunta:</span><span class="delimiter">&quot;</span></span>)
-    <span class="keyword">if</span> query:
-        response = index.as_query_engine().query(query)
-        st.markdown(f<span class="string"><span class="delimiter">&quot;</span><span class="content">**Respuesta:** {response.response}</span><span class="delimiter">&quot;</span></span>)
+<span class="comment"># Para ejecutarlo:</span>
+<span class="comment"># import asyncio</span>
+<span class="comment"># asyncio.run(main())</span>
 
 <span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
-    main()</code></pre>
+    <span class="keyword">import</span> <span class="include">asyncio</span>
+    asyncio.run(main())</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_visualización_del_flujo">5.3.2. Visualización del flujo</h4>
 <div class="listingblock">
-<div class="title">Interfaz Gradio avanzada:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">gradio</span> <span class="keyword">as</span> gr
-<span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">VectorStoreIndex</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Asegúrate de tener instalados los paquetes necesarios:</span>
+<span class="comment"># pip install llama-index-core llama-index-utils-workflow</span>
 
-index = VectorStoreIndex.load_from_disk(<span class="string"><span class="delimiter">&quot;</span><span class="content">indice/</span><span class="delimiter">&quot;</span></span>)
+<span class="keyword">import</span> <span class="include">asyncio</span>
+<span class="keyword">from</span> <span class="include">llama_index.core.workflow</span> <span class="keyword">import</span> <span class="include">Event</span>, <span class="include">StartEvent</span>, <span class="include">StopEvent</span>, <span class="include">Workflow</span>, <span class="include">step</span>
+<span class="keyword">from</span> <span class="include">llama_index.utils.workflow</span> <span class="keyword">import</span> <span class="include">draw_all_possible_flows</span>, <span class="include">draw_most_recent_execution</span>
 
-<span class="keyword">def</span> <span class="function">responder</span>(pregunta, historia):
-    response = index.as_chat_engine().chat(pregunta)
-    <span class="keyword">return</span> f<span class="string"><span class="delimiter">&quot;</span><span class="content">{historia}</span><span class="char">\n</span><span class="content">Usuario: {pregunta}</span><span class="char">\n</span><span class="content">Asistente: {response.response}</span><span class="delimiter">&quot;</span></span>
+<span class="comment"># Definición de un evento personalizado para el paso intermedio</span>
+<span class="keyword">class</span> <span class="class">ProcessingEvent</span>(Event):
+    intermediate_result: <span class="predefined">str</span>
 
-gr.ChatInterface(
-    responder,
-    title=<span class="string"><span class="delimiter">&quot;</span><span class="content">Asistente Virtual</span><span class="delimiter">&quot;</span></span>,
-    examples=[<span class="string"><span class="delimiter">&quot;</span><span class="content">¿Cómo reiniciar el servicio?</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Errores comunes de instalación</span><span class="delimiter">&quot;</span></span>]
-).launch()</code></pre>
+<span class="comment"># Definición del workflow con dos pasos</span>
+<span class="keyword">class</span> <span class="class">MultiStepWorkflow</span>(Workflow):
+    <span class="decorator">@step</span>
+    async <span class="keyword">def</span> <span class="function">step_one</span>(<span class="predefined-constant">self</span>, ev: StartEvent) -&gt; ProcessingEvent:
+        print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Ejecutando el primer paso...</span><span class="delimiter">&quot;</span></span>)
+        <span class="keyword">return</span> ProcessingEvent(intermediate_result=<span class="string"><span class="delimiter">&quot;</span><span class="content">Primer paso completado</span><span class="delimiter">&quot;</span></span>)
+
+    <span class="decorator">@step</span>
+    async <span class="keyword">def</span> <span class="function">step_two</span>(<span class="predefined-constant">self</span>, ev: ProcessingEvent) -&gt; StopEvent:
+        print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Ejecutando el segundo paso...</span><span class="delimiter">&quot;</span></span>)
+        final_result = f<span class="string"><span class="delimiter">&quot;</span><span class="content">Procesamiento finalizado: {ev.intermediate_result}</span><span class="delimiter">&quot;</span></span>
+        <span class="keyword">return</span> StopEvent(result=final_result)
+
+<span class="comment"># Función principal para ejecutar el workflow y generar las visualizaciones</span>
+async <span class="keyword">def</span> <span class="function">main</span>():
+    <span class="comment"># Instancia del workflow</span>
+    w = MultiStepWorkflow(timeout=<span class="integer">10</span>, verbose=<span class="predefined-constant">False</span>)
+
+    <span class="comment"># Ejecutar el workflow</span>
+    result = await w.run()
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Resultado final:</span><span class="delimiter">&quot;</span></span>, result)
+
+    <span class="comment"># Visualizar todos los posibles flujos del workflow</span>
+    draw_all_possible_flows(MultiStepWorkflow, filename=<span class="string"><span class="delimiter">&quot;</span><span class="content">multi_step_workflow.html</span><span class="delimiter">&quot;</span></span>)
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Visualización de todos los posibles flujos guardada en 'multi_step_workflow.html'</span><span class="delimiter">&quot;</span></span>)
+
+    <span class="comment"># Visualizar la ejecución más reciente del workflow</span>
+    draw_most_recent_execution(w, filename=<span class="string"><span class="delimiter">&quot;</span><span class="content">recent_execution.html</span><span class="delimiter">&quot;</span></span>)
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="content">Visualización de la ejecución más reciente guardada en 'recent_execution.html'</span><span class="delimiter">&quot;</span></span>)
+
+<span class="comment"># Ejecutar el main</span>
+<span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
+    asyncio.run(main())</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_casos_de_uso_comunes">5.3.3. Casos de uso comunes</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>RAG avanzado: recuperación, reranking y generación.</p>
+</li>
+<li>
+<p>Agentes colaborativos: sistemas multiagente con especialización.</p>
+</li>
+<li>
+<p>Generación estructurada y verificación de formato.</p>
+</li>
+<li>
+<p>Flujos interactivos con entrada humana en tiempo real.</p>
+</li>
+<li>
+<p>Orquestación de agentes, herramientas y motores de consulta.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ventajas_principales">5.3.4. Ventajas principales</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Modularidad y reutilización de pasos y agentes.</p>
+</li>
+<li>
+<p>Observabilidad y trazabilidad de la ejecución.</p>
+</li>
+<li>
+<p>Tolerancia a fallos y reintentos automáticos.</p>
+</li>
+<li>
+<p>Escalabilidad y ejecución paralela de pasos independientes.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ejemplo_práctico_desarrollo_de_un_asistente_de_documentación">6.3. Ejemplo práctico: desarrollo de un asistente de documentación</h3>
+<h3 id="_ejemplo_práctico_desarrollo_de_un_asistente_de_documentación">5.4. Ejemplo práctico: desarrollo de un asistente de documentación</h3>
 <div class="paragraph">
-<p>Flujo completo para un asistente técnico empresarial:</p>
+<p>QueryPipeline es un componente de LlamaIndex que permite construir flujos de consulta complejos, integrando múltiples módulos y herramientas para procesar consultas de manera eficiente. En este ejemplo, crearemos un asistente que responde preguntas sobre el dataset del Titanic utilizando un pipeline de consulta.</p>
+</div>
+<div class="paragraph">
+<p>La tendencia es ir sustituyenndo los 'QueryPipeline' por 'Workflow' para aprovechar las ventajas de la arquitectura basada en eventos y la reutilización de pasos.</p>
 </div>
 <div class="paragraph">
 <p><strong>Carga de documentos</strong>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_parse</span> <span class="keyword">import</span> <span class="include">LlamaParse</span>
+<pre class="CodeRay highlight"><code data-lang="python"><span class="comment"># Instala los paquetes necesarios (si aún no lo has hecho)</span>
+<span class="comment"># %pip install llama-index llama-index-experimental llama-index-llms-ollama</span>
 
-parser = LlamaParse(result_type=<span class="string"><span class="delimiter">&quot;</span><span class="content">markdown</span><span class="delimiter">&quot;</span></span>)
-manuales = parser.load_data(<span class="string"><span class="delimiter">&quot;</span><span class="content">./docs/manuales.pdf</span><span class="delimiter">&quot;</span></span>)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Configuración de embeddings en español</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">llama_index.embeddings.huggingface</span> <span class="keyword">import</span> <span class="include">HuggingFaceEmbedding</span>
+<span class="keyword">import</span> <span class="include">pandas</span> <span class="keyword">as</span> pd
+<span class="keyword">from</span> <span class="include">llama_index.core.query_pipeline</span> <span class="keyword">import</span> <span class="include">QueryPipeline</span> <span class="keyword">as</span> QP, <span class="include">Link</span>, <span class="include">InputComponent</span>
+<span class="keyword">from</span> <span class="include">llama_index.experimental.query_engine.pandas</span> <span class="keyword">import</span> <span class="include">PandasInstructionParser</span>
+<span class="keyword">from</span> <span class="include">llama_index.llms.ollama</span> <span class="keyword">import</span> <span class="include">Ollama</span>
+<span class="keyword">from</span> <span class="include">llama_index.core</span> <span class="keyword">import</span> <span class="include">PromptTemplate</span>
 
-Settings.embed_model = HuggingFaceEmbedding(
-    model_name=<span class="string"><span class="delimiter">&quot;</span><span class="content">BAAI/bge-small-es-v1.5</span><span class="delimiter">&quot;</span></span>
-)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Indexación con metadatos</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">index = VectorStoreIndex.from_documents(
-    manuales,
-    metadata_extractor=<span class="keyword">lambda</span> doc: {
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">seccion</span><span class="delimiter">&quot;</span></span>: doc.metadata.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">page_label</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>),
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">fecha</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2024-03-01</span><span class="delimiter">&quot;</span></span>
-    }
-)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Implementación con filtros</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">query_engine = index.as_query_engine(
-    vector_store_query_mode=<span class="string"><span class="delimiter">&quot;</span><span class="content">hybrid</span><span class="delimiter">&quot;</span></span>,
-    filters=MetadataFilters(
-        filters=[
-            ExactMatchFilter(key=<span class="string"><span class="delimiter">&quot;</span><span class="content">seccion</span><span class="delimiter">&quot;</span></span>, value=<span class="string"><span class="delimiter">&quot;</span><span class="content">configuracion</span><span class="delimiter">&quot;</span></span>)
+<span class="keyword">def</span> <span class="function">main</span>():
+    <span class="comment"># Carga el CSV</span>
+    df = pd.read_csv(<span class="string"><span class="delimiter">&quot;</span><span class="content">data/titanic.csv</span><span class="delimiter">&quot;</span></span>)
+
+    <span class="comment"># Configuración de Ollama</span>
+    llm = Ollama(model=<span class="string"><span class="delimiter">&quot;</span><span class="content">llama3.2</span><span class="delimiter">&quot;</span></span>, base_url=<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:11434</span><span class="delimiter">&quot;</span></span>)
+
+    <span class="comment"># Define las instrucciones y prompts</span>
+    instruction_str = (
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">1. Convierte la consulta a código Python ejecutable usando Pandas.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">2. La última línea debe ser una expresión Python evaluable con eval().</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">3. El código debe resolver la consulta.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">4. SOLO IMPRIMA LA EXPRESIÓN.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">5. No ponga la expresión entre comillas.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+    )
+
+    pandas_prompt_str = (
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Trabajas con un dataframe de pandas en Python.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">El nombre del dataframe es `df`.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Esto es el resultado de `print(df.head())`:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">{df_str}</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Sigue estas instrucciones:</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">{instruction_str}</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Consulta: {query_str}</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Expresión:</span><span class="delimiter">&quot;</span></span>
+    )
+
+    response_synthesis_prompt_str = (
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Dada una pregunta de entrada, sintetiza una respuesta a partir de los resultados de la consulta.</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Consulta: {query_str}</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Instrucciones de Pandas (opcional):</span><span class="char">\n</span><span class="content">{pandas_instructions}</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Salida de Pandas: {pandas_output}</span><span class="char">\n</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">Respuesta: </span><span class="delimiter">&quot;</span></span>
+    )
+
+    <span class="comment"># Crea los prompts</span>
+    pandas_prompt = PromptTemplate(pandas_prompt_str).partial_format(
+        instruction_str=instruction_str, df_str=df.head(<span class="integer">5</span>)
+    )
+    pandas_output_parser = PandasInstructionParser(df)
+    response_synthesis_prompt = PromptTemplate(response_synthesis_prompt_str)
+
+    <span class="comment"># Construye el pipeline de consulta</span>
+    qp = QP(
+        modules={
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>: InputComponent(),
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_prompt</span><span class="delimiter">&quot;</span></span>: pandas_prompt,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">llm1</span><span class="delimiter">&quot;</span></span>: llm,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_output_parser</span><span class="delimiter">&quot;</span></span>: pandas_output_parser,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">response_synthesis_prompt</span><span class="delimiter">&quot;</span></span>: response_synthesis_prompt,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">llm2</span><span class="delimiter">&quot;</span></span>: llm,
+        },
+        verbose=<span class="predefined-constant">True</span>,
+    )
+    qp.add_chain([<span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_prompt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">llm1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_output_parser</span><span class="delimiter">&quot;</span></span>])
+    qp.add_links(
+        [
+            Link(<span class="string"><span class="delimiter">&quot;</span><span class="content">input</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">response_synthesis_prompt</span><span class="delimiter">&quot;</span></span>, dest_key=<span class="string"><span class="delimiter">&quot;</span><span class="content">query_str</span><span class="delimiter">&quot;</span></span>),
+            Link(<span class="string"><span class="delimiter">&quot;</span><span class="content">llm1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">response_synthesis_prompt</span><span class="delimiter">&quot;</span></span>, dest_key=<span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_instructions</span><span class="delimiter">&quot;</span></span>),
+            Link(<span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_output_parser</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">response_synthesis_prompt</span><span class="delimiter">&quot;</span></span>, dest_key=<span class="string"><span class="delimiter">&quot;</span><span class="content">pandas_output</span><span class="delimiter">&quot;</span></span>),
         ]
     )
-)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Despliegue como API REST</strong>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">fastapi</span> <span class="keyword">import</span> <span class="include">FastAPI</span>
-app = FastAPI()
+    qp.add_link(<span class="string"><span class="delimiter">&quot;</span><span class="content">response_synthesis_prompt</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">llm2</span><span class="delimiter">&quot;</span></span>)
 
-<span class="decorator">@app.post</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">/consulta</span><span class="delimiter">&quot;</span></span>)
-async <span class="keyword">def</span> <span class="function">consultar</span>(pregunta: <span class="predefined">str</span>):
-    <span class="keyword">return</span> {<span class="string"><span class="delimiter">&quot;</span><span class="content">respuesta</span><span class="delimiter">&quot;</span></span>: query_engine.query(pregunta).response}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Ciclo de vida completo:</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash"># 1. Procesar documentos
-python procesar_docs.py
+    <span class="comment"># Ejemplo de consulta</span>
+    response = qp.run(
+        query_str=<span class="string"><span class="delimiter">&quot;</span><span class="content">¿Cuál es la edad media de los pasajeros supervivientes?</span><span class="delimiter">&quot;</span></span>
+    )
 
-# 2. Entrenar embeddings
-python entrenar_indice.py
+    print(<span class="string"><span class="delimiter">&quot;</span><span class="char">\n</span><span class="content">Respuesta final:</span><span class="delimiter">&quot;</span></span>)
+    print(response.message.content)
 
-# 3. Lanzar interfaz
-streamlit run app.py</code></pre>
+<span class="keyword">if</span> __name__ == <span class="string"><span class="delimiter">&quot;</span><span class="content">__main__</span><span class="delimiter">&quot;</span></span>:
+    main()</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_7_funcionalidades_avanzadas">7. 7. Funcionalidades Avanzadas</h2>
+<h2 id="_funcionalidades_avanzadas">6. Funcionalidades Avanzadas</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_uso_de_almacenes_vectoriales_para_búsquedas_semánticas_eficientes">7.1. Uso de almacenes vectoriales para búsquedas semánticas eficientes</h3>
+<h3 id="_uso_de_almacenes_vectoriales_para_búsquedas_semánticas_eficientes">6.1. Uso de almacenes vectoriales para búsquedas semánticas eficientes</h3>
 <div class="paragraph">
 <p>LlamaIndex soporta 20+ almacenes vectoriales para producción y desarrollo local:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Comparativa de almacenes populares:</caption>
+<caption class="title">Table 8. Comparativa de almacenes populares:</caption>
 <colgroup>
 <col style="width: 20%;">
 <col style="width: 40%;">
@@ -2640,7 +3021,7 @@ retriever = index.as_retriever(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_implementación_de_agentes_inteligentes_react_openai_function_agents">7.2. Implementación de agentes inteligentes (ReAct, OpenAI Function Agents)</h3>
+<h3 id="_implementación_de_agentes_inteligentes_react_openai_function_agents">6.2. Implementación de agentes inteligentes (ReAct, OpenAI Function Agents)</h3>
 <div class="paragraph">
 <p>Arquitecturas agentivas avanzadas usando Ollamad:</p>
 </div>
@@ -2687,7 +3068,7 @@ respuesta = agente.chat(<span class="string"><span class="delimiter">&quot;</spa
 </div>
 </div>
 <div class="sect2">
-<h3 id="_personalización_y_extensión_con_plugins_y_herramientas_externas">7.3. Personalización y extensión con plugins y herramientas externas</h3>
+<h3 id="_personalización_y_extensión_con_plugins_y_herramientas_externas">6.3. Personalización y extensión con plugins y herramientas externas</h3>
 <div class="paragraph">
 <p>Mecanismos de extensión avanzados:</p>
 </div>
@@ -2731,7 +3112,7 @@ nodes = pipeline.run(documents)</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Integración con herramientas externas:</caption>
+<caption class="title">Table 9. Integración con herramientas externas:</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 66.6667%;">
@@ -2761,10 +3142,10 @@ nodes = pipeline.run(documents)</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_8_persistencia_y_gestión_de_datos">8. 8. Persistencia y Gestión de Datos</h2>
+<h2 id="_persistencia_y_gestión_de_datos">7. Persistencia y Gestión de Datos</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_métodos_de_almacenamiento_y_recuperación_de_índices">8.1. Métodos de almacenamiento y recuperación de índices</h3>
+<h3 id="_métodos_de_almacenamiento_y_recuperación_de_índices">7.1. Métodos de almacenamiento y recuperación de índices</h3>
 <div class="paragraph">
 <p>LlamaIndex ofrece múltiples estrategias para almacenar y recuperar índices:</p>
 </div>
@@ -2839,7 +3220,7 @@ storage_context = StorageContext.from_defaults(
 </table>
 </div>
 <div class="sect2">
-<h3 id="_persistencia_de_datos_indexados_y_recarga_de_contextos">8.2. Persistencia de datos indexados y recarga de contextos</h3>
+<h3 id="_persistencia_de_datos_indexados_y_recarga_de_contextos">7.2. Persistencia de datos indexados y recarga de contextos</h3>
 <div class="paragraph">
 <p>Flujo completo para gestión de datos a largo plazo:</p>
 </div>
@@ -2926,10 +3307,10 @@ index_anterior = load_index_from_storage(storage_context)</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_9_ingeniería_de_prompts_y_estrategias_de_consulta">9. 9. Ingeniería de Prompts y Estrategias de Consulta</h2>
+<h2 id="_ingeniería_de_prompts_y_estrategias_de_consulta">8. Ingeniería de Prompts y Estrategias de Consulta</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_técnicas_cadena_de_pensamiento_few_shot_prompting_react">9.1. Técnicas: cadena de pensamiento, few-shot prompting, ReAct</h3>
+<h3 id="_técnicas_cadena_de_pensamiento_few_shot_prompting_react">8.1. Técnicas: cadena de pensamiento, few-shot prompting, ReAct</h3>
 <div class="paragraph">
 <p><strong>Cadena de Pensamiento (Chain-of-Thought - CoT):</strong>
 Técnica que guía al LLM a mostrar su proceso de razonamiento paso a paso:</p>
@@ -2979,7 +3360,7 @@ Combina razonamiento lógico con ejecución de acciones:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_mejores_prácticas_para_optimizar_la_interacción_con_el_llm">9.2. Mejores prácticas para optimizar la interacción con el LLM</h3>
+<h3 id="_mejores_prácticas_para_optimizar_la_interacción_con_el_llm">8.2. Mejores prácticas para optimizar la interacción con el LLM</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -3048,10 +3429,10 @@ response = index.as_query_engine(
 </div>
 </div>
 <div class="sect1">
-<h2 id="_10_implementación_escalado_y_optimización">10. 10. Implementación, Escalado y Optimización</h2>
+<h2 id="_implementación_escalado_y_optimización">9. Implementación, Escalado y Optimización</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_despliegue_de_aplicaciones_basadas_en_llamaindex">10.1. Despliegue de aplicaciones basadas en LlamaIndex</h3>
+<h3 id="_despliegue_de_aplicaciones_basadas_en_llamaindex">9.1. Despliegue de aplicaciones basadas en LlamaIndex</h3>
 <div class="paragraph">
 <p>Estrategias clave para entornos productivos:</p>
 </div>
@@ -3121,7 +3502,7 @@ metrics:
 </table>
 </div>
 <div class="sect2">
-<h3 id="_escalado_para_alto_rendimiento_y_grandes_volúmenes_de_datos">10.2. Escalado para alto rendimiento y grandes volúmenes de datos</h3>
+<h3 id="_escalado_para_alto_rendimiento_y_grandes_volúmenes_de_datos">9.2. Escalado para alto rendimiento y grandes volúmenes de datos</h3>
 <div class="paragraph">
 <p>Técnicas avanzadas para datasets &gt;1TB:</p>
 </div>
@@ -3183,7 +3564,7 @@ index = MultiModalVectorStoreIndex.from_documents(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_monitorización_y_optimización_de_aplicaciones">10.3. Monitorización y optimización de aplicaciones</h3>
+<h3 id="_monitorización_y_optimización_de_aplicaciones">9.3. Monitorización y optimización de aplicaciones</h3>
 <div class="paragraph">
 <p>Métricas esenciales y herramientas:</p>
 </div>
@@ -3237,23 +3618,33 @@ set_global_handler(
     response = agent.chat(<span class="string"><span class="delimiter">&quot;</span><span class="content">Analizar tendencias Q3 2025</span><span class="delimiter">&quot;</span></span>)</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><strong>Checklist de optimización:</strong>
-1. Re-indexar datos cada 6h con jobs programados
-2. Usar <code>BAAI/bge-large-es-v1.5</code> para embeddings en españold
-3. Implementar caché L2 con Redis Cluster
-4. Balancear carga entre 3+ instancias Ollama</p>
+<div class="olist arabic">
+<div class="title"><strong>Checklist de optimización:</strong></div>
+<ol class="arabic">
+<li>
+<p>Re-indexar datos cada 6h con jobs programados</p>
+</li>
+<li>
+<p>Usar <code>BAAI/bge-large-es-v1.5</code> para embeddings en españold</p>
+</li>
+<li>
+<p>Implementar caché L2 con Redis Cluster</p>
+</li>
+<li>
+<p>Balancear carga entre 3+ instancias Ollama</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_11_futuro_de_llamaindex_y_próximos_pasos">11. 11. Futuro de LlamaIndex y Próximos Pasos</h2>
+<h2 id="_futuro_de_llamaindex_y_próximos_pasos">10. Futuro de LlamaIndex y Próximos Pasos</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_tendencias_en_orquestación_de_datos_y_llms">11.1. Tendencias en orquestación de datos y LLMs</h3>
+<h3 id="_tendencias_en_orquestación_de_datos_y_llms">10.1. Tendencias en orquestación de datos y LLMs</h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. El ecosistema evoluciona hacia arquitecturas multiagente y sistemas autónomos:</caption>
+<caption class="title">Table 10. El ecosistema evoluciona hacia arquitecturas multiagente y sistemas autónomos:</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 75%;">
@@ -3304,7 +3695,7 @@ workflow = MultiAgentCollaboration(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_actualizaciones_y_roadmap_de_llamaindex">11.2. Actualizaciones y roadmap de LlamaIndex</h3>
+<h3 id="_actualizaciones_y_roadmap_de_llamaindex">10.2. Actualizaciones y roadmap de LlamaIndex</h3>
 <div class="ulist">
 <div class="title">Próximos hitos tecnológicos (Q3 2025 - Q1 2026):</div>
 <ul>
@@ -3335,7 +3726,7 @@ workflow = MultiAgentCollaboration(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_recursos_adicionales_y_comunidad">11.3. Recursos adicionales y comunidad</h3>
+<h3 id="_recursos_adicionales_y_comunidad">10.3. Recursos adicionales y comunidad</h3>
 <div class="paragraph">
 <p>Ecosistema para desarrolladores y empresasd:</p>
 </div>
@@ -3390,7 +3781,7 @@ https://github.com/run-llama/llama_index</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-06-05 00:50:26 +0200
+Last updated 2025-06-09 01:47:38 +0200
 </div>
 </div>
 </body>
