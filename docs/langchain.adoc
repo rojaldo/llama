@@ -2418,18 +2418,18 @@ vector_query = embeddings_hf.embed_query("Consulta de ejemplo")
 ----
 
 ==== Proceso completo de creación de vectores
-1. **Preprocesamiento:**
+**Preprocesamiento:**
    - Limpieza de texto (eliminar HTML, normalizar espacios)
    - División en chunks con `RecursiveCharacterTextSplitter`d
    
-2. **Generación de embeddings:**
+**Generación de embeddings:**
 [source,python]
 ----
 texts = ["Fragmento 1", "Fragmento 2"]
 vectors = embeddings.embed_documents(texts)
 ----
 
-3. **Almacenamiento vectorial (FAISS ejemplo):**
+**Almacenamiento vectorial (FAISS ejemplo):**
 [source,python]
 ----
 from langchain_community.vectorstores import FAISS
