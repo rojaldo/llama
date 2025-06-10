@@ -1,0 +1,821 @@
+= LangChain
+:toc: 
+:toc-title: Índice de contenidos
+:sectnums:
+:toclevels: 3
+:source-highlighter: coderay
+
+== 1. Introducción a LangChain
+
+=== 1.1 ¿Qué es LangChain y para qué sirve?
+LangChain es un framework de código abierto diseñado para facilitar la creación de aplicaciones que integran modelos de lenguaje de gran tamaño (LLM) como GPT-3, GPT-4, LLaMA, Claude y otros[1][2][14][17]. Permite a desarrolladores y científicos de datos construir sistemas avanzados de IA conversacional, chatbots, asistentes virtuales, motores de búsqueda semántica, sistemas de generación de contenido y aplicaciones de análisis de documentos, entre otros[3][5][8][17]. LangChain actúa como una capa de orquestación que conecta los LLM con fuentes de datos externas (APIs, bases de datos, documentos), gestiona el estado de la conversación y permite la automatización de flujos de trabajo complejos mediante cadenas de procesamiento (chains) y agentes inteligentes[1][2][9][10][14]. Su modularidad y flexibilidad hacen posible personalizar, escalar y desplegar aplicaciones de IA de forma rápida y eficiente, superando las limitaciones de los LLM puros al dotarlos de acceso a información actualizada y capacidades de razonamiento multi-paso[13][16][17].
+
+=== 1.2 Historia y evolución de LangChain
+LangChain fue lanzado como proyecto de código abierto por Harrison Chase en octubre de 2022, inicialmente en Python y luego en JavaScript[2][5][12][20]. Su aparición coincidió con el auge de ChatGPT, lo que impulsó su adopción masiva y lo convirtió en el proyecto open source de más rápido crecimiento en GitHub en 2023[2][5][12][20]. LangChain ha evolucionado rápidamente, incorporando nuevas funcionalidades como el LangChain Expression Language (LCEL) para definir cadenas de acciones de forma declarativa, y herramientas como LangServe para desplegar aplicaciones como APIs de producción[5]. El framework ha recibido inversiones significativas y ha establecido alianzas con líderes tecnológicos, expandiendo su ecosistema y capacidades[4][5]. Su desarrollo continuo ha permitido integrar docenas de conectores a servicios cloud, bases de datos vectoriales, sistemas de almacenamiento, herramientas de análisis y más de 50 tipos de fuentes de datos[5][13][14][18].
+
+=== 1.3 Casos de uso y aplicaciones en la industria
+LangChain se utiliza en una amplia variedad de sectores y casos de uso, entre los que destacan[6][8][15][16][17]:
+- **Chatbots y asistentes virtuales**: Empresas de atención al cliente implementan chatbots avanzados que mantienen contexto, resuelven dudas frecuentes y automatizan tareas repetitivas.
+- **Análisis y generación de documentos**: Plataformas legales y de recursos humanos usan LangChain para resumir contratos, extraer información clave y generar informes automáticos.
+- **Sistemas de búsqueda y RAG (Retrieval-Augmented Generation)**: Bibliotecas digitales, plataformas educativas y empresas tecnológicas emplean LangChain para búsquedas semánticas y respuestas basadas en fuentes actualizadas.
+- **Automatización de procesos empresariales**: Compañías de finanzas, salud y marketing automatizan flujos de trabajo complejos, como análisis de sentimiento, generación de reportes y traducción automática.
+- **Integración con herramientas y APIs**: LangChain permite crear agentes que interactúan con APIs externas, bases de datos, sistemas de almacenamiento y servicios cloud, facilitando la creación de asistentes personalizados y herramientas de productividad[7][15][16].
+- **Casos reales**: Morningstar desarrolló un motor de inteligencia de inversiones; Elastic AI Assistant aceleró su desarrollo de productos; Retool mejoró la precisión de modelos personalizados gracias a LangChain[8][15].
+
+=== 1.4 Arquitectura general y componentes clave
+La arquitectura de LangChain es modular y está compuesta por varios componentes esenciales que permiten construir aplicaciones complejas de IA[9][10][11][14][18][19]:
+
+- **Models (Modelos)**: Interfaces para conectar y gestionar diferentes LLMs (OpenAI, Hugging Face, modelos propios), permitiendo intercambiarlos fácilmente[10][19].
+- **Prompts (Plantillas de indicaciones)**: Herramientas para crear, gestionar y reutilizar prompts, incluyendo plantillas dinámicas y few-shot learning para mejorar la precisión de las respuestas[10][19].
+- **Chains (Cadenas)**: Secuencias de pasos (enlaces) que procesan datos, interactúan con modelos y realizan tareas compuestas. Permiten orquestar flujos de trabajo complejos y multi-etapa[9][13][14].
+- **Agents (Agentes)**: Programas inteligentes capaces de tomar decisiones sobre qué herramientas o cadenas ejecutar en función de la consulta del usuario. Los agentes pueden interactuar con APIs, buscar información, ejecutar código y más[9][10][19].
+- **Memory (Memoria)**: Módulos para gestionar el contexto y el historial de las conversaciones, permitiendo respuestas personalizadas y contextuales en chatbots y asistentes[10][19].
+- **Retrievers y RAG**: Herramientas para buscar y recuperar información relevante de bases de datos vectoriales, documentos o APIs externas, integrando RAG (Retrieval-Augmented Generation) para respuestas basadas en datos actualizados[13][16].
+- **Document Loaders y Embeddings**: Componentes para cargar, fragmentar y vectorizar documentos, facilitando la búsqueda semántica y el análisis de grandes volúmenes de texto[10][11][19].
+- **Callbacks y Monitorización**: Permiten registrar, monitorear y depurar el funcionamiento de las cadenas y agentes, facilitando el mantenimiento y la mejora continua[13][19].
+- **Integraciones y conectores**: Más de 50 integraciones con servicios cloud, bases de datos, APIs, almacenamiento y herramientas externas, ampliando el alcance y las capacidades de las aplicaciones construidas con LangChain[5][13][18].
+
+Esta arquitectura flexible y componible permite a los desarrolladores crear desde simples chatbots hasta complejos sistemas de IA empresarial, integrando múltiples fuentes de datos, herramientas y modelos de lenguaje de última generación.
+
+
+== 2. Instalación y Configuración del Entorno para trabajar con modelos Ollama en local
+
+=== 2.1 Requisitos previos
+- **Sistema operativo compatible**: macOS 12+, Windows 10/11 (preferiblemente con WSL2), o Linux (Ubuntu 20.04+, Debian 11+, Fedora 37+)[1][2][5].
+- **Hardware mínimo**:
+  - Procesador de 64 bits.
+  - 8GB de RAM (16GB recomendado para modelos grandes)[1][5].
+  - 10GB de espacio libre en disco (más para modelos de mayor tamaño)[1][5].
+  - GPU NVIDIA/AMD opcional para acelerar la inferencia, pero Ollama funciona también en CPU[1][5][7].
+- **Python 3.8+** instalado si se va a usar integración con LangChain u otros frameworks de IA.
+- **Docker** instalado si se desea usar la interfaz web Open WebUI o desplegar Ollama en contenedores[3][5][6].
+
+=== 2.2 Instalación de LangChain y dependencias
+- Crear y activar un entorno virtual Python:
++
+[source,bash]
+----
+python -m venv ollama-env
+source ollama-env/bin/activate      # Linux/Mac
+ollama-env\Scripts\activate.bat     # Windows
+----
+- Instalar dependencias esenciales:
++
+[source,bash]
+----
+pip install langchain-ollama python-dotenv
+----
+- (Opcional) Instalar librerías para búsqueda semántica y RAG:
++
+[source,bash]
+----
+pip install chromadb faiss-cpu
+----
+
+=== 2.3 Configuración de Ollama y modelos locales
+- Descargar e instalar Ollama:
+  - **Linux**:
+    +
+    [source,bash]
+    ----
+    curl -fsSL https://ollama.com/install.sh | sh
+    ----
+  - **macOS**:
+    +
+    [source,bash]
+    ----
+    brew install ollama
+    ----
+    o descargar el instalador desde la web oficial[1][2][5].
+  - **Windows**:
+    +
+    Descargar el instalador desde https://ollama.com y ejecutarlo, o instalar Ollama dentro de WSL2 siguiendo los pasos de Linux[5].
+- Verificar instalación:
++
+[source,bash]
+----
+ollama --version
+----
+- Iniciar el servicio Ollama:
++
+[source,bash]
+----
+ollama serve
+----
+- Descargar modelos LLM locales (ejemplo con Llama 3):
++
+[source,bash]
+----
+ollama pull llama3
+----
+  Puedes listar todos los modelos disponibles con:
++
+[source,bash]
+----
+ollama list
+----
+- (Opcional) Instalar y lanzar la interfaz web Open WebUI:
++
+[source,bash]
+----
+docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway \
+  -v open-webui:/app/backend/data --name open-webui --restart always \
+  ghcr.io/open-webui/open-webui:main
+----
+  Accede a la UI en <http://localhost:3000>[3][6].
+
+=== 2.4 Verificación de la instalación y primeros tests
+- Probar Ollama desde terminal:
++
+[source,bash]
+----
+ollama run llama3 "¿Cuál es la capital de Francia?"
+----
+- Probar integración con LangChain desde Python:
++
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+
+llm = OllamaLLM(model="llama3")
+respuesta = llm.invoke("Resume en una frase la teoría de la relatividad.")
+print(respuesta)
+----
+- Verificar que el modelo responde correctamente y que no aparecen errores de conexión.
+- Si usas la interfaz web, prueba cargar un modelo y realizar una consulta desde el navegador.
+- Para comprobar uso de GPU, puedes monitorizar con `nvidia-smi` (en sistemas compatibles).
+
+Con estos pasos, tendrás un entorno local listo para experimentar y desarrollar aplicaciones de IA generativa con modelos Ollama y LangChain, sin depender de la nube ni exponer tus datos fuera de tu equipo[1][5][6].
+
+
+== 3. Fundamentos de LLMs y su integración con LangChain
+
+=== 3.1 ¿Qué es un Large Language Model (LLM)?
+Un **Large Language Model (LLM)** es un modelo de inteligencia artificial de aprendizaje profundo entrenado con enormes cantidades de texto (libros, artículos, código, webs) para comprender, generar y manipular lenguaje humano de forma avanzada. Utilizan arquitecturas basadas en transformers y mecanismos de autoatención, permitiendo captar relaciones complejas entre palabras y frases. Los LLMs predicen el siguiente token en una secuencia, lo que les permite generar texto coherente, resumir, traducir, responder preguntas y mucho más. Ejemplos de LLMs incluyen GPT-3/4 (OpenAI), LLaMA 3 (Meta), Mistral 7B, entre otros.
+
+=== 3.2 Integración de modelos open source y comerciales
+LangChain facilita la integración tanto de modelos open source (código abierto) como comerciales, proporcionando interfaces estandarizadas para trabajar con ambos tipos de modelos. Los modelos open source (como LLaMA, Mistral, BERT) pueden ejecutarse localmente o a través de plataformas como Hugging Face, brindando control total y privacidad. Los modelos comerciales (como GPT-4, Claude, Cohere) se consumen mediante APIs en la nube, ofreciendo acceso a modelos de última generación y actualizaciones continuas, aunque con dependencia de proveedores externos y costes asociados.
+
+[cols="1,1,2,2",options="header"]
+|===
+| Tipo         | Ejemplos                | Ventajas                         | Clase LangChain
+| Open Source  | LLaMA, Mistral, BERT    | Privacidad, control total        | HuggingFacePipeline
+| Comerciales  | GPT-4, Claude, Cohere   | Alto rendimiento, actualizaciones| ChatOpenAI
+|===
+
+.Ejemplo de cambio rápido entre modelos:
+[source,python]
+----
+from langchain_community.llms import HuggingFacePipeline
+from langchain_openai import ChatOpenAI
+
+modelo_oss = HuggingFacePipeline.from_model_id("mistralai/Mistral-7B")
+modelo_comercial = ChatOpenAI(model="gpt-4-turbo")
+----
+
+=== 3.3 Conexión con modelos de Hugging Face
+Para conectar modelos de Hugging Face en LangChain:
+
+Instala las dependencias necesarias:
++
+[source,bash]
+----
+pip install langchain-huggingface transformers
+----
+
+Configura tu token de Hugging Face si usas modelos en la nube:
++
+[source,python]
+----
+import os
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = "hf_..."
+----
+
+Carga el modelo deseado:
++
+[source,python]
+----
+from langchain_community.llms import HuggingFaceEndpoint
+
+# Modelo remoto
+llm_remote = HuggingFaceEndpoint(repo_id="google/flan-t5-xxl")
+
+# Modelo local
+from transformers import AutoModelForCausalLM, AutoTokenizer
+model = AutoModelForCausalLM.from_pretrained("mistralai/Mistral-7B")
+tokenizer = AutoTokenizer.from_pretrained("mistralai/Mistral-7B")
+----
+
+== 4. Modelos y Prompts en LangChain
+
+=== 4.1 Uso básico de LLMs y ChatModels
+LangChain ofrece interfaces unificadas para trabajar con modelos de lenguaje de diferentes proveedores. Los `ChatModels` manejan mensajes estructurados con roles (system, human, assistant), mientras que los `LLMs` trabajan con texto plano.
+
+.Ejemplo de ChatModel con OpenAI:
+[source,python]
+----
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import SystemMessage, HumanMessage
+
+chat = ChatOpenAI(model="gpt-4-turbo")
+messages = [
+    SystemMessage("Eres un experto en historia del arte"),
+    HumanMessage("Explica el cubismo en 50 palabras")
+]
+respuesta = chat.invoke(messages)
+print(respuesta.content)
+----
+
+.Ejemplo de LLM local con Ollama:
+[source,python]
+----
+from langchain_community.llms import OllamaLLM
+
+llm = OllamaLLM(model="llama3.1:8b")
+respuesta = llm.invoke("Diferencia entre HTTP y HTTPS")
+print(respuesta)
+----
+
+=== 4.2 Creación y gestión de Prompt Templates
+Los `PromptTemplate` permiten crear plantillas reutilizables con variables dinámicas.
+
+.Estructura básica:
+[source,python]
+----
+from langchain_core.prompts import PromptTemplate
+
+plantilla = PromptTemplate.from_template(
+    "Traduce al {idioma} el siguiente texto: {texto}"
+)
+prompt_formateado = plantilla.format(idioma="francés", texto="Hola mundo")
+----
+
+.Plantilla con múltiples variables:
+[source,python]
+----
+plantilla_avanzada = PromptTemplate(
+    input_variables=["producto", "tono"],
+    template="Escribe un tweet promocionando {producto} con un tono {tono}"
+)
+----
+
+=== 4.3 Prompts dinámicos y personalizados
+Se pueden crear prompts adaptativos usando lógica condicional y selección de ejemplos.
+
+.Ejemplo con lógica condicional:
+[source,python]
+----
+from langchain_core.prompts import PromptTemplate
+
+plantilla = """
+{%- if formal -%}
+Estimado {nombre}: {mensaje_formal}
+{%- else -%}
+¡Hola {nombre}! {mensaje_informal}
+{%- endif -%}
+"""
+
+prompt = PromptTemplate.from_template(plantilla, template_format="jinja2")
+----
+
+.Selección de ejemplos con FewShotPromptTemplate:
+[source,python]
+----
+from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
+
+ejemplos = [
+    {"palabra": "feliz", "antonimo": "triste"},
+    {"palabra": "rápido", "antonimo": "lento"}
+]
+
+formato_ejemplo = PromptTemplate(
+    input_variables=["palabra", "antonimo"],
+    template="Palabra: {palabra}\nAntónimo: {antonimo}"
+)
+
+prompt = FewShotPromptTemplate(
+    examples=ejemplos,
+    example_prompt=formato_ejemplo,
+    prefix="Lista de antónimos:",
+    suffix="Palabra: {input}\nAntónimo:"
+)
+----
+
+=== 4.4 Buenas prácticas en la redacción de prompts
+. **Reglas clave para prompts efectivos**:
+1. **Especificidad**: Definir claramente el formato y alcance de la respuesta
++
+[source,text]
+----
+"Genera 3 opciones de nombres para una startup de IoT. Formato: lista numerada"
+----
+2. **Contextualización**: Proporcionar información relevante
++
+[source,text]
+----
+"Como experto en marketing digital con 10 años de experiencia, redacta..."
+----
+3. **Ejemplificación**: Incluir casos de uso
++
+[source,text]
+----
+"Ejemplo de entrada: 'mesa de madera' → Ejemplo de salida: 'Tablero macizo de roble natural'"
+----
+4. **Validación**: Implementar chequeos de formato
++
+[source,python]
+----
+respuesta = llm.invoke(prompt)
+if not respuesta.startswith("1."):
+    raise ValueError("Formato de respuesta inválido")
+----
+5. **Iteración**: Refinar mediante pruebas A/B
++
+[source,text]
+----
+Versión A: "Resume el texto en 100 palabras"
+Versión B: "Extrae los 3 puntos clave principales"
+----
+
+.Tabla comparativa de enfoques:
+[cols="1,2,2",options="header"]
+|===
+| Técnica           | Ventajas                     | Caso de uso típico
+| Plantillas simples| Rápidas de implementar      | Traducciones, resúmenes
+| Lógica condicional| Adaptabilidad contextual    | Chatbots, respuestas personalizadas
+| Few-shot learning | Mayor precisión             | Clasificación de texto
+|===
+
+== 5. Chains: Composición y Orquestación
+
+=== 5.1 ¿Qué es una Chain en LangChain?
+Una *Chain* en LangChain es una secuencia de pasos donde la salida de un componente (como un modelo Ollama local, función o herramienta) se convierte en la entrada del siguiente. Esto permite construir flujos de trabajo complejos y modulares, integrando procesamiento de datos, lógica condicional y uso de modelos LLM locales de Ollama en una sola aplicación de IA. Las chains pueden ser simples (lineales) o complejas (anidadas o con lógica condicional), y son la base para organizar tareas y procesos de IA de manera mantenible y escalable.
+
+=== 5.2 Chains simples y secuenciales
+Las *chains simples* conectan varios pasos de manera lineal, donde cada paso recibe una entrada y genera una salida, que pasa al siguiente paso. Esto es útil para pipelines claros y directos, como generación de texto seguida de traducción o resumen.
+
+.Ejemplo de SimpleSequentialChain con modelos Ollama:
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain, SimpleSequentialChain
+
+# Paso 1: Generar una idea de producto
+prompt1 = PromptTemplate.from_template("Sugiere una idea de producto sobre {tema}.")
+chain1 = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt1)
+
+# Paso 2: Generar un eslogan para la idea
+prompt2 = PromptTemplate.from_template("Crea un eslogan para este producto: {text}")
+chain2 = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt2)
+
+# Encadenar ambos pasos
+chain = SimpleSequentialChain(chains=[chain1, chain2])
+resultado = chain.run("hogares inteligentes")
+print(resultado)
+----
+
+=== 5.3 Chains personalizadas y anidadas
+Puedes crear *chains personalizadas* combinando componentes básicos y definiendo la lógica de conexión entre ellos. Se pueden anidar chains, es decir, que la salida de una chain sea la entrada de otra, o construir flujos con lógica condicional y ramificaciones.
+
+.Ejemplo de chain anidada con Ollama:
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain, SequentialChain
+
+# Chain 1: Resumir un texto
+prompt_resumen = PromptTemplate.from_template("Resume el siguiente texto: {texto}")
+chain_resumen = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt_resumen)
+
+# Chain 2: Extraer palabras clave del resumen
+prompt_keywords = PromptTemplate.from_template("Extrae palabras clave del siguiente resumen: {resumen}")
+chain_keywords = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt_keywords)
+
+# Encadenar ambas usando SequentialChain
+chain = SequentialChain(
+    chains=[chain_resumen, chain_keywords],
+    input_variables=["texto"],
+    output_variables=["resumen", "palabras_clave"]
+)
+salida = chain({"texto": "La inteligencia artificial está revolucionando la industria tecnológica..."})
+print(salida)
+----
+
+=== 5.4 Chains para preguntas y respuestas
+LangChain permite crear chains especializadas para sistemas de *preguntas y respuestas* (QA), combinando recuperación de contexto relevante con generación de respuestas por parte de un modelo Ollama local.
+
+.Ejemplo de QA chain con Ollama:
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template(
+    "Pregunta: {pregunta}\nTexto de referencia: {contexto}\nRespuesta:"
+)
+chain = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt)
+
+contexto = "LangChain es un framework para orquestar modelos de lenguaje en aplicaciones de IA."
+pregunta = "¿Para qué sirve LangChain?"
+respuesta = chain.invoke({"pregunta": pregunta, "contexto": contexto})
+print(respuesta)
+----
+
+=== 5.5 Manejo de múltiples entradas y salidas
+Para flujos complejos donde cada paso requiere o genera varios datos, puedes usar `SequentialChain` y mapear explícitamente variables entre pasos, o emplear el LangChain Expression Language (LCEL) para componer pipelines avanzados.
+
+.Ejemplo de SequentialChain con múltiples variables y Ollama:
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain, SequentialChain
+
+# Paso 1: Generar idea y resumen
+prompt_idea = PromptTemplate.from_template("Sugiere una idea innovadora sobre {tema} en el sector {sector}.")
+chain_idea = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt_idea)
+
+prompt_resumen = PromptTemplate.from_template("Resume en una frase la siguiente idea: {idea}")
+chain_resumen = LLMChain(llm=OllamaLLM(model="llama3.1"), prompt=prompt_resumen)
+
+chain = SequentialChain(
+    chains=[chain_idea, chain_resumen],
+    input_variables=["tema", "sector"],
+    output_variables=["idea", "resumen"]
+)
+salida = chain({"tema": "energía renovable", "sector": "hogar"})
+print(salida)
+----
+
+Estas técnicas permiten construir pipelines robustos y adaptables, orquestando modelos Ollama locales de forma eficiente y privada.
+
+
+== 6. Manejo y Procesamiento de Documentos con Ollama y LangChain
+
+=== 6.1 Document Loaders: carga de PDFs, TXT, web, etc.
+
+LangChain dispone de loaders especializados para cargar datos de distintos formatos y fuentes, convirtiéndolos en objetos Document estandarizados que pueden ser utilizados por modelos Ollama en local[1][2][3][4][5].
+
+.Cargar un archivo PDF:
+[source,python]
+----
+from langchain_community.document_loaders import PyPDFLoader
+
+loader = PyPDFLoader("documento.pdf")
+documents = loader.load()  # Devuelve una lista de Document, uno por página
+----
+
+.Cargar un archivo TXT:
+[source,python]
+----
+from langchain_community.document_loaders import TextLoader
+
+loader = TextLoader("notas.txt")
+documents = loader.load()
+----
+
+.Cargar varios archivos de un directorio:
+[source,python]
+----
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+
+loader = DirectoryLoader(
+    "./mis_docs",
+    glob="**/*.txt",
+    loader_cls=TextLoader
+)
+documents = loader.load()
+----
+
+.Cargar contenido de una web:
+[source,python]
+----
+from langchain_community.document_loaders import AsyncHtmlLoader
+
+urls = ["https://es.wikipedia.org/wiki/LangChain"]
+loader = AsyncHtmlLoader(urls)
+documents = loader.load()
+----
+
+.Cargar un archivo CSV:
+[source,python]
+----
+from langchain_community.document_loaders.csv_loader import CSVLoader
+
+loader = CSVLoader("./datos.csv")
+documents = loader.load()
+----
+
+Cada loader transforma el contenido y los metadatos en una estructura Document, facilitando la integración, el procesamiento y la indexación para tareas posteriores como chunking, embedding y búsqueda semántica con modelos Ollama.
+
+=== 6.2 Procesamiento y limpieza de documentos
+
+El procesamiento y limpieza de documentos es un paso fundamental antes de utilizar modelos Ollama en local con LangChain, ya que mejora la calidad de los datos y la precisión de las respuestas generadas[1][6][9].
+
+.Pasos habituales de limpieza:
+- Eliminación de frases o marcas irrelevantes (por ejemplo, anuncios o firmas automáticas)
+- Normalización de espacios y saltos de línea
+- Eliminación de caracteres no imprimibles o especiales
+- Conversión de texto a un formato uniforme y legible por el modelo
+
+.Ejemplo de función de limpieza básica:
+[source,python]
+----
+import re
+
+def clean_text(text):
+    # Eliminar frases específicas no deseadas
+    cleaned_text = re.sub(r'\s*Free eBooks at Planet eBook\.com\s*', '', text, flags=re.DOTALL)
+    # Eliminar espacios adicionales
+    cleaned_text = re.sub(r' +', ' ', cleaned_text)
+    # Eliminar caracteres no imprimibles
+    cleaned_text = re.sub(r'[\x00-\x1F]', '', cleaned_text)
+    # Reemplazar saltos de línea por espacios
+    cleaned_text = cleaned_text.replace('\n', ' ')
+    # Eliminar espacios alrededor de guiones
+    cleaned_text = re.sub(r'\s*-\s*', '', cleaned_text)
+    return cleaned_text
+
+# Aplicar limpieza a todos los documentos cargados
+for doc in documents:
+    doc.page_content = clean_text(doc.page_content)
+----
+
+.Estrategias adicionales de procesamiento:
+- Preservar la estructura relevante del documento (títulos, secciones) si es importante para el análisis posterior[3][6].
+- Tokenizar el texto si se requiere para procesamiento avanzado o chunking.
+- Identificar y eliminar duplicados o fragmentos irrelevantes.
+
+LangChain facilita estas tareas mediante su diseño modular, permitiendo integrar funciones de limpieza personalizadas antes de dividir los documentos o generar embeddings para búsqueda y recuperación[6][9]. Una buena limpieza y preprocesamiento asegura que los modelos Ollama trabajen con datos de calidad y produzcan resultados más útiles y precisos.
+
+
+=== 6.3 Splitters: fragmentación de texto y chunking
+
+La fragmentación de texto (chunking) es esencial cuando se trabaja con documentos largos en LangChain y Ollama, ya que los LLMs locales tienen límites de contexto y procesan mejor fragmentos manejables[2][5][7]. Los splitters permiten dividir documentos en partes más pequeñas, manteniendo la coherencia semántica y facilitando la recuperación de información relevante.
+
+==== Tipos de splitters y estrategias
+
+- **Basados en longitud**: Dividen el texto por número de caracteres o tokens, asegurando chunks de tamaño uniforme[5].
+- **Basados en estructura**: Aprovechan la organización natural del texto (párrafos, frases, palabras) para mantener sentido y contexto[2][5].
+- **Solapamiento (overlap)**: Añade parte del contenido del chunk anterior al siguiente, evitando pérdida de contexto entre fragmentos[2][7][8].
+
+==== Ejemplo: Uso de RecursiveCharacterTextSplitter
+
+El splitter recomendado para la mayoría de aplicaciones es `RecursiveCharacterTextSplitter`, que intenta dividir primero por párrafos, luego por líneas, frases y finalmente palabras, hasta alcanzar el tamaño de chunk deseado[2][5][7].
+
+[source,python]
+----
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,        # Máximo de caracteres por chunk
+    chunk_overlap=200,      # Solapamiento entre fragmentos
+    separators=["\n\n", "\n", ". ", "? ", "! "],  # Priorización de cortes
+)
+
+# Supón que 'documents' es una lista de Document cargados previamente
+chunks = text_splitter.split_documents(documents)
+----
+
+Cada elemento de `chunks` es un fragmento del documento original, listo para ser procesado por un modelo Ollama en local.
+
+==== Ejemplo: Splitter personalizado para otros idiomas o estructuras
+
+Puedes adaptar los separadores para textos en otros idiomas o con estructuras diferentes[2]:
+
+[source,python]
+----
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=800,
+    chunk_overlap=100,
+    separators=["。", "．", "\n", " "],  # Separadores para japonés/chino
+)
+chunks = text_splitter.split_documents(documents)
+----
+
+.Ventajas del chunking con splitters
+- Permite procesar grandes volúmenes de texto con modelos Ollama locales sin perder contexto relevante.
+- Mejora la eficiencia en tareas de búsqueda semántica y recuperación aumentada (RAG).
+- Facilita la extracción de información relevante y la generación de resúmenes o respuestas precisas.
+
+El uso adecuado de splitters es un paso fundamental en cualquier pipeline de procesamiento documental avanzado con LangChain y modelos LLM en local.
+
+=== 6.4 Extracción de información relevante
+
+La extracción de información relevante es el proceso de identificar, estructurar y obtener datos clave a partir de documentos extensos o fragmentos de texto, transformando información no estructurada en conocimiento útil y procesable[2][3][8]. Este proceso es fundamental para analizar grandes volúmenes de datos, automatizar flujos de trabajo y facilitar la toma de decisiones en entornos empresariales o de investigación.
+
+==== ¿Cómo funciona la extracción de información?
+
+1. **Carga y digitalización**: El documento se digitaliza (si es necesario) y se carga en el sistema, pudiendo ser en formatos como PDF, TXT, imágenes o páginas web[1][4][8].
+2. **Conversión a texto**: Si el documento es una imagen o PDF escaneado, se aplica OCR para obtener el texto editable[1][4].
+3. **Procesamiento del texto**: El texto se limpia, normaliza y se divide en fragmentos (chunks) para facilitar su análisis por modelos LLM locales como Ollama.
+4. **Extracción automatizada**: Se utilizan técnicas de Procesamiento del Lenguaje Natural (PLN) y modelos de IA para identificar entidades, relaciones, fechas, cifras, temas, etc.[3][4][8].
+5. **Estructuración y almacenamiento**: La información extraída se organiza en formatos estructurados (JSON, CSV, tablas) para su consulta, análisis o integración con otros sistemas[2][3][8].
+
+==== Técnicas y métodos de extracción
+
+- **Extracción basada en reglas**: Usa patrones predefinidos (expresiones regulares, palabras clave) para identificar datos específicos como fechas, nombres o importes[3].
+- **Extracción basada en aprendizaje automático**: Utiliza modelos entrenados para reconocer entidades y relaciones en el texto, permitiendo mayor flexibilidad y precisión[3][4].
+- **Extracción semántica con LLMs**: Los modelos Ollama pueden resumir, clasificar, extraer entidades o responder preguntas directamente sobre los fragmentos de texto, combinando comprensión contextual y generación de lenguaje natural[8][9].
+
+==== Ejemplo 1: Resumir fragmentos de texto con Ollama
+
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+from langchain.chains import LLMChain
+from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template("Resume el siguiente texto en 2 frases: {texto}")
+
+llm = OllamaLLM(model="llama3.1")
+chain = LLMChain(llm=llm, prompt=prompt)
+
+for chunk in chunks:
+    resumen = chain.invoke({"texto": chunk.page_content})
+    print(resumen)
+----
+
+==== Ejemplo 2: Extracción de entidades nombradas
+
+[source,python]
+----
+prompt_entidades = PromptTemplate.from_template(
+    "Extrae todas las personas, lugares y fechas del siguiente texto: {texto}"
+)
+chain_entidades = LLMChain(llm=llm, prompt=prompt_entidades)
+
+for chunk in chunks:
+    entidades = chain_entidades.invoke({"texto": chunk.page_content})
+    print(entidades)
+----
+
+==== Ejemplo 3: Clasificación temática de fragmentos
+
+[source,python]
+----
+prompt_clasificacion = PromptTemplate.from_template(
+    "Clasifica el siguiente texto en una de estas categorías: Ciencia, Tecnología, Historia, Otro. Texto: {texto}"
+)
+chain_clasificacion = LLMChain(llm=llm, prompt=prompt_clasificacion)
+
+for chunk in chunks:
+    categoria = chain_clasificacion.invoke({"texto": chunk.page_content})
+    print(categoria)
+----
+
+==== Ejemplo 4: Extracción de metadatos
+
+[source,python]
+----
+prompt_metadatos = PromptTemplate.from_template(
+    "Identifica el título, autor y fecha de creación del siguiente documento: {texto}"
+)
+chain_metadatos = LLMChain(llm=llm, prompt=prompt_metadatos)
+
+for chunk in chunks:
+    metadatos = chain_metadatos.invoke({"texto": chunk.page_content})
+    print(metadatos)
+----
+
+.Ventajas y aplicaciones
+- **Automatización**: Reduce el tiempo y los errores del procesamiento manual de documentos extensos[7][8].
+- **Eficiencia**: Permite analizar grandes volúmenes de información y extraer datos clave de forma rápida y precisa[2][7].
+- **Privacidad y control**: Al trabajar con Ollama en local, los datos sensibles no salen del entorno seguro[9].
+- **Casos de uso**: Gestión de contratos, análisis de informes financieros, revisión de artículos de investigación, extracción de datos legales, generación de resúmenes ejecutivos y más[7][8][9].
+
+La extracción de información relevante con modelos Ollama y LangChain es una herramienta poderosa para transformar documentos no estructurados en conocimiento estructurado, facilitando la automatización y la toma de decisiones basada en datos.
+
+
+== 7. Embeddings y Bases de Datos Vectoriales
+
+=== 7.1 ¿Qué son los embeddings y para qué se usan?
+Los **embeddings** son representaciones vectoriales numéricas que capturan el significado semántico de textos, imágenes u otros datos. En el procesamiento de lenguaje natural (NLP), los embeddings convierten palabras, frases o documentos en vectores de alta dimensión (por ejemplo, de 300 a 1000 dimensiones), de modo que la proximidad espacial entre estos vectores refleja la similitud semántica: conceptos relacionados, como "gato" y "felino", estarán cerca en el espacio vectorial.  
+**Principales usos:**  
+- Búsqueda semántica (encontrar documentos relevantes aunque no coincidan exactamente las palabras)
+- Sistemas RAG (Retrieval-Augmented Generation)
+- Recomendaciones y clustering de textos
+- Clasificación y análisis temático
+
+=== 7.2 Creación de embeddings con LLMs
+Con Ollama y LangChain puedes generar embeddings de manera local utilizando modelos optimizados para este fin, como `nomic-embed-text`.
+
+[source,python]
+----
+from langchain_community.embeddings import OllamaEmbeddings
+
+# Crear el objeto de embeddings usando un modelo local
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
+
+texto = "LangChain facilita el desarrollo con IA"
+vector = embeddings.embed_query(texto)  # Devuelve un vector de 3584 dimensiones
+----
+
+**Flujo de procesamiento típico:**
+1. Tokenización del texto
+2. Paso por las capas del modelo de embeddings
+3. Extracción del vector de la última capa
+
+=== 7.3 Almacenamiento en bases de datos vectoriales (Pinecone, FAISS, Chroma)
+Para búsquedas rápidas y eficientes, los embeddings se almacenan en bases de datos vectoriales. Las opciones más comunes en entornos locales son Chroma y FAISS, aunque Pinecone es una alternativa cloud.
+
+[cols="1,1,2,2",options="header"]
+|===
+| Base de Datos | Tipo        | Ventajas                          | Ejemplo de uso LangChain
+| Chroma        | Open Source | Integración nativa, persistencia  | Chroma.from_documents()
+| FAISS         | Biblioteca  | Optimizada para CPU/GPU           | FAISS.from_texts()
+| Pinecone      | Cloud       | Escalabilidad empresarial         | Requiere API key
+|===
+
+**Ejemplo con Chroma:**
+[source,python]
+----
+from langchain_community.vectorstores import Chroma
+
+vector_store = Chroma.from_documents(
+    documents=documentos,
+    embedding=OllamaEmbeddings(model="nomic-embed-text"),
+    persist_directory="./chroma_db"
+)
+----
+
+=== 7.4 Búsqueda semántica y recuperación de información
+La búsqueda semántica consiste en comparar el embedding de una consulta con los embeddings almacenados, usando métricas como la similitud coseno o índices jerárquicos como HNSW para búsquedas rápidas.
+
+**Ejemplo de búsqueda semántica:**
+[source,python]
+----
+# Recuperar los 3 documentos más relevantes para la consulta
+docs = vector_store.similarity_search("¿Qué es LangChain?", k=3)
+
+# Búsqueda con filtro de metadatos
+docs_filtrados = vector_store.max_marginal_relevance_search(
+    query="Aprendizaje automático",
+    filter={"tema": "IA"},
+    k=5
+)
+----
+
+**Flujo completo de RAG (Retrieval-Augmented Generation):**
+1. Generar embeddings de los documentos y almacenarlos en la base vectorial
+2. Convertir la consulta del usuario en un embedding y buscar los chunks más relevantes
+3. Alimentar esos chunks al LLM para generar una respuesta contextualizada
+
+[source,python]
+----
+from langchain_ollama import OllamaLLM
+from langchain.chains import RetrievalQA
+
+qa_chain = RetrievalQA.from_chain_type(
+    llm=OllamaLLM(model="llama3.1"),
+    retriever=vector_store.as_retriever()
+)
+respuesta = qa_chain.run("Explica los embeddings en 50 palabras")
+print(respuesta)
+----
+
+
+== 8. Retrieval Augmented Generation (RAG)
+=== 8.1 Concepto y arquitectura de RAG
+=== 8.2 Implementación de RAG con LangChain
+=== 8.3 Integración de bases de datos vectoriales en RAG
+=== 8.4 Ejemplos prácticos: sistemas de preguntas y respuestas
+
+== 9. Memoria y Estado en Aplicaciones LangChain
+=== 9.1 ¿Qué es la memoria en LangChain?
+=== 9.2 Tipos de memoria: ConversationBuffer, Summary, Entity, etc.
+=== 9.3 Implementación de memoria en chatbots
+=== 9.4 Casos de uso avanzados de memoria
+
+== 10. Agentes en LangChain
+=== 10.1 ¿Qué es un agente y cómo funciona?
+=== 10.2 Agentes reactivos y planificadores
+=== 10.3 Herramientas y plugins para agentes
+=== 10.4 Agentes para búsqueda web, análisis SQL, y más
+=== 10.5 Creación de agentes conversacionales personalizados
+
+== 11. Integración con APIs y Herramientas Externas
+=== 11.1 Conexión con APIs REST y servicios externos
+=== 11.2 Integración con Google, AWS, y otras plataformas
+=== 11.3 Automatización de flujos de trabajo con agentes
+
+== 12. Desarrollo de Aplicaciones Conversacionales
+=== 12.1 Construcción de chatbots avanzados
+=== 12.2 Manejo de contexto y multihilo
+=== 12.3 Integración de memoria y RAG en chatbots
+=== 12.4 Ejemplos de asistentes virtuales y casos reales
+
+== 13. Despliegue y Producción
+=== 13.1 Opciones de despliegue (local, cloud, serverless)
+=== 13.2 Integración con frameworks web (FastAPI, Gradio, Streamlit)
+=== 13.3 Seguridad, autenticación y control de acceso
+=== 13.4 Monitorización y logging de aplicaciones
+
+
+== 15. Recursos y Siguientes Pasos
+=== 15.1 Documentación oficial y comunidad
+=== 15.2 Repositorios y ejemplos recomendados
+=== 15.3 Roadmap avanzado: integración con agentes autónomos y nuevas tendencias

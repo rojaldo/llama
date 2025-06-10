@@ -1,0 +1,13 @@
+Esto es un texto de ejemplo para el archivo sample.txt.
+Este archivo puede contener información de prueba o datos que se utilizarán en el código de ejemplo.
+
+A continuación una lista de los mejores Pokemons:
+- Ninguno
+
+Ahora los peores Pokemons:
+- Magikarp
+- Caterpie
+- Rattata
+- Pidgey
+- Zubat
+

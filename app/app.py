@@ -33,6 +33,16 @@ documentos = SimpleDirectoryReader(
     "data", file_extractor=file_extractor
 ).load_data()
 
+documents = SimpleDirectoryReader(
+    input_dir="./data",
+    file_extractor = {
+        ".xlsx": parser,
+        # Puedes añadir más extractores si es necesario
+    },
+    required_exts=[".xls", ".xlsx"],
+    recursive=True
+).load_data()  #
+
 indice = VectorStoreIndex.from_documents(
     documentos,
     show_progress=True
@@ -44,7 +54,9 @@ herramienta_query_engine = QueryEngineTool(
     query_engine=query_engine,
     metadata=ToolMetadata(
         name="consulta_documentos",
-        description="Herramienta para leer una url con una tabla de rios de españa.",
+        description="Herramienta para leer un xlsx y responder preguntas sobre su contenido. " +
+                    "Utiliza un modelo de lenguaje para interpretar los datos y generar respuestas.",
+        return_direct=True  # Para que la respuesta sea directa sin formato adicional
     )
 )
 
@@ -52,10 +64,12 @@ herramienta_query_engine = QueryEngineTool(
 agente = ReActAgent.from_tools(
     tools=[herramienta_query_engine],
     llm=Settings.llm,
-    verbose=True
+    verbose=True,
+    max_iterations=50  # Increase from default (usually 10)
+
 )
 
 if __name__ == "__main__":
-    pregunta = "Saca un Json con los nombres de los ríos de España y sus longitudes.La contestación es en formato JSON."
+    pregunta = "dame toda la información que tienes del río Tajo"
     respuesta = agente.query(pregunta)
     print("Respuesta:\n", respuesta)
