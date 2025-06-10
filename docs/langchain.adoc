@@ -406,12 +406,12 @@ LangChain actúa como una capa de orquestación entre los LLM y el mundo real, p
 
 ==== Tools
 
-Las **Tools** en LangChain son funciones Python encapsuladas con un esquema (nombre, descripción, argumentos) que pueden ser llamadas por modelos de lenguaje, como Llama3.2 en Ollama, para ejecutar tareas externas (cálculos, búsquedas, consultas API, etc.)[1][2][5][6][7]. Esto amplía las capacidades del LLM más allá de la simple generación de texto, permitiendo agentes y cadenas que interactúan con el mundo real. Las tools se definen fácilmente usando el decorador `@tool`, y pueden ser conectadas a modelos que soportan "tool calling"[1][2][6].
+Las **Tools** en LangChain son funciones Python encapsuladas con un esquema (nombre, descripción, argumentos) que pueden ser llamadas por modelos de lenguaje, como Llama3.2 en Ollama, para ejecutar tareas externas (cálculos, búsquedas, consultas API, etc.). Esto amplía las capacidades del LLM más allá de la simple generación de texto, permitiendo agentes y cadenas que interactúan con el mundo real. Las tools se definen fácilmente usando el decorador `@tool`, y pueden ser conectadas a modelos que soportan "tool calling".
 
 .¿Cómo se trabaja con Tools?
-1. **Definir la tool**: Usando el decorador `@tool`, se crea una función con nombre, descripción y argumentos inferidos automáticamente[1][6][7].
-2. **Vincular la tool al modelo**: Se utiliza `.bind_tools([tool])` para que el modelo pueda decidir cuándo y cómo llamar a la tool[2][4].
-3. **Invocar el modelo**: El usuario interactúa con el modelo y, si es necesario, el LLM solicita la ejecución de la tool y usa el resultado en su respuesta[2][5].
+1. **Definir la tool**: Usando el decorador `@tool`, se crea una función con nombre, descripción y argumentos inferidos automáticamente.
+2. **Vincular la tool al modelo**: Se utiliza `.bind_tools([tool])` para que el modelo pueda decidir cuándo y cómo llamar a la tool.
+3. **Invocar el modelo**: El usuario interactúa con el modelo y, si es necesario, el LLM solicita la ejecución de la tool y usa el resultado en su respuesta.
 
 .Ejemplo completo: sumar dos números con una tool y Llama3.2 local en Ollama
 [source,python]
@@ -442,19 +442,19 @@ print("Resultado final:", resultado["messages"][-1].content)
 ----
 
 .Detalles técnicos y ventajas
-- El decorador `@tool` infiere automáticamente el nombre, descripción y argumentos a partir de la función y su docstring[1][6][7].
-- El modelo puede inspeccionar el esquema de la tool (nombre, descripción, args) y decidir cuándo llamarla[1][2].
-- El resultado de la tool se integra en la respuesta final del modelo, permitiendo respuestas precisas y acciones automatizadas[2][5].
-- Se pueden definir tools para tareas mucho más avanzadas: llamadas API, scraping, consultas a bases de datos, análisis de sentimiento, etc.[5][7].
+- El decorador `@tool` infiere automáticamente el nombre, descripción y argumentos a partir de la función y su docstring.
+- El modelo puede inspeccionar el esquema de la tool (nombre, descripción, args) y decidir cuándo llamarla.
+- El resultado de la tool se integra en la respuesta final del modelo, permitiendo respuestas precisas y acciones automatizadas.
+- Se pueden definir tools para tareas mucho más avanzadas: llamadas API, scraping, consultas a bases de datos, análisis de sentimiento, etc..
 
 ==== Tool Calling 
 
-El **Tool Calling** permite a los LLMs llamar funciones externas (tools) para realizar acciones específicas. Los modelos deciden cuándo y cómo usar estas herramientas basándose en el contexto de la consulta, combinando generación de texto con ejecución de código[1][2][5].
+El **Tool Calling** permite a los LLMs llamar funciones externas (tools) para realizar acciones específicas. Los modelos deciden cuándo y cómo usar estas herramientas basándose en el contexto de la consulta, combinando generación de texto con ejecución de código.
 
 .Componentes principales
 1. **Tool**: Función Python con esquema definido (nombre, descripción, parámetros)
 2. **Modelo con soporte para tool calling**: Debe entender cómo generar llamadas estructuradas
-3. **Ejecutor**: Mecanismo para invocar la herramienta y devolver resultados al modelo[1][4]
+3. **Ejecutor**: Mecanismo para invocar la herramienta y devolver resultados al modelo
 
 .Ejemplo completo: Calculadora con Llama3.2 local
 [source,python]
@@ -495,14 +495,14 @@ else:
 4. Se muestra el resultado: "Resultado de la suma: 42"
 
 .Características clave
-- El decorador `@tool` genera automáticamente el esquema de la función[1][6]
-- `bind_tools` vincula las herramientas al modelo para su reconocimiento[2][4]
-- Los modelos deciden dinámicamente cuándo usar tools[1][5]
-- Soporte para ejecución local y privada con Ollama[2][5]
+- El decorador `@tool` genera automáticamente el esquema de la función
+- `bind_tools` vincula las herramientas al modelo para su reconocimiento
+- Los modelos deciden dinámicamente cuándo usar tools
+- Soporte para ejecución local y privada con Ollama
 
 ==== Structured Output
 
-El **Structured Output** en LangChain permite que los modelos de lenguaje generen respuestas en formatos estructurados (como JSON o modelos Pydantic) en vez de solo texto libre. Esto facilita la integración directa con sistemas, la validación automática de datos y el procesamiento consistente de la información, siendo ideal para aplicaciones empresariales, extracción de datos, generación de informes y workflows automatizados[2][3][4][6].
+El **Structured Output** en LangChain permite que los modelos de lenguaje generen respuestas en formatos estructurados (como JSON o modelos Pydantic) en vez de solo texto libre. Esto facilita la integración directa con sistemas, la validación automática de datos y el procesamiento consistente de la información, siendo ideal para aplicaciones empresariales, extracción de datos, generación de informes y workflows automatizados.
 
 .¿Cómo se trabaja con Structured Output?
 1. **Definir un esquema estructurado** (por ejemplo, con Pydantic) que describe el formato de la respuesta esperada.
@@ -563,7 +563,7 @@ La memoria permite a los modelos mantener el contexto entre interacciones, esenc
 .Funciona almacenando:
 - Historial completo de conversaciones (buffer)
 - Resúmenes de interacciones largas
-- Entidades clave y sus relaciones[1][6][8]
+- Entidades clave y sus relaciones
 
 .Implementación básica con ConversationBufferMemory
 [source,python]
@@ -591,19 +591,19 @@ print("Asistente:", response2)
 ----
 
 .Tipos avanzados de memoria
-1. **ConversationSummaryMemory**: Reduce el uso de tokens con resúmenes[1]
-2. **ConversationBufferWindowMemory**: Limita el historial a las últimas K interacciones[1]
-3. **EntityMemory**: Recuerda entidades específicas (nombres, fechas)[7][8]
+1. **ConversationSummaryMemory**: Reduce el uso de tokens con resúmenes
+2. **ConversationBufferWindowMemory**: Limita el historial a las últimas K interacciones
+3. **EntityMemory**: Recuerda entidades específicas (nombres, fechas)
 
 .Mejores prácticas
-- Usar `return_messages=True` para formato de chat estructurado[6]
-- Limitar el buffer a 2000 tokens para evitar sobrecarga[8]
-- Combinar con RAG para contexto ampliado[1][9]
-- Persistir en disco con `FileChatMessageHistory` para conversaciones largas[3]
+- Usar `return_messages=True` para formato de chat estructurado
+- Limitar el buffer a 2000 tokens para evitar sobrecarga
+- Combinar con RAG para contexto ampliado
+- Persistir en disco con `FileChatMessageHistory` para conversaciones largas
 
 ==== Document Loader
 
-Los Document Loaders son componentes de LangChain que cargan datos de diversas fuentes (PDFs, CSVs, webs, etc.) al formato estándar `Document` de LangChain, permitiendo su posterior procesamiento y análisis. Son esenciales para construir sistemas de Recuperación Aumentada por Generación (RAG), donde se integra conocimiento específico en aplicaciones de IA locales con modelos como Llama3.2[1][3][5][8].
+Los Document Loaders son componentes de LangChain que cargan datos de diversas fuentes (PDFs, CSVs, webs, etc.) al formato estándar `Document` de LangChain, permitiendo su posterior procesamiento y análisis. Son esenciales para construir sistemas de Recuperación Aumentada por Generación (RAG), donde se integra conocimiento específico en aplicaciones de IA locales con modelos como Llama3.2.
 
 .Implementación con modelo local Llama3.2
 [source,python]
@@ -652,10 +652,10 @@ print(respuesta["result"])
 |===
 
 .Buenas prácticas
-- Usar `chunk_size` entre 500-1500 tokens para equilibrio contexto/eficiencia[3][5]
+- Usar `chunk_size` entre 500-1500 tokens para equilibrio contexto/eficiencia
 - Incluir metadatos relevantes para trazabilidad (`source`, `page`, etc.)
-- Combinar con modelos locales para privacidad total[8][9]
-- Usar `lazy_load` para grandes datasets[2]
+- Combinar con modelos locales para privacidad total
+- Usar `lazy_load` para grandes datasets
 
 ==== Retrieval
 El **Retrieval** en LangChain se refiere al proceso de recuperar información relevante de fuentes externas para mejorar las respuestas de los LLMs. Es fundamental en sistemas RAG (Retrieval-Augmented Generation). 
@@ -731,12 +731,12 @@ print(result["result"])
 
 ==== Text Splitters
 
-Los **Text Splitters** son componentes críticos en el procesamiento de documentos para LLMs, diseñados para dividir textos en fragmentos manejables manteniendo la coherencia semántica[1][4]. Su función principal es adaptar contenidos extensos a los límites de contexto de los modelos, mejorando la eficiencia en tareas como RAG (Retrieval-Augmented Generation).
+Los **Text Splitters** son componentes críticos en el procesamiento de documentos para LLMs, diseñados para dividir textos en fragmentos manejables manteniendo la coherencia semántica. Su función principal es adaptar contenidos extensos a los límites de contexto de los modelos, mejorando la eficiencia en tareas como RAG (Retrieval-Augmented Generation).
 
 .Componentes clave:
-* **Estrategia recursiva**: Divide jerárquicamente (párrafos → oraciones → palabras)[1][3]
+* **Estrategia recursiva**: Divide jerárquicamente (párrafos → oraciones → palabras)
 * **Control de tamaño**: `chunk_size` define longitud máxima por fragmento
-* **Solapamiento contextual**: `chunk_overlap` preserva contexto entre chunks[5]
+* **Solapamiento contextual**: `chunk_overlap` preserva contexto entre chunks
 
 .Implementación práctica
 [source,python]
@@ -773,9 +773,9 @@ print(f"Resumen modelo:\n{analisis}")
 
 
 .Este flujo muestra:
-* Carga de PDFs con `PyPDFLoader`[1]
-* División inteligente preservando estructura jerárquica[3][5]
-* Procesamiento local con modelo Llama3 mediante Ollama[6]
+* Carga de PDFs con `PyPDFLoader`
+* División inteligente preservando estructura jerárquica
+* Procesamiento local con modelo Llama3 mediante Ollama
 
 .Parámetros clave para `RecursiveCharacterTextSplitter`:
 |===
@@ -793,12 +793,12 @@ print(f"Resumen modelo:\n{analisis}")
 
 ==== Embedding Models en LangChain
 
-Los **Embedding Models** transforman texto en representaciones vectoriales que capturan significado semántico, permitiendo comparaciones matemáticas entre contenidos[1][4]. En LangChain facilitan operaciones como búsqueda semántica y RAG (Retrieval-Augmented Generation).
+Los **Embedding Models** transforman texto en representaciones vectoriales que capturan significado semántico, permitiendo comparaciones matemáticas entre contenidos. En LangChain facilitan operaciones como búsqueda semántica y RAG (Retrieval-Augmented Generation).
 
 .Características clave:
-* **Vectorización contextual**: Conversión de texto a arrays numéricos densos[5]
-* **Preservación semántica**: Relaciones espaciales reflejan similitudes conceptuales[6]
-* **Interoperabilidad**: Interface unificada para múltiples proveedores[4]
+* **Vectorización contextual**: Conversión de texto a arrays numéricos densos
+* **Preservación semántica**: Relaciones espaciales reflejan similitudes conceptuales
+* **Interoperabilidad**: Interface unificada para múltiples proveedores
 
 .Implementación con Ollama
 [source,python]
@@ -822,7 +822,7 @@ text_splitter = RecursiveCharacterTextSplitter(
 texts = text_splitter.split_documents(documents)
 
 # 3. Generar embeddings locales
-embeddings = OllamaEmbeddings(model="nomic-embed-text:latest")  # Modelo especializado[5]
+embeddings = OllamaEmbeddings(model="nomic-embed-text:latest")  # Modelo especializado
 
 # 4. Almacenar vectores
 vectorstore = Chroma.from_documents(
@@ -844,25 +844,25 @@ print(f"Respuesta contextualizada:\n{respuesta}")
 ----
 
 .Flujo de trabajo
-1. **Ingestión**: `PyPDFLoader` carga documentos PDF[3]
-2. **Fragmentación**: Splitter divide texto preservando contexto[1]
-3. **Vectorización**: Ollama genera embeddings con modelo local[2][5]
-4. **Almacenamiento**: Chroma guarda vectores para búsqueda eficiente[3]
-5. **Consulta**: Búsqueda semántica encuentra fragmentos relevantes[4]
-6. **Generación**: LLM local produce respuesta usando contexto[3]
+1. **Ingestión**: `PyPDFLoader` carga documentos PDF
+2. **Fragmentación**: Splitter divide texto preservando contexto
+3. **Vectorización**: Ollama genera embeddings con modelo local
+4. **Almacenamiento**: Chroma guarda vectores para búsqueda eficiente
+5. **Consulta**: Búsqueda semántica encuentra fragmentos relevantes
+6. **Generación**: LLM local produce respuesta usando contexto
 
 .Configuración avanzada
 |===
 | Parámetro | Función | Valor óptimo
-| Modelo embedding | Determina calidad vectorial | `nomic-embed-text` o `mxbai-embed-large`[5]
+| Modelo embedding | Determina calidad vectorial | `nomic-embed-text` o `mxbai-embed-large`
 | Tamaño de chunk | Balance contexto/eficiencia | 500-1000 tokens
 | Dimensión vector | Densidad información | 768-1024 (modelos modernos)
 |===
 
 .**Ventajas clave:**
-- Operación 100% local sin APIs externas[2][3]
-- Baja latencia en generación de embeddings[5]
-- Integración nativa con ecosistema LangChain[4]
+- Operación 100% local sin APIs externas
+- Baja latencia en generación de embeddings
+- Integración nativa con ecosistema LangChain
 
 ==== Vector Stores en LangChain (Markdown)
 
@@ -927,16 +927,16 @@ print(f"Respuesta contextualizada:\n{respuesta}")
 .**Ventajas**:
 - Procesamiento y búsqueda local sobre documentos Markdown
 - Integración nativa con LangChain y Ollama
-- Ejemplo práctico y reproducible para flujos de IA documentados en AsciiDoc[1][2]
+- Ejemplo práctico y reproducible para flujos de IA documentados en AsciiDoc
 
 ==== Retriever en LangChain
 
-El **Retriever** es el componente central en sistemas RAG que recupera documentos relevantes para una consulta usando búsqueda semántica[1][3]. Su función principal es conectar la consulta del usuario con la información almacenada en bases vectoriales[5][9].
+El **Retriever** es el componente central en sistemas RAG que recupera documentos relevantes para una consulta usando búsqueda semántica. Su función principal es conectar la consulta del usuario con la información almacenada en bases vectoriales.
 
 .Características clave:
-* **Interfaz estandarizada**: Recibe strings y devuelve documentos[1][9]
-* **Búsqueda contextual**: Utiliza embeddings y metadatos para relevancia[3][6]
-* **Integración modular**: Funciona con múltiples bases vectoriales (Chroma, Redis)[3][7]
+* **Interfaz estandarizada**: Recibe strings y devuelve documentos
+* **Búsqueda contextual**: Utiliza embeddings y metadatos para relevancia
+* **Integración modular**: Funciona con múltiples bases vectoriales (Chroma, Redis)
 
 .Implementación con Ollama
 [source,python]
@@ -992,39 +992,39 @@ print(resultado["result"])
 ----
 
 .Flujo de trabajo
-1. **Carga**: `TextLoader` ingiere documentos Markdown/PDF[3][7]
-2. **Fragmentación**: Splitter recursivo mantiene contexto[1][6]
-3. **Vectorización**: Modelo Nomic-embed-text local via Ollama[5][10]
-4. **Almacenamiento**: ChromaDB persiste vectores y metadatos[3][9]
-5. **Búsqueda**: Retriever filtra por similitud y umbral[1][5]
-6. **Generación**: Llama3.2 crea respuesta contextualizada[10][11]
+1. **Carga**: `TextLoader` ingiere documentos Markdown/PDF
+2. **Fragmentación**: Splitter recursivo mantiene contexto
+3. **Vectorización**: Modelo Nomic-embed-text local via Ollama
+4. **Almacenamiento**: ChromaDB persiste vectores y metadatos
+5. **Búsqueda**: Retriever filtra por similitud y umbral
+6. **Generación**: Llama3.2 crea respuesta contextualizada
 
 .Configuración avanzada
 |===
 | Parámetro | Función | Valor óptimo
-| search_type | Algoritmo de búsqueda | `similarity`/`mmr`[1][9]
-| k | Resultados a retornar | 3-5 según precisión[3][5]
-| score_threshold | Filtro de relevancia | 0.6-0.8[3][7]
+| search_type | Algoritmo de búsqueda | `similarity`/`mmr`
+| k | Resultados a retornar | 3-5 según precisión
+| score_threshold | Filtro de relevancia | 0.6-0.8
 |===
 
 .**Optimizaciones:**
-- Usar `search_type="mmr"` para diversidad en resultados[1][9]
-- Combinar filtros de metadatos con búsqueda semántica[3][5]
-- Implementar caché de embeddings para consultas recurrentes[7][10]
+- Usar `search_type="mmr"` para diversidad en resultados
+- Combinar filtros de metadatos con búsqueda semántica
+- Implementar caché de embeddings para consultas recurrentes
 
 ==== Output Parser en LangChain
 
-Los **Output Parsers** transforman respuestas textuales de LLMs en formatos estructurados (JSON, listas, objetos Python)[1][3]. Esenciales para integrar salidas de modelos en aplicaciones, permiten:
+Los **Output Parsers** transforman respuestas textuales de LLMs en formatos estructurados (JSON, listas, objetos Python). Esenciales para integrar salidas de modelos en aplicaciones, permiten:
 
 * Normalización de respuestas
 * Validación de estructuras de datos
-* Conversión a formatos consumibles por sistemas externos[3][6]
+* Conversión a formatos consumibles por sistemas externos
 
 .Tipos principales
-* **StructuredOutputParser**: Crea diccionarios según esquema personalizado[3][6]
-* **ListOutputParser**: Convierte textos en listas Python[3]
-* **DatetimeOutputParser**: Extrae fechas/horas en objetos datetime[3]
-* **PydanticOutputParser**: Valida salidas contra modelos Pydantic[6]
+* **StructuredOutputParser**: Crea diccionarios según esquema personalizado
+* **ListOutputParser**: Convierte textos en listas Python
+* **DatetimeOutputParser**: Extrae fechas/horas en objetos datetime
+* **PydanticOutputParser**: Valida salidas contra modelos Pydantic
 
 .Implementación con Ollama
 [source,python]
@@ -1090,10 +1090,10 @@ else:
 ----
 
 .Flujo de trabajo
-1. **Definición de esquema**: Especifica estructura requerida[3][6]
-2. **Generación de instrucciones**: `get_format_instructions()` crea texto para prompt[3]
-3. **Ejecución del modelo**: Llama3.2 genera respuesta textual[9][10]
-4. **Validación y parsing**: Convierte texto a estructura validada[1][6]
+1. **Definición de esquema**: Especifica estructura requerida
+2. **Generación de instrucciones**: `get_format_instructions()` crea texto para prompt
+3. **Ejecución del modelo**: Llama3.2 genera respuesta textual
+4. **Validación y parsing**: Convierte texto a estructura validada
 
 .Configuración avanzada
 |===
@@ -1103,18 +1103,18 @@ else:
 |===
 
 .**Ventajas clave:**
-- Integración con modelos locales via Ollama[9][10]
-- Validación automática de estructuras[6]
-- Compatibilidad con múltiples formatos de salida[1][3]
+- Integración con modelos locales via Ollama
+- Validación automática de estructuras
+- Compatibilidad con múltiples formatos de salida
 
 ==== Few-shot Prompting
 
-El **few-shot prompting** es una técnica que proporciona ejemplos contextuales al LLM para guiar su comportamiento en tareas específicas[1][6]. 
+El **few-shot prompting** es una técnica que proporciona ejemplos contextuales al LLM para guiar su comportamiento en tareas específicas. 
 
 .En LangChain se implementa mediante:
-* **Ejemplos demostrativos**: Pares entrada-salida que ilustran la tarea[3][7]
-* **Plantillas estructuradas**: Formateo consistente usando `FewShotPromptTemplate`[4][8]
-* **Selectores dinámicos**: Mecanismos para optimizar ejemplos usados (ej: `LengthBasedExampleSelector`)[4][7]
+* **Ejemplos demostrativos**: Pares entrada-salida que ilustran la tarea
+* **Plantillas estructuradas**: Formateo consistente usando `FewShotPromptTemplate`
+* **Selectores dinámicos**: Mecanismos para optimizar ejemplos usados (ej: `LengthBasedExampleSelector`)
 
 .Implementación con Ollama
 [source,python]
@@ -1164,39 +1164,39 @@ print(f"Respuesta generada:\n{respuesta}")
 ----
 
 .Flujo de trabajo
-1. **Definición de ejemplos**: Selección de casos representativos[1][7]
-2. **Estructuración**: Formateo consistente con `PromptTemplate`[3][4]
-3. **Ensamblaje**: Combinación prefijo/ejemplos/sufijo[8][7]
-4. **Generación**: Modelo local produce respuesta contextualizada[9][10]
+1. **Definición de ejemplos**: Selección de casos representativos
+2. **Estructuración**: Formateo consistente con `PromptTemplate`
+3. **Ensamblaje**: Combinación prefijo/ejemplos/sufijo
+4. **Generación**: Modelo local produce respuesta contextualizada
 
 .Configuración avanzada
 |===
 | Parámetro | Función | Valor óptimo
-| examples | Casos demostrativos | 2-5 ejemplos variados[3][7]
-| example_separator | Divisor entre ejemplos | "\n\n" para claridad[4]
-| max_length | Longitud máxima total | 1500-2000 tokens[7][8]
+| examples | Casos demostrativos | 2-5 ejemplos variados
+| example_separator | Divisor entre ejemplos | "\n\n" para claridad
+| max_length | Longitud máxima total | 1500-2000 tokens
 |===
 
 .**Ventajas clave:**
-- Adaptabilidad a nuevas tareas sin reentrenamiento[1][6]
-- Mejora precisión en tareas complejas (58%↑ según tests)[8]
-- Operación 100% local con Ollama y modelos Llama3[9][10]
+- Adaptabilidad a nuevas tareas sin reentrenamiento
+- Mejora precisión en tareas complejas (58%↑ según tests)
+- Operación 100% local con Ollama y modelos Llama3
 
 ==== Example Selectors en LangChain
 
-Los **Example Selectors** son componentes que seleccionan ejemplos relevantes para incluir en prompts, optimizando el contexto proporcionado a los LLMs[1][3]. 
+Los **Example Selectors** son componentes que seleccionan ejemplos relevantes para incluir en prompts, optimizando el contexto proporcionado a los LLMs. 
 
 .Los Example Selectors permiten:
-* **Selección dinámica**: Eligen ejemplos basados en similitud semántica o características del input[1][6]
-* **Gestión de contexto**: Controlan la cantidad de ejemplos según límites de longitud[6][7]
-* **Integración con RAG**: Mejoran respuestas en sistemas Retrieval-Augmented Generation[7]
+* **Selección dinámica**: Eligen ejemplos basados en similitud semántica o características del input
+* **Gestión de contexto**: Controlan la cantidad de ejemplos según límites de longitud
+* **Integración con RAG**: Mejoran respuestas en sistemas Retrieval-Augmented Generation
 
 .Tipos principales
 |===
 | Selector | Función | Caso de uso
-| LengthBased | Selecciona por longitud del texto | Optimización de tokens[6]
-| MMR | Balance relevancia/diversidad | Evitar redundancias[6]
-| SemanticSimilarity | Búsqueda por embeddings | Respuestas contextualizadas[6]
+| LengthBased | Selecciona por longitud del texto | Optimización de tokens
+| MMR | Balance relevancia/diversidad | Evitar redundancias
+| SemanticSimilarity | Búsqueda por embeddings | Respuestas contextualizadas
 |===
 
 .Implementación con Ollama
@@ -1256,40 +1256,40 @@ print(f"Respuesta contextualizada:\n{respuesta}")
 ----
 
 .Flujo de trabajo
-1. **Carga de datos**: `TextLoader` ingiere documentos Markdown[1][3]
-2. **Preparación de ejemplos**: Splitter crea fragmentos contextuales[6][7]
-3. **Selección dinámica**: El selector elige ejemplos por longitud[6]
-4. **Ensamblaje de prompt**: Combina ejemplos y consulta[1][3]
-5. **Generación**: Modelo local produce respuesta contextual[8][9]
+1. **Carga de datos**: `TextLoader` ingiere documentos Markdown
+2. **Preparación de ejemplos**: Splitter crea fragmentos contextuales
+3. **Selección dinámica**: El selector elige ejemplos por longitud
+4. **Ensamblaje de prompt**: Combina ejemplos y consulta
+5. **Generación**: Modelo local produce respuesta contextual
 
 .Configuración avanzada
 |===
 | Parámetro | Función | Valor óptimo
-| max_length | Límite tokens contexto | 1000-2000[6][7]
-| example_count | Ejemplos iniciales | 5-10[1][3]
-| similarity_threshold | Filtro relevancia | 0.7-0.85[6]
+| max_length | Límite tokens contexto | 1000-2000
+| example_count | Ejemplos iniciales | 5-10
+| similarity_threshold | Filtro relevancia | 0.7-0.85
 |===
 
 .**Optimizaciones:**
-- Combinar con embeddings locales para selección semántica[6][7]
-- Usar `MMRExampleSelector` para diversidad en respuestas[6]
-- Implementar caché de ejemplos para consultas recurrentes[3][7]
+- Combinar con embeddings locales para selección semántica
+- Usar `MMRExampleSelector` para diversidad en respuestas
+- Implementar caché de ejemplos para consultas recurrentes
 
 ==== Evaluation en LangChain
 
-El módulo **Evaluation** permite evaluar cualitativa y cuantitativamente el rendimiento de aplicaciones LLM mediante métricas personalizadas[1][4]. 
+El módulo **Evaluation** permite evaluar cualitativa y cuantitativamente el rendimiento de aplicaciones LLM mediante métricas personalizadas. 
 
 .Componente clave para:
 * Validar respuestas contra estándares de calidad
-* Comparar modelos y configuraciones[4][5]
-* Detectar _drift_ en producción[5]
+* Comparar modelos y configuraciones
+* Detectar _drift_ en producción
 
 .Tipos de evaluadores
 |===
 | Tipo | Función | Ejemplo
-| Criterios | Valida cumplimiento de normas | Concisión, precisión[1][6]
-| QA | Evalúa respuestas contra referencia | Exactitud factual[4]
-| Custom | Métricas específicas del dominio | Coherencia técnica[5][7]
+| Criterios | Valida cumplimiento de normas | Concisión, precisión
+| QA | Evalúa respuestas contra referencia | Exactitud factual
+| Custom | Métricas específicas del dominio | Coherencia técnica
 |===
 
 .Implementación con Ollama
@@ -1340,10 +1340,10 @@ if 'reasoning' in resultado:
 ----
 
 .Flujo de trabajo
-1. **Definición de métricas**: Seleccionar criterios relevantes[5][7]
-2. **Configuración**: Cargar evaluador con modelo local[1][4]
-3. **Ejecución**: Comparar respuestas contra estándares[4][5]
-4. **Análisis**: Identificar mejoras con métricas cuantificables[5]
+1. **Definición de métricas**: Seleccionar criterios relevantes
+2. **Configuración**: Cargar evaluador con modelo local
+3. **Ejecución**: Comparar respuestas contra estándares
+4. **Análisis**: Identificar mejoras con métricas cuantificables
 
 .Evaluación comparativa entre modelos
 [source,python]
@@ -1373,7 +1373,7 @@ resultado_comparacion = evaluador_comparativo.invoke({
 print(f"Comparación: {resultado_comparacion}")
 ----
 
-.**Métricas clave para sistemas RAG[5][7]:**
+.**Métricas clave para sistemas RAG:**
 * Precisión contextual (`context_relevance`)
 * Fidelidad a la fuente (`faithfulness`)
 * Utilidad práctica (`practical_utility`)
