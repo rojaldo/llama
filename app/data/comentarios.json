@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "comentario": "Increíble película, Quentin Tarantino es un genio. Me quedé maravillado con la forma en que entrelaza las historias y cómo cada personaje tiene algo único que aportar a la narrativa. La película no solo es entretenida, sino que también te hace reflexionar sobre la vida, la casualidad y el destino. Sin duda, una obra maestra del cine moderno que sigue siendo relevante décadas después de su estreno.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 2,
+    "comentario": "Me encantó la trama y los personajes. La manera en que Tarantino construye los diálogos y los momentos de tensión es simplemente brillante. Cada escena está llena de significado y el ritmo es perfecto, nunca te aburres. Los personajes son tan carismáticos y memorables que te quedas pensando en ellos mucho después de terminar la película. Es una experiencia cinematográfica que recomiendo a todo el mundo.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 3,
+    "comentario": "No me gustó para nada, demasiada violencia. Aunque entiendo que la violencia es parte del estilo de Tarantino, en esta película me pareció excesiva y gratuita. Algunas escenas me resultaron incómodas e innecesarias, y eso me impidió disfrutar de la historia. Además, los personajes no me resultaron simpáticos y el humor negro no conectó conmigo. No es una película que recomendaría a personas sensibles.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 4,
+    "comentario": "La banda sonora es simplemente perfecta. Cada canción está seleccionada con mucho cuidado y aporta un ambiente único a las escenas. La música no solo acompaña la acción, sino que también ayuda a definir el tono y el estilo de la película. Es increíble cómo Tarantino utiliza la música para potenciar las emociones y crear momentos inolvidables. La banda sonora es, sin duda, uno de los puntos más fuertes de Pulp Fiction.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 5,
+    "comentario": "No me enganchó, la encontré aburrida. Esperaba mucho más después de todo lo que había escuchado sobre ella, pero la historia no me atrapó en ningún momento. Los personajes me parecieron poco interesantes y la trama, aunque original, me resultó confusa y difícil de seguir. No logré conectar emocionalmente con la película y me costó terminar de verla. No es para mí.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 6,
+    "comentario": "Los diálogos son brillantes. Cada conversación está cargada de significado y el lenguaje es tan natural que parece real. Tarantino tiene un don para crear diálogos que son a la vez divertidos, filosos y profundos. Los personajes hablan como personas reales, con sus propias manías y formas de expresarse. Los diálogos son, sin duda, uno de los mayores aciertos de la película y hacen que cada escena sea memorable.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 7,
+    "comentario": "No entiendo por qué es tan famosa. La vi esperando encontrar algo especial, pero no logré ver qué la hace tan valorada. La historia me pareció confusa y los personajes, aunque carismáticos, no me resultaron especialmente interesantes. No niego que tiene momentos divertidos y originales, pero en general no me impactó tanto como a la mayoría. Quizás es una película que hay que ver más de una vez para apreciarla.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 8,
+    "comentario": "Una obra maestra del cine moderno. Pulp Fiction es una película que redefine lo que significa hacer cine. La forma en que Tarantino entrelaza las historias, el ritmo, los personajes y los diálogos es simplemente magistral. Cada escena está cuidadosamente construida y no hay un solo minuto desperdiciado. Es una película que te deja pensando y que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. Sin duda, una de las mejores películas de todos los tiempos.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 9,
+    "comentario": "Me parece una película normal, ni bien ni mal. No me emocionó especialmente, pero tampoco me disgustó. La historia es original y los personajes están bien construidos, pero no logré conectar emocionalmente con la película. Quizás mis expectativas eran demasiado altas, pero en general me dejó indiferente. No la recomendaría ni la desaconsejaría, simplemente es una película más para mí.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 10,
+    "comentario": "La actuación de John Travolta es espectacular. Travolta demuestra una vez más su versatilidad como actor, dando vida a un personaje complejo y lleno de matices. Su química con Samuel L. Jackson es palpable y juntos crean algunas de las escenas más memorables de la película. Travolta aporta carisma, humor y profundidad a su papel, y es uno de los grandes aciertos del casting. Sin duda, una de sus mejores interpretaciones.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 11,
+    "comentario": "No me gustó el final. Después de todo el desarrollo de la historia, esperaba un cierre más impactante o al menos más satisfactorio. El final me dejó con la sensación de que faltaba algo, como si la película no terminara de cerrar todas las tramas de manera convincente. No fue lo suficientemente memorable para mí y eso afectó mi opinión general sobre la película. Quizás es cuestión de gustos, pero a mí no me convenció.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 12,
+    "comentario": "Muy recomendable para los amantes del cine. Pulp Fiction es una película que todo cinéfilo debería ver al menos una vez. Es una obra que rompe con las convenciones del cine tradicional y que demuestra el poder de la creatividad y la originalidad. La dirección, el guion y las actuaciones son excepcionales. Es una experiencia cinematográfica única que te deja con ganas de más. No te la pierdas si te gusta el cine de autor.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 13,
+    "comentario": "No la volvería a ver. Aunque reconocer el mérito artístico de la película, personalmente no disfruté la experiencia. La violencia, el humor negro y los personajes no me resultaron atractivos. Me costó conectar con la historia y no logré empatizar con ningún personaje. Quizás es una película que requiere de un tipo de humor o sensibilidad que no tengo. No la recomendaría a personas que buscan algo más ligero o menos crudo.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 14,
+    "comentario": "La dirección y el montaje son increíbles. Tarantino demuestra una vez más su talento detrás de la cámara, creando escenas que son a la vez visualmente impactantes y narrativamente sólidas. El montaje es ágil y ayuda a mantener el ritmo de la película, mientras que la dirección de arte y la fotografía contribuyen a crear una atmósfera única. Es una película que se disfruta tanto por su historia como por su forma de contarla.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 15,
+    "comentario": "No me pareció nada especial. La vi con la recomendación de varios amigos, pero no encontré nada que me impactara especialmente. La historia es original, pero no me resultó tan sorprendente como esperaba. Los personajes están bien construidos, pero no logré conectar con ellos. En general, es una película correcta, pero no la consideraría una obra maestra. Simplemente no es para mí.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 16,
+    "comentario": "Samuel L. Jackson está increíble en su papel. Su interpretación es poderosa, carismática y llena de matices. Jackson logra transmitir la complejidad de su personaje con una naturalidad impresionante. Cada vez que aparece en pantalla, roba la escena con su presencia y su forma de hablar. Es uno de los personajes más memorables de la película y, sin duda, una de las mejores actuaciones de su carrera. Un verdadero acierto del casting.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 17,
+    "comentario": "Demasiado larga para lo que cuenta. La película me pareció que se extendía más de lo necesario en algunas partes. Aunque tiene momentos brillantes, también hay escenas que podrían haberse acortado sin perder fuerza narrativa. El ritmo es irregular y en ocasiones me sentí aburrido. Creo que con una edición más ajustada, la película habría ganado en intensidad y coherencia. No es una de mis favoritas, aunque reconozco su valor artístico.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 18,
+    "comentario": "Una de las mejores películas que he visto. Pulp Fiction es una experiencia cinematográfica que te marca. La forma en que Tarantino juega con el tiempo y las historias es simplemente genial. Los personajes son inolvidables y los diálogos, brillantes. Es una película que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. No hay un solo minuto desperdiciado y cada escena aporta algo a la historia. Sin duda, una obra maestra.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 19,
+    "comentario": "No me gustaron los personajes. Aunque reconocí la originalidad de la historia, no logré empatizar con ninguno de los protagonistas. Sus acciones y motivaciones me resultaron poco creíbles y, en ocasiones, desagradables. El humor negro tampoco conectó conmigo y eso me impidió disfrutar de la película. Creo que es una cuestión de gustos, pero para mí los personajes fueron el punto débil de la película.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 20,
+    "comentario": "Me gustó, pero no es para todos los públicos. Reconozco el mérito artístico de la película y la originalidad de la historia, pero creo que no todo el mundo va a disfrutarla. La violencia, el humor negro y los diálogos pueden resultar incómodos para algunas personas. Es una película que requiere de cierta apertura mental y gusto por el cine de autor. No la recomendaría a personas sensibles o que buscan algo más convencional.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 21,
+    "comentario": "La película es muy original y divertida. Me encantó la forma en que Tarantino mezcla géneros y juega con las expectativas del espectador. Cada escena es una sorpresa y el humor negro está presente en todo momento. Los personajes son extravagantes y memorables, y la historia nunca deja de sorprender. Es una película que te hace reír, reflexionar y disfrutar del cine de una manera diferente. Muy recomendable para quienes buscan algo fuera de lo común.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 22,
+    "comentario": "No logré conectar con la historia. Aunque reconocí la originalidad de la película, no logré empatizar con los personajes ni con la trama. Me resultó difícil seguir el hilo de la historia y, en ocasiones, me sentí perdido. El humor negro tampoco conectó conmigo y eso me impidió disfrutar de la experiencia. No es una película que recomendaría, aunque entiendo que tiene muchos seguidores.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 23,
+    "comentario": "Recomendada totalmente. Pulp Fiction es una película que todo amante del cine debería ver al menos una vez. Es una obra que rompe con las convenciones y que demuestra el poder de la creatividad. La dirección, el guion y las actuaciones son excepcionales. Es una experiencia cinematográfica única que te deja con ganas de más. No te la pierdas si te gusta el cine de autor y las historias originales.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 24,
+    "comentario": "No la recomendaría. Aunque reconozco el mérito artístico de la película, personalmente no la disfruté. La violencia, el humor negro y los personajes no me resultaron atractivos. Me costó conectar con la historia y no logré empatizar con ningún personaje. Quizás es una película que requiere de un tipo de humor o sensibilidad que no tengo. No la recomendaría a personas que buscan algo más ligero o menos crudo.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 25,
+    "comentario": "Me encantó cada minuto. Pulp Fiction es una película que te atrapa desde el primer momento y no te suelta hasta el final. La forma en que Tarantino construye la historia y los personajes es simplemente genial. Cada escena está llena de significado y el ritmo es perfecto. Es una película que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. Sin duda, una de mis favoritas de todos los tiempos.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 26,
+    "comentario": "No me pareció tan buena como dicen. La vi esperando encontrar algo especial, pero no logré ver qué la hace tan valorada. La historia me pareció confusa y los personajes, aunque carismáticos, no me resultaron especialmente interesantes. No niego que tiene momentos divertidos y originales, pero en general no me impactó tanto como a la mayoría. Quizás es una película que hay que ver más de una vez para apreciarla.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 27,
+    "comentario": "La estructura narrativa es muy interesante. Me fascinó la forma en que Tarantino juega con el tiempo y las historias, entrelazando diferentes tramas de manera original y sorprendente. Cada historia tiene su propio ritmo y estilo, pero todas convergen de manera magistral. Es una película que te mantiene atento y que te invita a reflexionar sobre la casualidad y el destino. Sin duda, uno de los mayores aciertos de la película.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 28,
+    "comentario": "La violencia es innecesaria. Aunque entiendo que es parte del estilo de Tarantino, en esta película me pareció excesiva y gratuita. Algunas escenas me resultaron incómodas e innecesarias, y eso me impidió disfrutar de la historia. Además, los personajes no me resultaron simpáticos y el humor negro no conectó conmigo. No es una película que recomendaría a personas sensibles o que buscan algo más ligero.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 29,
+    "comentario": "Una película que no olvidaré fácilmente. Pulp Fiction es una experiencia cinematográfica que te marca. La forma en que Tarantino juega con el tiempo y las historias es simplemente genial. Los personajes son inolvidables y los diálogos, brillantes. Es una película que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. No hay un solo minuto desperdiciado y cada escena aporta algo a la historia. Sin duda, una obra maestra.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 30,
+    "comentario": "No me aportó nada nuevo. La vi esperando encontrar algo innovador, pero la historia me pareció confusa y los personajes, aunque originales, no me resultaron especialmente interesantes. No niego que tiene momentos divertidos y originales, pero en general no me impactó tanto como a la mayoría. Quizás es una película que hay que ver más de una vez para apreciarla, pero a mí no me convenció del todo.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 31,
+    "comentario": "La vería una y otra vez. Pulp Fiction es una película que nunca cansa. Cada vez que la veo, descubro nuevos detalles y matices que no había notado antes. La historia, los personajes y los diálogos son tan ricos que siempre hay algo nuevo que disfrutar. Es una película que te invita a reflexionar y a disfrutar del cine de una manera diferente. Sin duda, una de mis favoritas de todos los tiempos.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 32,
+    "comentario": "Demasiado confusa. Me costó seguir el hilo de la historia y, en ocasiones, me sentí perdido. La estructura narrativa, aunque original, me resultó difícil de seguir y eso me impidió disfrutar de la película. El humor negro tampoco conectó conmigo y los personajes no me resultaron especialmente interesantes. No es una película que recomendaría, aunque entiendo que tiene muchos seguidores.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 33,
+    "comentario": "Me fascinó la química entre los actores. La interacción entre los personajes es uno de los puntos más fuertes de la película. John Travolta y Samuel L. Jackson tienen una química increíble y juntos crean algunas de las escenas más memorables. La naturalidad con la que actúan y la forma en que se relacionan hacen que la historia cobre vida. Es una película que se disfruta tanto por las actuaciones como por la historia.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 34,
+    "comentario": "No me gustó el ritmo de la película. Me pareció que la historia avanzaba de manera irregular y que algunas escenas se extendían más de lo necesario. El ritmo lento en ciertos momentos me hizo perder el interés y me costó mantener la atención. Aunque reconozco la originalidad de la historia, el ritmo fue un punto débil para mí. No es una película que recomendaría a quienes buscan algo más dinámico.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 35,
+    "comentario": "Una película que todo cinéfilo debe ver. Pulp Fiction es una obra que redefine lo que significa hacer cine. La forma en que Tarantino entrelaza las historias, el ritmo, los personajes y los diálogos es simplemente magistral. Cada escena está cuidadosamente construida y no hay un solo minuto desperdiciado. Es una película que te deja pensando y que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. Sin duda, una de las mejores películas de todos los tiempos.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 36,
+    "comentario": "No la entendí del todo. Me costó seguir el hilo de la historia y, en ocasiones, me sentí perdido. La estructura narrativa, aunque original, me resultó difícil de seguir y eso me impidió disfrutar de la película. El humor negro tampoco conectó conmigo y los personajes no me resultaron especialmente interesantes. No es una película que recomendaría, aunque entiendo que tiene muchos seguidores.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 37,
+    "comentario": "Me sorprendió gratamente. No esperaba mucho de la película, pero me encontré con una obra original, divertida y llena de matices. La forma en que Tarantino mezcla géneros y juega con las expectativas del espectador es simplemente genial. Los personajes son extravagantes y memorables, y la historia nunca deja de sorprender. Es una película que te hace reír, reflexionar y disfrutar del cine de una manera diferente. Muy recomendable.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 38,
+    "comentario": "No es lo que esperaba. La vi con la recomendación de varios amigos, pero no encontré nada que me impactara especialmente. La historia es original, pero no me resultó tan sorprendente como esperaba. Los personajes están bien construidos, pero no logré conectar con ellos. En general, es una película correcta, pero no la consideraría una obra maestra. Simplemente no es para mí.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 39,
+    "comentario": "Me gustó, pero no es mi favorita. Reconozco el mérito artístico de la película y la originalidad de la historia, pero no logré conectar emocionalmente con ella. La violencia, el humor negro y los diálogos pueden resultar incómodos para algunas personas. Es una película que requiere de cierta apertura mental y gusto por el cine de autor. No la recomendaría a personas sensibles o que buscan algo más convencional.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 40,
+    "comentario": "La recomiendo a todo el mundo. Pulp Fiction es una película que todo amante del cine debería ver al menos una vez. Es una obra que rompe con las convenciones y que demuestra el poder de la creatividad. La dirección, el guion y las actuaciones son excepcionales. Es una experiencia cinematográfica única que te deja con ganas de más. No te la pierdas si te gusta el cine de autor y las historias originales.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 41,
+    "comentario": "No me atrapó. Aunque reconocí la originalidad de la historia, no logré empatizar con los personajes ni con la trama. Me resultó difícil seguir el hilo de la historia y, en ocasiones, me sentí perdido. El humor negro tampoco conectó conmigo y eso me impidió disfrutar de la experiencia. No es una película que recomendaría, aunque entiendo que tiene muchos seguidores.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 42,
+    "comentario": "Una experiencia cinematográfica única. Pulp Fiction es una película que redefine lo que significa hacer cine. La forma en que Tarantino entrelaza las historias, el ritmo, los personajes y los diálogos es simplemente magistral. Cada escena está cuidadosamente construida y no hay un solo minuto desperdiciado. Es una película que te deja pensando y que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. Sin duda, una de las mejores películas de todos los tiempos.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 43,
+    "comentario": "No me gustaron los diálogos. Aunque reconozco que son originales y diferentes, no logré conectar con la forma en que los personajes hablan. Me resultaron forzados y poco naturales en algunos momentos. El humor negro tampoco conectó conmigo y eso me impidió disfrutar de la película. No es una película que recomendaría, aunque entiendo que tiene muchos seguidores.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 44,
+    "comentario": "Me encantó la mezcla de géneros. Pulp Fiction es una película que no se puede encasillar en un solo género. Tarantino mezcla el drama, la comedia, el thriller y el cine negro de una manera magistral. Cada escena es una sorpresa y el resultado es una obra original y divertida. Es una película que te hace reír, reflexionar y disfrutar del cine de una manera diferente. Muy recomendable para quienes buscan algo fuera de lo común.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 45,
+    "comentario": "No la recomiendo a todo el mundo. Reconozco el mérito artístico de la película y la originalidad de la historia, pero creo que no todo el mundo va a disfrutarla. La violencia, el humor negro y los diálogos pueden resultar incómodos para algunas personas. Es una película que requiere de cierta apertura mental y gusto por el cine de autor. No la recomendaría a personas sensibles o que buscan algo más convencional.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 46,
+    "comentario": "Una película que nunca pasa de moda. Pulp Fiction es una obra que sigue siendo relevante décadas después de su estreno. La forma en que Tarantino juega con el tiempo y las historias es simplemente genial. Los personajes son inolvidables y los diálogos, brillantes. Es una película que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. No hay un solo minuto desperdiciado y cada escena aporta algo a la historia. Sin duda, una obra maestra.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 47,
+    "comentario": "No me pareció tan buena como dicen. La vi esperando encontrar algo especial, pero no logré ver qué la hace tan valorada. La historia me pareció confusa y los personajes, aunque carismáticos, no me resultaron especialmente interesantes. No niego que tiene momentos divertidos y originales, pero en general no me impactó tanto como a la mayoría. Quizás es una película que hay que ver más de una vez para apreciarla.",
+    "sentimiento": "negativo"
+  },
+  {
+    "id": 48,
+    "comentario": "Me gustó, pero no la volvería a ver. Reconozco el mérito artístico de la película y la originalidad de la historia, pero no logré conectar emocionalmente con ella. La violencia, el humor negro y los diálogos pueden resultar incómodos para algunas personas. Es una película que requiere de cierta apertura mental y gusto por el cine de autor. No la recomendaría a personas sensibles o que buscan algo más convencional.",
+    "sentimiento": "neutro"
+  },
+  {
+    "id": 49,
+    "comentario": "Tarantino demuestra su genialidad. Pulp Fiction es una película que redefine lo que significa hacer cine. La forma en que Tarantino entrelaza las historias, el ritmo, los personajes y los diálogos es simplemente magistral. Cada escena está cuidadosamente construida y no hay un solo minuto desperdiciado. Es una película que te deja pensando y que puedes ver una y otra vez, descubriendo nuevos detalles cada vez. Sin duda, una de las mejores películas de todos los tiempos.",
+    "sentimiento": "positivo"
+  },
+  {
+    "id": 50,
+    "comentario": "No me gustó el humor negro. Aunque entiendo que es parte del estilo de Tarantino, en esta película me pareció excesivo y poco adecuado. Algunas escenas me resultaron incómodas e innecesarias, y eso me impidió disfrutar de la historia. Además, los personajes no me resultaron simpáticos y el humor negro no conectó conmigo. No es una película que recomendaría a personas sensibles o que buscan algo más ligero.",
+    "sentimiento": "negativo"
+  }
+]
